@@ -1,0 +1,13 @@
+{
+  "name": "brick-store-coursework-2021",
+  "version": "1.0.0",
+  "repository": "https://github.com/UP2012320/brick-store-coursework-2021.git",
+  "author": "Emily Medhurst <UP2012320@myport.ac.uk>",
+  "license": "MIT",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "private": true,
+  "packageManager": "yarn@3.0.2"
+}
