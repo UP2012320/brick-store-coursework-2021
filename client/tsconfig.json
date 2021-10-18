@@ -2,6 +2,14 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ESNext", "DOM"],
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "Styles/*": ["styles/*"],
+      "Types/*": ["types/*"],
+      "Scripts/*": ["scripts/*"],
+      "Assets/*": ["assets/*"]
+    }
   },
   "include": ["src"]
 }
