@@ -6,8 +6,12 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
 ): HTMLElementTagNameMap[K] {
   const newElement = document.createElement(type) as HTMLElementTagNameMap[K];
 
+  const classes = Array.isArray(options?.classes)
+    ? options?.classes ?? []
+    : [options?.classes ?? ''];
+
   newElement.textContent = options?.textContent ?? '';
-  newElement.classList.add(...(options?.classNames ?? []));
+  newElement.classList.add(...classes);
   newElement.id = options?.textContent ?? '';
 
   return newElement;

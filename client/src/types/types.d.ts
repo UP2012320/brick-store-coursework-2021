@@ -1,5 +1,5 @@
 export interface CreateElementOptions {
   id: string;
-  classNames: string[];
+  classes: string[] | string;
   textContent: string;
 }
