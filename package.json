@@ -4,6 +4,10 @@
   "repository": "https://github.com/UP2012320/brick-store-coursework-2021.git",
   "author": "Emily Medhurst <UP2012320@myport.ac.uk>",
   "license": "MIT",
+  "scripts": {
+    "setup": "cd client && npm run build && cd ../server && npm run build",
+    "start": "cd server && npm run start"
+  },
   "workspaces": [
     "client",
     "server"
