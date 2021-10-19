@@ -3,23 +3,27 @@ on: [ push ]
 jobs:
   ValidateClient:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
         with:
           node-version: '16'
           cache: 'yarn'
-      - run: cd client
       - run: yarn
       - run: yarn run build
   ValidateServer:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
         with:
           node-version: '16'
           cache: 'yarn'
-      - run: cd server
       - run: yarn
       - run: yarn run build
