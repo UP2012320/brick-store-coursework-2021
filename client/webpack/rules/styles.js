@@ -7,6 +7,7 @@ import {
   cssLoaderItems,
   cssModulesSupportLoaderItems,
   miniCssExtractLoader,
+  postCssLoader,
   resolveUrlLoader,
   sassLoaderItems,
 } from './useLoaderRuleItems';
@@ -14,7 +15,7 @@ import {
 /** css **/
 export const cssRule = {
   test: /\.css$/,
-  use: [miniCssExtractLoader, resolveUrlLoader, cssLoader],
+  use: [miniCssExtractLoader, postCssLoader, resolveUrlLoader, cssLoader],
 };
 
 /** sass **/
@@ -22,6 +23,7 @@ export const sassModulesRule = {
   test: /\.module\.s([ca])ss$/,
   use: arrayFilterEmpty([
     ...cssModulesSupportLoaderItems,
+    postCssLoader,
     resolveUrlLoader,
     ...sassLoaderItems,
   ]),
@@ -32,6 +34,7 @@ export const sassRule = {
   exclude: /\.module.scss$/,
   use: arrayFilterEmpty([
     ...cssLoaderItems,
+    postCssLoader,
     resolveUrlLoader,
     ...sassLoaderItems,
   ]),

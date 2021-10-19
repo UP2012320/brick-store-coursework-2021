@@ -6,7 +6,7 @@ import {join} from 'path';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 import {sassResourceItems} from '../config';
-import {isProd, rootDir} from '../utils/env';
+import {isProd, rootDir, webpackDir} from '../utils/env';
 
 export const cssLoader = {
   loader: 'css-loader',
@@ -52,6 +52,16 @@ export const miniCssExtractLoader = isProd
         esModule: false,
       },
     };
+
+export const postCssLoader = {
+  loader: 'postcss-loader',
+  options: {
+    postcssOptions: {
+      config: join(webpackDir, './config/postcss.js'),
+    },
+    sourceMap: true,
+  },
+};
 
 /**
  * Using to convert CSS modules from css-loader to TypeScript typings
