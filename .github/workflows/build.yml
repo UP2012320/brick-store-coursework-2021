@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: '16'
-          cache: 'yarn'
+      - run: npm install -g yarn
       - run: yarn
       - run: yarn run build
   ValidateServer:
@@ -24,6 +24,6 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: '16'
-          cache: 'yarn'
+      - run: npm install -g yarn
       - run: yarn
       - run: yarn run build
