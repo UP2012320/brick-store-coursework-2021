@@ -10,6 +10,7 @@ import {isProd, rootDir, webpackDir} from '../utils/env';
 
 export const cssLoader = {
   loader: 'css-loader',
+  options: {modules: true},
 };
 
 /**
