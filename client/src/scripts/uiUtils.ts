@@ -13,6 +13,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
   newElement.textContent = options?.textContent ?? '';
   newElement.classList.add(...classes);
   newElement.id = options?.textContent ?? '';
+  newElement.title = options?.textContent ?? '';
 
   return newElement;
 }
