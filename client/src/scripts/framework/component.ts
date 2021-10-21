@@ -1,4 +1,4 @@
-import {SignalDispatcher} from 'strongly-typed-events';
+import {ComponentElement} from 'Scripts/framework/componentElement';
 
 // If I cannot use React, I will create my own React! :D
 // * 200% Extra Bugs
@@ -7,22 +7,17 @@ export abstract class Component<
   T extends Record<string, unknown> = Record<string, unknown>,
 > {
   children: Component[] = [];
-  rebuildEvent: SignalDispatcher = new SignalDispatcher();
   parent?: Component;
   props?: T;
   private _nextStoreIndex = 0;
   private _store: Record<number, unknown> = {};
-  protected _componentRoot: Element | undefined;
+  protected _componentRoot?: ComponentElement;
 
-  constructor(props?: T) {
+  constructor(componentRoot?: ComponentElement, props?: T) {
     this.props = props;
   }
 
   appendChild(component: Component) {
-    component.rebuildEvent.subscribe(() => {
-      this.rebuildTree();
-    });
-
     component.parent = this;
     this.children.push(component);
   }
@@ -45,22 +40,11 @@ export abstract class Component<
     return children;
   }
 
-  private _clearChildrenTree(clearSelf: boolean) {
-    if (this._componentRoot) {
-      while (this._componentRoot.firstChild) {
-        this._componentRoot.firstChild.remove();
-      }
-
-      if (clearSelf) {
-        this._componentRoot.remove();
-      }
-    }
-  }
-
   protected rebuildTree(clearSelf = true) {
-    this._clearChildrenTree(clearSelf);
+    this._componentRoot?.clearChildren(false);
     this._nextStoreIndex = 0;
-    this.rebuildEvent.dispatch();
+    this.build();
+    this.buildAllChildren();
   }
 
   private _modifyStore<T>(id: number, newValue: T | ((previous: T) => T)) {
@@ -113,9 +97,9 @@ export class Root extends Component {
     const id = document.querySelector(this._rootId);
 
     if (id) {
-      id.append(...this.buildAllChildren());
-      this._componentRoot = id;
-      return id;
+      this._componentRoot = new ComponentElement(id);
+      this._componentRoot.element.append(...this.buildAllChildren());
+      return this._componentRoot.element;
     }
 
     throw new Error('Root ID not found');

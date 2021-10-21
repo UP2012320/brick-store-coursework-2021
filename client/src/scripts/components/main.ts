@@ -1,4 +1,5 @@
 import {Component} from 'Scripts/framework/component';
+import {ComponentElement} from 'Scripts/framework/componentElement';
 import {createElement} from 'Scripts/uiUtils';
 
 export class Main extends Component {
@@ -9,20 +10,19 @@ export class Main extends Component {
       setClicks((prev) => prev + 1);
     };
 
-    this._componentRoot = createElement('div');
+    if (!this._componentRoot) {
+      this._componentRoot = new ComponentElement(createElement('div'));
+    }
 
-    const e = createElement('h1', {
+    const header = createElement('h1', {
       textContent: `You've clicked ${clicks ?? 0} times`,
     });
 
-    const c = createElement<'button'>('button', {
+    const button = createElement('button', {
       textContent: 'Click me',
     });
-    c.addEventListener('click', () => onClick());
+    button.addEventListener('click', () => onClick());
 
-    this._componentRoot.appendChild(e);
-    this._componentRoot.appendChild(c);
-
-    return this._componentRoot;
+    return this._componentRoot.then(header).then(button).end();
   }
 }

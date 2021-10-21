@@ -1,4 +1,4 @@
-class ComponentElement {
+export class ComponentElement {
   element: Element;
   parent?: ComponentElement;
   children: ComponentElement[] = [];
@@ -12,22 +12,59 @@ class ComponentElement {
     return new ComponentElement(element, parent);
   }
 
-  then(element: Element) {
+  down(element: Element) {
     const e = new ComponentElement(element, this);
     this.children.push(e);
     return e;
+  }
+
+  then(element: Element) {
+    const e = new ComponentElement(element, this);
+    this.children.push(e);
+    return this;
   }
 
   up() {
     return this.parent ? this.parent : this;
   }
 
-  private _build() {
-    let child: ComponentElement | undefined;
+  clearChildren(clearSelf = true) {
+    const children: Element[] = [];
+    const queue: ComponentElement[] = [];
 
-    while ((child = this.children.shift())) {
-      this.element.appendChild(child._build());
+    if (clearSelf) {
+      queue.push(this);
+    } else {
+      let child: ComponentElement | undefined;
+
+      while ((child = this.children.shift())) {
+        queue.push(child);
+      }
     }
+
+    while (queue.length > 0) {
+      const element = queue.pop();
+
+      if (element) {
+        children.push(element.element);
+
+        let child: ComponentElement | undefined;
+
+        while ((child = element.children.shift())) {
+          queue.push(child);
+        }
+      }
+    }
+
+    children.forEach((child) => {
+      child.remove();
+    });
+  }
+
+  private _build() {
+    this.children.forEach((child) => {
+      this.element.appendChild(child._build());
+    });
 
     return this.element;
   }
@@ -39,6 +76,6 @@ class ComponentElement {
       parent = parent?.parent;
     }
 
-    return parent?._build();
+    return parent ? parent._build() : this._build();
   }
 }

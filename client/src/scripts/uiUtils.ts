@@ -10,14 +10,21 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
     ? options?.classes ?? []
     : [options?.classes ?? ''];
 
-  newElement.textContent = options?.textContent ?? '';
+  if (options?.textContent) {
+    newElement.textContent = options?.textContent;
+  }
 
   if (options?.classes) {
     newElement.classList.add(...classes);
   }
 
-  newElement.id = options?.textContent ?? '';
-  newElement.title = options?.textContent ?? '';
+  if (options?.id) {
+    newElement.id = options.id;
+  }
+
+  if (options?.title) {
+    newElement.title = options.title;
+  }
 
   return newElement;
 }
