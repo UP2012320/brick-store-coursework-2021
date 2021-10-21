@@ -11,7 +11,11 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
     : [options?.classes ?? ''];
 
   newElement.textContent = options?.textContent ?? '';
-  newElement.classList.add(...classes);
+
+  if (options?.classes) {
+    newElement.classList.add(...classes);
+  }
+
   newElement.id = options?.textContent ?? '';
   newElement.title = options?.textContent ?? '';
 
