@@ -6,45 +6,21 @@ import {ComponentElement} from 'Scripts/framework/componentElement';
 export abstract class Component<
   T extends Record<string, unknown> = Record<string, unknown>,
 > {
-  children: Component[] = [];
-  parent?: Component;
   props?: T;
   private _nextStoreIndex = 0;
   private _store: Record<number, unknown> = {};
   protected _componentRoot?: ComponentElement;
 
-  constructor(componentRoot?: ComponentElement, props?: T) {
+  constructor(props?: T) {
     this.props = props;
   }
 
-  appendChild(component: Component) {
-    component.parent = this;
-    this.children.push(component);
-  }
-
-  appendChildren(components: Component[]) {
-    components.forEach((component) => {
-      this.appendChild(component);
-    });
-  }
-
   abstract build(): Element;
-
-  protected buildAllChildren(): Element[] {
-    const children: Element[] = [];
-
-    this.children.forEach((child) => {
-      children.push(child.build());
-    });
-
-    return children;
-  }
 
   protected rebuildTree(clearSelf = true) {
     this._componentRoot?.clearChildren(false);
     this._nextStoreIndex = 0;
     this.build();
-    this.buildAllChildren();
   }
 
   private _modifyStore<T>(id: number, newValue: T | ((previous: T) => T)) {
@@ -81,27 +57,3 @@ export abstract class Component<
   }
 }
 
-export class Root extends Component {
-  private readonly _rootId: string;
-
-  constructor(rootId = '#root') {
-    super();
-    this._rootId = rootId;
-  }
-
-  protected rebuildTree() {
-    this.build();
-  }
-
-  build(): Element {
-    const id = document.querySelector(this._rootId);
-
-    if (id) {
-      this._componentRoot = new ComponentElement(id);
-      this._componentRoot.element.append(...this.buildAllChildren());
-      return this._componentRoot.element;
-    }
-
-    throw new Error('Root ID not found');
-  }
-}

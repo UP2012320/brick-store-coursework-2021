@@ -1,8 +1,6 @@
 import 'Styles/reset.scss';
 
-import {Main} from 'Scripts/components/main';
-import {Root} from 'Scripts/framework/component';
+import {Root} from 'Scripts/framework/root';
 
 const root = new Root();
-root.appendChild(new Main());
 root.build();
