@@ -1,4 +1,5 @@
 import {ComponentElement} from 'Scripts/framework/componentElement';
+import {StoreRef} from 'Scripts/framework/storeRef';
 
 // If I cannot use React, I will create my own React! :D
 // * 200% Extra Bugs
@@ -9,17 +10,53 @@ export abstract class Component<
   props?: T;
   private _nextStoreIndex = 0;
   private _store: Record<number, unknown> = {};
+  private _renderCounter = 0;
+  private _stateChanged = false;
   protected _componentRoot?: ComponentElement;
+  protected _onFirstRender?: () => void;
+  protected _onRender?: () => void;
+  protected _beforeRemove?: () => void;
 
   constructor(props?: T) {
     this.props = props;
   }
 
-  abstract build(): Element;
+  build(): Element {
+    if (this._renderCounter === 0) {
+      if (this._onFirstRender) {
+        this._onFirstRender();
+      }
+    }
 
-  protected rebuildTree(clearSelf = true) {
-    this._componentRoot?.clearChildren(false);
+    if (this._onRender) {
+      this._onRender();
+    }
+
+    const result = this._build();
+    this._renderCounter++;
+
+    return result;
+  }
+
+  protected abstract _build(): Element;
+
+  protected registerCallback(func: () => void) {
+    func();
+
+    if (this._stateChanged) {
+      this._stateChanged = false;
+      this.rebuildTree();
+    }
+  }
+
+  protected rebuildTree() {
+    if (this._beforeRemove) {
+      this._beforeRemove();
+    }
+
+    this._componentRoot?.clearChildren();
     this._nextStoreIndex = 0;
+
     this.build();
   }
 
@@ -33,7 +70,7 @@ export abstract class Component<
     }
 
     this._store[id] = valueTemp;
-    this.rebuildTree();
+    this._stateChanged = true;
   }
 
   protected createStore<T>(
@@ -55,5 +92,20 @@ export abstract class Component<
 
     return [value, setter];
   }
-}
 
+  protected createRef<T>(defaultValue?: T): StoreRef<T | undefined> {
+    const id = this._nextStoreIndex++;
+
+    const value = defaultValue;
+
+    if (this._store[id]) {
+      return this._store[id] as StoreRef<T>;
+    }
+
+    const storeRef = new StoreRef(value);
+
+    this._store[id] = storeRef;
+
+    return storeRef;
+  }
+}
