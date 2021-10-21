@@ -2731,6 +2731,7 @@ __metadata:
     sass: ~1.43.2
     sass-loader: ~12.2.0
     sass-resources-loader: ~2.2.4
+    strongly-typed-events: ^2.1.13
     style-loader: ~3.3.0
     svg-url-loader: ~7.1.1
     terser-webpack-plugin: ~5.2.4
@@ -8327,6 +8328,67 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"ste-core@npm:^2.1.13":
+  version: 2.1.13
+  resolution: "ste-core@npm:2.1.13"
+  checksum: eab7ef15e78398e3dbb73b48a4b1eaf0cd77b33d2ab0efa4864e4e501702aa7d41da0ee43ca5b9e2b32ccf6eb21329a9c3f1aebe30c2221d8e4fc59e0def005b
+  languageName: node
+  linkType: hard
+
+"ste-events@npm:^2.1.13":
+  version: 2.1.13
+  resolution: "ste-events@npm:2.1.13"
+  dependencies:
+    ste-core: ^2.1.13
+  checksum: 2bc29a2d2bd735cd8f568b7a03cef95e8100967ef46dcabfce4789eccc6e4c111b6a0efd62f6fc3a82b7a91fd2a3022904e61e54ba77e864abe9db497153f6c1
+  languageName: node
+  linkType: hard
+
+"ste-promise-events@npm:^2.1.13":
+  version: 2.1.13
+  resolution: "ste-promise-events@npm:2.1.13"
+  dependencies:
+    ste-core: ^2.1.13
+  checksum: e224231ab291df9064f0659a8ad9e00dc65d15c19be81acc1170af1eb054a792fcd26b414dd03b250cfdb59ce65cc021dbb45d82cb377df2c4e1a385e152f5fd
+  languageName: node
+  linkType: hard
+
+"ste-promise-signals@npm:^2.1.13":
+  version: 2.1.13
+  resolution: "ste-promise-signals@npm:2.1.13"
+  dependencies:
+    ste-core: ^2.1.13
+  checksum: 862b7ba03b9231500b894f60fd105617fe557ea10b6e3165f6ea29fb5cf6c2d50c81d1a008073085bdfa0bb1c8581dd038f7599dbd3f663f575e9bf2626b583e
+  languageName: node
+  linkType: hard
+
+"ste-promise-simple-events@npm:^2.1.13":
+  version: 2.1.13
+  resolution: "ste-promise-simple-events@npm:2.1.13"
+  dependencies:
+    ste-core: ^2.1.13
+  checksum: d3e107d3e10714174f9725e2d4c5910a7315d0d56b0418096a267d7de152a757ba4bc70df1df91589f6f13750c261b9c0392cbf9208cf0b01f02fc9efa57f1ae
+  languageName: node
+  linkType: hard
+
+"ste-signals@npm:^2.1.13":
+  version: 2.1.13
+  resolution: "ste-signals@npm:2.1.13"
+  dependencies:
+    ste-core: ^2.1.13
+  checksum: 882bf6f31f15814582f2bfc04bbf30ee2c2a66eeb9387e2fb9f6071491f0405cdd34d24dea6e90538143c8c3e7278fc0a803e15414014272ce1b9bf9c9b33f0f
+  languageName: node
+  linkType: hard
+
+"ste-simple-events@npm:^2.1.13":
+  version: 2.1.13
+  resolution: "ste-simple-events@npm:2.1.13"
+  dependencies:
+    ste-core: ^2.1.13
+  checksum: ba3cdb198d2964b69ac2e913255b1fb39554364c774bcc27a434eaa8e5bf6490fd87d82d3a57cb948fb105437f7083549fb2ad146ca32b9e7074b09a028b9ecf
+  languageName: node
+  linkType: hard
+
 "string-argv@npm:0.3.1":
   version: 0.3.1
   resolution: "string-argv@npm:0.3.1"
@@ -8457,6 +8519,21 @@ fsevents@~2.3.2:
   version: 3.1.1
   resolution: "strip-json-comments@npm:3.1.1"
   checksum: 492f73e27268f9b1c122733f28ecb0e7e8d8a531a6662efbd08e22cccb3f9475e90a1b82cab06a392f6afae6d2de636f977e231296400d0ec5304ba70f166443
+  languageName: node
+  linkType: hard
+
+"strongly-typed-events@npm:^2.1.13":
+  version: 2.1.13
+  resolution: "strongly-typed-events@npm:2.1.13"
+  dependencies:
+    ste-core: ^2.1.13
+    ste-events: ^2.1.13
+    ste-promise-events: ^2.1.13
+    ste-promise-signals: ^2.1.13
+    ste-promise-simple-events: ^2.1.13
+    ste-signals: ^2.1.13
+    ste-simple-events: ^2.1.13
+  checksum: 597c3c031df3d11852c37012bd230e858955588153efeb3fff96a51fa9488e963e4fc87b0c64034f5dc615ae09a35b5b1b453a072cd2bd8f17020277c1219f5a
   languageName: node
   linkType: hard
 
