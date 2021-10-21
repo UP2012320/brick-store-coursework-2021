@@ -22,11 +22,11 @@ class ComponentElement {
     return this.parent ? this.parent : this;
   }
 
-  private build() {
+  private _build() {
     let child: ComponentElement | undefined;
 
     while ((child = this.children.shift())) {
-      this.element.appendChild(child.build());
+      this.element.appendChild(child._build());
     }
 
     return this.element;
@@ -39,6 +39,6 @@ class ComponentElement {
       parent = parent?.parent;
     }
 
-    return parent?.build();
+    return parent?._build();
   }
 }
