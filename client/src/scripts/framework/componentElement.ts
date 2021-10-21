@@ -28,18 +28,14 @@ export class ComponentElement {
     return this.parent ? this.parent : this;
   }
 
-  clearChildren(clearSelf = true) {
+  clearChildren() {
     const children: Element[] = [];
     const queue: ComponentElement[] = [];
 
-    if (clearSelf) {
-      queue.push(this);
-    } else {
-      let child: ComponentElement | undefined;
+    let child: ComponentElement | undefined;
 
-      while ((child = this.children.shift())) {
-        queue.push(child);
-      }
+    while ((child = this.children.shift())) {
+      queue.push(child);
     }
 
     while (queue.length > 0) {
