@@ -8,8 +8,8 @@ class ComponentElement {
     this.parent = parent;
   }
 
-  static create(element: Element) {
-    return new ComponentElement(element);
+  static create(element: Element, parent?: ComponentElement) {
+    return new ComponentElement(element, parent);
   }
 
   then(element: Element) {
