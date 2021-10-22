@@ -4,7 +4,3 @@ export interface CreateElementOptions {
   textContent: string;
   title: string;
 }
-
-export interface StateRef<T> {
-  value?: T;
-}

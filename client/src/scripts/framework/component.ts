@@ -1,5 +1,5 @@
 import {ComponentElement} from 'Scripts/framework/componentElement';
-import {StoreRef} from 'Scripts/framework/storeRef';
+import {Ref} from 'Scripts/framework/ref';
 
 // If I cannot use React, I will create my own React! :D
 // * 200% Extra Bugs
@@ -64,18 +64,20 @@ export abstract class Component<
     let valueTemp: T | undefined;
 
     if (newValue instanceof Function) {
-      valueTemp = newValue(this._store[id] as T);
+      const ref = this._store[id] as Ref<T>;
+      valueTemp = newValue(ref.value as T);
     } else {
       valueTemp = newValue;
     }
 
-    this._store[id] = valueTemp;
+    const ref = this._store[id] as Ref<T>;
+    ref.value = valueTemp;
     this._stateChanged = true;
   }
 
-  protected createStore<T>(
+  protected createReactiveRef<T>(
     defaultValue?: T,
-  ): [T | undefined, (newValue: T | ((previous: T) => T)) => void] {
+  ): [Ref<T | undefined>, (newValue: T | ((previous: T) => T)) => void] {
     const id = this._nextStoreIndex++;
 
     const value = defaultValue;
@@ -85,24 +87,25 @@ export abstract class Component<
     };
 
     if (this._store[id]) {
-      return [this._store[id] as T, setter];
+      return [this._store[id] as Ref<T>, setter];
     }
 
-    this._store[id] = value;
+    const ref = new Ref(value);
+    this._store[id] = ref;
 
-    return [value, setter];
+    return [ref, setter];
   }
 
-  protected createRef<T>(defaultValue?: T): StoreRef<T | undefined> {
+  protected createRef<T>(defaultValue?: T): Ref<T | undefined> {
     const id = this._nextStoreIndex++;
 
     const value = defaultValue;
 
     if (this._store[id]) {
-      return this._store[id] as StoreRef<T>;
+      return this._store[id] as Ref<T>;
     }
 
-    const storeRef = new StoreRef(value);
+    const storeRef = new Ref(value);
 
     this._store[id] = storeRef;
 
