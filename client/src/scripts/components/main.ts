@@ -5,23 +5,26 @@ import {createElement} from 'Scripts/uiUtils';
 export class Main extends Component {
   _build(): Element {
     const [clicks, setClicks] = this.createStore(0);
-    const u = this.createRef(0);
+    const u = this.createRef(1);
 
     const onClick = () => {
-      setClicks((prev) => prev + 1);
-
-      if (clicks) {
-        u.value = clicks * 2;
-      }
+      setClicks(prev => prev + 1);
     };
 
     if (!this._componentRoot) {
       this._componentRoot = new ComponentElement(createElement('div'));
     }
 
+    this.registerEffect(() => {
+      console.log('running');
+      if (u.value) {
+        u.value = u.value + 1;
+      }
+    }, [clicks]);
+
     const header = createElement('h1', {
-      textContent: `You've clicked ${clicks ?? 0} times | ${
-        clicks ?? 0
+      textContent: `You've clicked ${clicks} times | ${
+        clicks
       } * 2 = ${u.value ?? 0}`,
     });
 
