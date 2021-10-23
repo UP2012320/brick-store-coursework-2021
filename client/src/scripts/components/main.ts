@@ -4,14 +4,14 @@ import {createElement} from 'Scripts/uiUtils';
 
 export class Main extends Component {
   _build(): Element {
-    const [clicks, setClicks] = this.createReactiveRef(0);
+    const [clicks, setClicks] = this.createStore(0);
     const u = this.createRef(0);
 
     const onClick = () => {
       setClicks((prev) => prev + 1);
 
-      if (clicks.value) {
-        u.value = clicks.value * 2;
+      if (clicks) {
+        u.value = clicks * 2;
       }
     };
 
@@ -20,8 +20,8 @@ export class Main extends Component {
     }
 
     const header = createElement('h1', {
-      textContent: `You've clicked ${clicks.value ?? 0} times | ${
-        clicks.value ?? 0
+      textContent: `You've clicked ${clicks ?? 0} times | ${
+        clicks ?? 0
       } * 2 = ${u.value ?? 0}`,
     });
 

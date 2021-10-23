@@ -64,36 +64,31 @@ export abstract class Component<
     let valueTemp: T | undefined;
 
     if (newValue instanceof Function) {
-      const ref = this._store[id] as Ref<T>;
-      valueTemp = newValue(ref.value as T);
+      valueTemp = newValue(this._store[id] as T);
     } else {
       valueTemp = newValue;
     }
 
-    const ref = this._store[id] as Ref<T>;
-    ref.value = valueTemp;
+    this._store[id] = valueTemp;
     this._stateChanged = true;
   }
 
-  protected createReactiveRef<T>(
+  protected createStore<T>(
     defaultValue?: T,
-  ): [Ref<T | undefined>, (newValue: T | ((previous: T) => T)) => void] {
+  ): [T | undefined, (newValue: T | ((previous: T) => T)) => void] {
     const id = this._nextStoreIndex++;
-
-    const value = defaultValue;
 
     const setter = (newValue: T | ((previous: T) => T)) => {
       this._modifyStore(id, newValue);
     };
 
     if (this._store[id]) {
-      return [this._store[id] as Ref<T>, setter];
+      return [this._store[id] as T, setter];
     }
 
-    const ref = new Ref(value);
-    this._store[id] = ref;
+    this._store[id] = defaultValue;
 
-    return [ref, setter];
+    return [defaultValue, setter];
   }
 
   protected createRef<T>(defaultValue?: T): Ref<T | undefined> {
