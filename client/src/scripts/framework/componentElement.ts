@@ -8,12 +8,8 @@ export class ComponentElement {
     this.parent = parent;
   }
 
-  static create(element: Element, parent?: ComponentElement) {
-    return new ComponentElement(element, parent);
-  }
-
-  down(elements: Element) {
-    const e = new ComponentElement(elements, this);
+  down(element: Element) {
+    const e = new ComponentElement(element, this);
     this.children.push(e);
     return e;
   }
@@ -26,6 +22,12 @@ export class ComponentElement {
     } else {
       this._internalThen(elements);
     }
+
+    return this;
+  }
+
+  thenComponent(func: (parent?: ComponentElement) => void) {
+    func(this);
 
     return this;
   }

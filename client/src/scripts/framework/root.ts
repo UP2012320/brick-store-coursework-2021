@@ -6,7 +6,7 @@ export class Root extends Component {
   private readonly _rootId: string;
 
   constructor(rootId = '#root') {
-    super();
+    super({});
     this._rootId = rootId;
   }
 
@@ -21,7 +21,7 @@ export class Root extends Component {
   }
 
   _build(componentRoot: ComponentElement): Element {
-    const main = new Main().build();
+    const main = new Main({}).build();
 
     return componentRoot.then(main).end();
   }

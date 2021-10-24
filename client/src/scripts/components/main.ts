@@ -8,35 +8,78 @@ export class Main extends Component {
   }
 
   _build(componentRoot: ComponentElement): Element {
-    const [clicks, setClicks] = this.createStore(0);
-    const u = this.createRef(1);
-
-    const onClick = () => {
-      setClicks((prev) => prev + 1);
-    };
-
-    this.registerEffect(() => {
-      console.log('running');
-      if (u.value) {
-        u.value = u.value + 1;
-      }
-    }, [clicks]);
+    const [list, setList] = this._createStore<{id: number; text: string}[]>([]);
 
     const header = createElement('h1', {
-      textContent: `You've clicked ${clicks} times | ${clicks} * 2 = ${
-        u.value ?? 0
-      }`,
+      textContent: 'Your To-Do List',
     });
 
-    const button = createElement('button', {
-      textContent: 'Click me',
+    const inputField = createElement('input', {
+      placeholder: 'Add an item',
     });
-    button.addEventListener('click', () =>
-      this.registerCallback(() => onClick()),
+
+    const submitButton = createElement('button', {
+      textContent: 'Add',
+    });
+    submitButton.addEventListener('click', () =>
+      this.registerCallback(() =>
+        setList((prev) => [
+          ...prev,
+          {id: (list?.length ?? 0) + 1, text: inputField.value},
+        ]),
+      ),
     );
 
-    const k: Element[] = [createElement('p'), createElement('h1')];
+    const onDelete = (id: number) => {
+      this.registerCallback(() => {
+        setList((prev) => {
+          return prev.filter((item) => item.id !== id);
+        });
+      });
+    };
 
-    return componentRoot.then(header).then(button).end();
+    const ul = createElement('ul');
+
+    return componentRoot
+      .then(header)
+      .then(inputField)
+      .then(submitButton)
+      .down(ul)
+      .thenComponent((parent) => {
+        // I don't like how this implicitly adds to the parent tree by reference,
+        // it's not intuitive
+
+        list?.forEach((item) => {
+          const li = new ListItem({...item, onDelete}, parent);
+          li.build();
+        });
+      })
+      .end();
+  }
+}
+
+export class ListItem extends Component<{
+  text: string;
+  id: number;
+  onDelete: (id: number) => void;
+}> {
+  protected _setComponentRoot() {
+    // TODO Figure out how to solve this in the future, if the component root is passed via the constructor this isn't needed
+    return new ComponentElement(createElement('div'));
+  }
+
+  protected _build(componentRoot: ComponentElement) {
+    const li = createElement('li', {
+      textContent: this._props.text,
+    });
+
+    const deleteButton = createElement('button', {
+      textContent: 'Delete',
+    });
+    deleteButton.addEventListener('click', () =>
+      this._props.onDelete(this._props.id),
+    );
+
+    return componentRoot.then(li).then(deleteButton).end();
   }
 }

@@ -7,7 +7,7 @@ import {Ref} from 'Scripts/framework/ref';
 export abstract class Component<
   T extends Record<string, unknown> = Record<string, unknown>,
 > {
-  props?: T;
+  protected _props: T;
   private _nextStoreIndex = 0;
   private _store: Record<number, unknown> = {};
   private _renderCounter = 0;
@@ -17,8 +17,9 @@ export abstract class Component<
   protected _onRender?: () => void;
   protected _beforeRemove?: () => void;
 
-  constructor(props?: T) {
-    this.props = props;
+  constructor(props: T, componentRoot?: ComponentElement) {
+    this._props = props;
+    this._componentRoot = componentRoot;
   }
 
   build(): Element {
@@ -46,7 +47,7 @@ export abstract class Component<
 
   protected abstract _build(componentRoot: ComponentElement): Element;
 
-  protected registerEffect(callback: () => void, dependencies?: unknown[]) {
+  protected _registerEffect(callback: () => void, dependencies?: unknown[]) {
     const id = this._nextStoreIndex;
 
     const value = this._store[id] as unknown[] | undefined;
@@ -97,7 +98,7 @@ export abstract class Component<
     this._stateChanged = true;
   }
 
-  protected createStore<T>(
+  protected _createStore<T>(
     defaultValue?: T,
   ): [T | undefined, (newValue: T | ((previous: T) => T)) => void] {
     const id = this._nextStoreIndex++;
@@ -115,7 +116,7 @@ export abstract class Component<
     return [defaultValue, setter];
   }
 
-  protected createRef<T>(defaultValue?: T): Ref<T | undefined> {
+  protected _createRef<T>(defaultValue?: T): Ref<T | undefined> {
     const id = this._nextStoreIndex++;
 
     const value = defaultValue;
