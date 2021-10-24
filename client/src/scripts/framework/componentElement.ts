@@ -12,16 +12,27 @@ export class ComponentElement {
     return new ComponentElement(element, parent);
   }
 
-  down(element: Element) {
-    const e = new ComponentElement(element, this);
+  down(elements: Element) {
+    const e = new ComponentElement(elements, this);
     this.children.push(e);
     return e;
   }
 
-  then(element: Element) {
+  then(elements: Element | Element[]) {
+    if (Array.isArray(elements)) {
+      elements.forEach((element) => {
+        this._internalThen(element);
+      });
+    } else {
+      this._internalThen(elements);
+    }
+
+    return this;
+  }
+
+  private _internalThen(element: Element) {
     const e = new ComponentElement(element, this);
     this.children.push(e);
-    return this;
   }
 
   up() {

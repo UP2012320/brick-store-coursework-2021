@@ -35,6 +35,8 @@ export class Main extends Component {
       this.registerCallback(() => onClick()),
     );
 
+    const k: Element[] = [createElement('p'), createElement('h1')];
+
     return componentRoot.then(header).then(button).end();
   }
 }
