@@ -3,17 +3,17 @@ import {ComponentElement} from 'Scripts/framework/componentElement';
 import {createElement} from 'Scripts/uiUtils';
 
 export class Main extends Component {
-  _build(): Element {
+  protected _setComponentRoot() {
+    return new ComponentElement(createElement('div'));
+  }
+
+  _build(componentRoot: ComponentElement): Element {
     const [clicks, setClicks] = this.createStore(0);
     const u = this.createRef(1);
 
     const onClick = () => {
-      setClicks(prev => prev + 1);
+      setClicks((prev) => prev + 1);
     };
-
-    if (!this._componentRoot) {
-      this._componentRoot = new ComponentElement(createElement('div'));
-    }
 
     this.registerEffect(() => {
       console.log('running');
@@ -23,9 +23,9 @@ export class Main extends Component {
     }, [clicks]);
 
     const header = createElement('h1', {
-      textContent: `You've clicked ${clicks} times | ${
-        clicks
-      } * 2 = ${u.value ?? 0}`,
+      textContent: `You've clicked ${clicks} times | ${clicks} * 2 = ${
+        u.value ?? 0
+      }`,
     });
 
     const button = createElement('button', {
@@ -35,6 +35,6 @@ export class Main extends Component {
       this.registerCallback(() => onClick()),
     );
 
-    return this._componentRoot.then(header).then(button).end();
+    return componentRoot.then(header).then(button).end();
   }
 }

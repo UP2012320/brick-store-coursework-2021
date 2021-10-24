@@ -4,14 +4,15 @@ import {Ref} from 'Scripts/framework/ref';
 // If I cannot use React, I will create my own React! :D
 // * 200% Extra Bugs
 
-export abstract class Component<T extends Record<string, unknown> = Record<string, unknown>,
-  > {
+export abstract class Component<
+  T extends Record<string, unknown> = Record<string, unknown>,
+> {
   props?: T;
   private _nextStoreIndex = 0;
   private _store: Record<number, unknown> = {};
   private _renderCounter = 0;
   private _stateChanged = false;
-  protected _componentRoot?: ComponentElement;
+  private _componentRoot?: ComponentElement;
   protected _onFirstRender?: () => void;
   protected _onRender?: () => void;
   protected _beforeRemove?: () => void;
@@ -31,13 +32,19 @@ export abstract class Component<T extends Record<string, unknown> = Record<strin
       this._onRender();
     }
 
-    const result = this._build();
+    if (!this._componentRoot) {
+      this._componentRoot = this._setComponentRoot();
+    }
+
+    const result = this._build(this._componentRoot);
     this._renderCounter++;
 
     return result;
   }
 
-  protected abstract _build(): Element;
+  protected abstract _setComponentRoot(): ComponentElement;
+
+  protected abstract _build(componentRoot: ComponentElement): Element;
 
   protected registerEffect(callback: () => void, dependencies?: unknown[]) {
     const id = this._nextStoreIndex;

@@ -10,16 +10,19 @@ export class Root extends Component {
     this._rootId = rootId;
   }
 
-  _build(): Element {
+  protected _setComponentRoot() {
     const id = document.querySelector(this._rootId);
 
     if (id) {
-      this._componentRoot = new ComponentElement(id);
-      const main = new Main().build();
-
-      return this._componentRoot.then(main).end();
+      return new ComponentElement(id);
+    } else {
+      throw new Error('Root ID not found');
     }
+  }
 
-    throw new Error('Root ID not found');
+  _build(componentRoot: ComponentElement): Element {
+    const main = new Main().build();
+
+    return componentRoot.then(main).end();
   }
 }
