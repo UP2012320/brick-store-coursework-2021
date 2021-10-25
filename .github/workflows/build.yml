@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
-        with:
+      - with:
           node-version: ${{ matrix.node-version }}
       - with:
           path: ~/.pnpm-store
@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
-        with:
+      - with:
           node-version: ${{ matrix.node-version }}
       - with:
           path: ~/.pnpm-store
