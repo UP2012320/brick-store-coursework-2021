@@ -1,16 +1,14 @@
 import {Component} from 'Scripts/framework/component';
 import {ComponentElement} from 'Scripts/framework/componentElement';
-import styles from 'Styles/main.module.scss';
+import 'Styles/footer.scss';
 import {createElement} from 'Scripts/uiUtils';
 
-export default class Main extends Component {
+export default class Footer extends Component {
   protected _setComponentRoot(): ComponentElement {
-    return new ComponentElement(createElement('div', {
-      id: styles.main
-    }));
+    return new ComponentElement(createElement('footer'));
   }
 
-  _build(componentRoot: ComponentElement): Element {
+  protected _build(componentRoot: ComponentElement): Element {
     return componentRoot.end();
   }
 }
