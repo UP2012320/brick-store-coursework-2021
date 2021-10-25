@@ -3,10 +3,6 @@ import {ComponentElement} from 'Scripts/framework/componentElement';
 import {createElement} from 'Scripts/uiUtils';
 
 export class Main extends Component {
-  protected _setComponentRoot() {
-    return new ComponentElement(createElement('div'));
-  }
-
   _build(componentRoot: ComponentElement): Element {
     const [list, setList] = this._createStore<{id: number; text: string}[]>([]);
 
@@ -61,11 +57,6 @@ export class ListItem extends Component<{
   id: number;
   onDelete: (args: {id: number}) => void;
 }> {
-  protected _setComponentRoot() {
-    // TODO Figure out how to solve this in the future, if the component root is passed via the constructor this isn't needed
-    return new ComponentElement(createElement('div'));
-  }
-
   protected _build(componentRoot: ComponentElement) {
     const li = createElement('li', {
       textContent: this._props.text,

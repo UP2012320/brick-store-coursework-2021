@@ -1,5 +1,6 @@
 import {ComponentElement} from 'Scripts/framework/componentElement';
 import {Ref} from 'Scripts/framework/ref';
+import {createElement} from 'Scripts/uiUtils';
 
 // If I cannot use React, I will create my own React! :D
 // * 200% Extra Bugs
@@ -20,17 +21,23 @@ export abstract class Component<
   }
 
   build(): Element {
+    let result: Element;
+
     if (!this._componentRoot) {
       this._componentRoot = this._setComponentRoot();
+      result = this._build(this._componentRoot);
+    } else {
+      result = this._build(this._componentRoot);
     }
 
-    const result = this._build(this._componentRoot);
     this._renderCounter++;
 
     return result;
   }
 
-  protected abstract _setComponentRoot(): ComponentElement;
+  protected _setComponentRoot() {
+    return new ComponentElement(createElement('div'));
+  }
 
   protected abstract _build(componentRoot: ComponentElement): Element;
 
