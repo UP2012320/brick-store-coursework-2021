@@ -22,7 +22,7 @@ export class Main extends Component {
       textContent: 'Add',
     });
     submitButton.addEventListener('click', () =>
-      this._registerCallback(() =>
+      this._registerStatefulCallback(() =>
         setList((prev) => [
           ...prev,
           {id: (list?.length ?? 0) + 1, text: inputField.value},
@@ -30,7 +30,7 @@ export class Main extends Component {
       ),
     );
 
-    const onDelete = this._getRegisterCallback((args: {id: number}) => {
+    const onDelete = this._getStatefulCallback((args: {id: number}) => {
       setList((prev) => {
         return prev.filter((item) => item.id !== args.id);
       });

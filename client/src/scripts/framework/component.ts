@@ -13,9 +13,6 @@ export abstract class Component<
   private _renderCounter = 0;
   private _stateChanged = false;
   private _componentRoot?: ComponentElement;
-  protected _onFirstRender?: () => void;
-  protected _onRender?: () => void;
-  protected _beforeRemove?: () => void;
 
   constructor(props: T, componentRoot?: ComponentElement) {
     this._props = props;
@@ -23,16 +20,6 @@ export abstract class Component<
   }
 
   build(): Element {
-    if (this._renderCounter === 0) {
-      if (this._onFirstRender) {
-        this._onFirstRender();
-      }
-    }
-
-    if (this._onRender) {
-      this._onRender();
-    }
-
     if (!this._componentRoot) {
       this._componentRoot = this._setComponentRoot();
     }
@@ -65,7 +52,7 @@ export abstract class Component<
     }
   }
 
-  protected _registerCallback(func: () => void) {
+  protected _registerStatefulCallback(func: () => void) {
     func();
 
     if (this._stateChanged) {
@@ -74,7 +61,7 @@ export abstract class Component<
     }
   }
 
-  protected _getRegisterCallback<P extends Record<string, unknown>>(func: (args: P) => void) {
+  protected _getStatefulCallback<P extends Record<string, unknown>>(func: (args: P) => void) {
     return (args: P) => {
       func(args);
 
@@ -86,10 +73,6 @@ export abstract class Component<
   }
 
   protected _rebuildTree() {
-    if (this._beforeRemove) {
-      this._beforeRemove();
-    }
-
     this._componentRoot?.clearChildren();
     this._nextStoreIndex = 0;
 
