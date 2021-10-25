@@ -6,14 +6,20 @@ jobs:
     defaults:
       run:
         working-directory: ./client
+    strategy:
+      matrix:
+        node-version: [ 16 ]
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
         with:
-          node-version: '16'
-      - run: npm install -g yarn
-      - run: yarn workspace client install
-      - run: yarn run build
+          node-version: ${{ matrix.node-version }}
+      - with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
+      - run: pnpm i
+      - run: pnpm run build
   ValidateServer:
     runs-on: self-hosted
     defaults:
@@ -23,7 +29,10 @@ jobs:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
         with:
-          node-version: '16'
-      - run: npm install -g yarn
-      - run: yarn workspace server install
-      - run: yarn run build
+          node-version: ${{ matrix.node-version }}
+      - with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
+      - run: pnpm i
+      - run: pnpm run build
