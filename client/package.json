@@ -1,6 +1,5 @@
 {
   "name": "client",
-  "packageManager": "yarn@3.0.2",
   "main": "webpack.config.babel.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.babel.js",
