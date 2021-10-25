@@ -65,16 +65,27 @@ export abstract class Component<
     }
   }
 
-  protected registerCallback(func: () => void) {
+  protected _registerCallback(func: () => void) {
     func();
 
     if (this._stateChanged) {
       this._stateChanged = false;
-      this.rebuildTree();
+      this._rebuildTree();
     }
   }
 
-  protected rebuildTree() {
+  protected _getRegisterCallback<P extends Record<string, unknown>>(func: (args: P) => void) {
+    return (args: P) => {
+      func(args);
+
+      if (this._stateChanged) {
+        this._stateChanged = true;
+        this._rebuildTree();
+      }
+    };
+  }
+
+  protected _rebuildTree() {
     if (this._beforeRemove) {
       this._beforeRemove();
     }

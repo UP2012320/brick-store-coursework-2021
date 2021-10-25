@@ -22,7 +22,7 @@ export class Main extends Component {
       textContent: 'Add',
     });
     submitButton.addEventListener('click', () =>
-      this.registerCallback(() =>
+      this._registerCallback(() =>
         setList((prev) => [
           ...prev,
           {id: (list?.length ?? 0) + 1, text: inputField.value},
@@ -30,13 +30,11 @@ export class Main extends Component {
       ),
     );
 
-    const onDelete = (id: number) => {
-      this.registerCallback(() => {
-        setList((prev) => {
-          return prev.filter((item) => item.id !== id);
-        });
+    const onDelete = this._getRegisterCallback((args: {id: number}) => {
+      setList((prev) => {
+        return prev.filter((item) => item.id !== args.id);
       });
-    };
+    });
 
     const ul = createElement('ul');
 
@@ -61,7 +59,7 @@ export class Main extends Component {
 export class ListItem extends Component<{
   text: string;
   id: number;
-  onDelete: (id: number) => void;
+  onDelete: (args: {id: number}) => void;
 }> {
   protected _setComponentRoot() {
     // TODO Figure out how to solve this in the future, if the component root is passed via the constructor this isn't needed
@@ -77,7 +75,7 @@ export class ListItem extends Component<{
       textContent: 'Delete',
     });
     deleteButton.addEventListener('click', () =>
-      this._props.onDelete(this._props.id),
+      this._props.onDelete({id: this._props.id}),
     );
 
     return componentRoot.then(li).then(deleteButton).end();
