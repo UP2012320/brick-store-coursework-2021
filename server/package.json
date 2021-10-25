@@ -2,7 +2,7 @@
   "name": "server",
   "scripts": {
     "start": "",
-    "build": ""
+    "build": "exit 0"
   },
   "devDependencies": {
     "@types/node": "^16.11.1",
