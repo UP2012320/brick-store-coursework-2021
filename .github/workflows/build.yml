@@ -14,7 +14,8 @@ jobs:
       - uses: actions/setup-node@master
       - with:
           node-version: ${{ matrix.node-version }}
-      - with:
+      - uses: actions/cache@v1
+        with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
@@ -28,9 +29,10 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
-      - with:
+        with:
           node-version: ${{ matrix.node-version }}
-      - with:
+      - uses: actions/cache@v1
+        with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
