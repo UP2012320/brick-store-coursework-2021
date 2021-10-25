@@ -26,6 +26,9 @@ jobs:
     defaults:
       run:
         working-directory: ./server
+    strategy:
+      matrix:
+        node-version: [ 16 ]
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
