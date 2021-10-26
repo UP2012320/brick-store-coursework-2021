@@ -11,13 +11,9 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 16
-      - uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
-      - run: pnpm i
-      - run: pnpm run test
+      - run: npm i -g yarn
+      - run: yarn
+      - run: yarn run test
   BuildClient:
     runs-on: self-hosted
     defaults:
@@ -29,13 +25,9 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 16
-      - uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
-      - run: pnpm i
-      - run: pnpm run build
+      - run: npm i -g yarn
+      - run: yarn
+      - run: yarn run build
   BuildServer:
     runs-on: self-hosted
     defaults:
@@ -46,10 +38,6 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 16
-      - uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
-      - run: pnpm i
-      - run: pnpm run build
+      - run: npm i -g yarn
+      - run: yarn
+      - run: yarn run build
