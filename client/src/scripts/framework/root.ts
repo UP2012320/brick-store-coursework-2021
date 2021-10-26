@@ -6,7 +6,7 @@ import Footer from 'Scripts/components/layout/footer';
 import styles from 'Styles/root.module.scss';
 import {createElement} from 'Scripts/uiUtils';
 
-export class Root extends Component {
+export default class Root extends Component {
   _build(componentRoot: ComponentElement): Element {
     const root = createElement('div', {
       id: styles.root

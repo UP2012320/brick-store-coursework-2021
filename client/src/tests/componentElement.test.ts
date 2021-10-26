@@ -1,12 +1,15 @@
 import ComponentElement from 'Scripts/framework/componentElement';
 import {createElement} from 'Scripts/uiUtils';
+import Navbar from 'Scripts/components/layout/navbar';
 
 test('building with single element', () => {
   const div = createElement('div');
 
   const element = new ComponentElement(div);
 
-  expect(element.end()).toBe(div);
+  const result = element.end();
+
+  expect(result).toBe(div);
 });
 
 test('building with one child element', () => {
@@ -28,7 +31,7 @@ test('building with down works', () => {
 
   const element = new ComponentElement(div1);
 
-  const result = element.down(div2).then(div3).end();
+  const result = element.down(div2).down(div3).end();
 
   expect(result.firstChild).toBe(div2);
   expect(result.firstChild?.firstChild).toBe(div3);
@@ -63,14 +66,41 @@ test('passing an array to then works', () => {
 test('clearing children works', () => {
   const div1 = createElement('div');
   const div2 = createElement('div');
+  const div3 = createElement('div');
+  const div4 = createElement('div');
 
   const element = new ComponentElement(div1);
 
-  const result = element.then(div2);
+  element.then(div2).down(div3).then(div4);
 
-  result.clearChildren();
+  element.clearChildren();
 
-  const end = element.end();
+  const result = element.end();
 
-  expect(end.hasChildNodes()).toBe(false);
+  expect(result.hasChildNodes()).toBe(false);
+});
+
+test('using thenComponent', () => {
+  const div1 = createElement('div');
+  const div2 = createElement('div');
+  const div3 = createElement('div');
+
+  const element = new ComponentElement(div1);
+
+  const result = element.then(div2).down(div3).thenComponent((parent) => {
+    const navbar = new Navbar({}, parent);
+    navbar.build();
+  }).end();
+
+  expect(result.children[1].hasChildNodes()).toBeTruthy();
+});
+
+test('up won\'t fail when there is no parent', () => {
+  const div = createElement('div');
+
+  const element = new ComponentElement(div);
+
+  const result = element.up().up().end();
+
+  expect(result).toBeTruthy();
 });

@@ -20,7 +20,7 @@ export default abstract class Component<
     this._componentRoot = componentRoot;
   }
 
-  build(): Element {
+  build() {
     let result: Element;
 
     if (!this._componentRoot) {
