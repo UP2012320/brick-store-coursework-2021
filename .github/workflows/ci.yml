@@ -1,23 +1,38 @@
-name: Build Validator
-on: [ push ]
+name: CI
+on: [ push, pull_request ]
 jobs:
+  TestClient:
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: 16
+      - uses: actions/cache@v1
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
+      - run: pnpm i
+      - run: pnpm run test
   BuildClient:
     runs-on: self-hosted
     defaults:
       run:
         working-directory: ./client
-    strategy:
-      matrix:
-        node-version: [ 16 ]
+    needs: TestClient
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16
       - uses: actions/cache@v1
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
       - run: pnpm i
       - run: pnpm run build
@@ -26,18 +41,15 @@ jobs:
     defaults:
       run:
         working-directory: ./server
-    strategy:
-      matrix:
-        node-version: [ 16 ]
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16
       - uses: actions/cache@v1
         with:
           path: ~/.pnpm-store
-          key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
       - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
       - run: pnpm i
       - run: pnpm run build
