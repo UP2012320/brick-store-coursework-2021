@@ -1,4 +1,4 @@
-name: Build Validator
+name: Tests
 on: [ push ]
 jobs:
   ValidateClient:
