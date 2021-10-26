@@ -1,16 +1,11 @@
 name: CI
 on:
   push:
-    branches:
-      - main
     paths-ignore:
       - 'dependabot.yml'
       - 'LICENSE'
       - 'README.md'
       - '.gitignore'
-  pull_request:
-    branches-ignore:
-      - main
 jobs:
   TestClient:
     runs-on: self-hosted
