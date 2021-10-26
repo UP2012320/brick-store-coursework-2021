@@ -1,5 +1,5 @@
 import {ComponentElement} from 'Scripts/framework/componentElement';
-import {Ref} from 'Scripts/framework/ref';
+import Ref from 'Scripts/framework/ref';
 import {createElement} from 'Scripts/uiUtils';
 
 // If I cannot use React, I will create my own React! :D

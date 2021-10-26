@@ -2,4 +2,3 @@ node_modules
 webpack
 webpack.config.babel.js
 jest.config.js
-tests/**

@@ -9,6 +9,11 @@ module.exports = (api) => {
   api.cache.using(() => mode);
 
   return {
+    "env": {
+      "test": {
+        "plugins": ["@babel/plugin-transform-modules-commonjs"]
+      }
+    },
     presets: [
       [
         '@babel/preset-env',

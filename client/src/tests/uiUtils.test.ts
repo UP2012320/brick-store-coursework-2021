@@ -1,7 +1,7 @@
-const uiUtils = require('client/src/scripts/uiUtils')
+import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
 
 test('createElement creates elements successfully', () => {
-  const element = uiUtils.createElement('p', {
+  const element = createElement('p', {
     textContent: 'Hello World!',
     id: 'text'
   });
@@ -12,19 +12,19 @@ test('createElement creates elements successfully', () => {
 });
 
 test('createElement create elements with tag specific properties available', () => {
-  const canvas = uiUtils.createElement('canvas');
+  const canvas = createElement('canvas');
 
   expect(canvas.width).toBeTruthy();
 });
 
 test('createElementWithStyle adds styles to element', () => {
-  const element = uiUtils.createElementWithStyles('p', undefined, 'red');
+  const element = createElementWithStyles('p', undefined, 'red');
 
   expect(element.classList).toContain('red');
 });
 
 test('createElementWithStyle adds styles to element and options', () => {
-  const element = uiUtils.createElementWithStyles('p', {id: 'text'}, 'red');
+  const element = createElementWithStyles('p', {id: 'text'}, 'red');
 
   expect(element.classList).toContain('red');
   expect(element.id).toBe('text');

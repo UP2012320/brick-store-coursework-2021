@@ -1,4 +1,4 @@
-export class ComponentElement {
+export default class ComponentElement {
   element: Element;
   parent?: ComponentElement;
   children: ComponentElement[] = [];

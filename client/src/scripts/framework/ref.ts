@@ -9,7 +9,7 @@ interface InternalRef<T> {
 // and that property is updated then the reference to the object will
 // include the updated property even if it's a primitive.
 
-export class Ref<T> {
+export default class Ref<T> {
   get value(): T | undefined {
     return this._value.value;
   }
