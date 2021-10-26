@@ -1,7 +1,7 @@
 name: Build Validator
 on: [ push ]
 jobs:
-  ValidateClient:
+  BuildClient:
     runs-on: self-hosted
     defaults:
       run:
@@ -21,7 +21,7 @@ jobs:
       - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
       - run: pnpm i
       - run: pnpm run build
-  ValidateServer:
+  BuildServer:
     runs-on: self-hosted
     defaults:
       run:
