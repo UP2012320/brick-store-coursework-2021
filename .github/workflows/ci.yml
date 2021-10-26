@@ -1,11 +1,5 @@
 name: CI
-on:
-  push:
-    paths-ignore:
-      - 'dependabot.yml'
-      - 'LICENSE'
-      - 'README.md'
-      - '.gitignore'
+on: [ push, pull_request ]
 jobs:
   TestClient:
     runs-on: self-hosted
@@ -17,9 +11,13 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 16
-      - run: npm i -g yarn
-      - run: yarn
-      - run: yarn run test
+      - uses: actions/cache@v1
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
+      - run: pnpm i
+      - run: pnpm run test
   BuildClient:
     runs-on: self-hosted
     defaults:
@@ -31,9 +29,13 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 16
-      - run: npm i -g yarn
-      - run: yarn
-      - run: yarn run build
+      - uses: actions/cache@v1
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
+      - run: pnpm i
+      - run: pnpm run build
   BuildServer:
     runs-on: self-hosted
     defaults:
@@ -44,6 +46,10 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 16
-      - run: npm i -g yarn
-      - run: yarn
-      - run: yarn run build
+      - uses: actions/cache@v1
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
+      - run: pnpm i
+      - run: pnpm run build
