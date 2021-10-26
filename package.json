@@ -12,5 +12,6 @@
     "client",
     "server"
   ],
-  "private": true
+  "private": true,
+  "packageManager": "yarn@3.1.0"
 }
