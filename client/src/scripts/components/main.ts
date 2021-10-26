@@ -1,5 +1,5 @@
-import {Component} from 'Scripts/framework/component';
-import {ComponentElement} from 'Scripts/framework/componentElement';
+import Component from 'Scripts/framework/component';
+import ComponentElement from 'Scripts/framework/componentElement';
 import styles from 'Styles/main.module.scss';
 import {createElement} from 'Scripts/uiUtils';
 

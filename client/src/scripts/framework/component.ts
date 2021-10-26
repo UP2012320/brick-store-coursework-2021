@@ -1,11 +1,11 @@
-import {ComponentElement} from 'Scripts/framework/componentElement';
+import ComponentElement from 'Scripts/framework/componentElement';
 import Ref from 'Scripts/framework/ref';
 import {createElement} from 'Scripts/uiUtils';
 
 // If I cannot use React, I will create my own React! :D
 // * 200% Extra Bugs
 
-export abstract class Component<
+export default abstract class Component<
   T extends Record<string, unknown> = Record<string, unknown>,
 > {
   protected _props: T;
