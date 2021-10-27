@@ -5,9 +5,8 @@ import {createElement} from 'Scripts/uiUtils';
 // If I cannot use React, I will create my own React! :D
 // * 200% Extra Bugs
 
-export default abstract class Component<
-  T extends Record<string, unknown> = Record<string, unknown>,
-> {
+export default abstract class Component<T extends Record<string, unknown> = Record<string, unknown>,
+  > {
   protected _props: T;
   private _nextStoreIndex = 0;
   private _store: Record<number, unknown> = {};
@@ -42,17 +41,17 @@ export default abstract class Component<
   protected abstract _build(componentRoot: ComponentElement): Element;
 
   protected _registerEffect(callback: () => void, dependencies?: unknown[]) {
-    const id = this._nextStoreIndex;
+    const id = this._nextStoreIndex++;
 
     const value = this._store[id] as unknown[] | undefined;
 
     if (value) {
-      if (value.length === 0 && this._renderCounter === 1) {
-        callback();
-      } else if (value.length !== 0 && !Object.is(value, dependencies)) {
+      if (value.length !== 0 && !Object.is(value, dependencies)) {
         callback();
       }
     } else if (dependencies === undefined) {
+      callback();
+    } else if (dependencies.length === 0 && this._renderCounter === 0) {
       callback();
     } else {
       this._store[id] = dependencies;
