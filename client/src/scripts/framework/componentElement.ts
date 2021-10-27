@@ -37,8 +37,18 @@ export default class ComponentElement {
     this.children.push(e);
   }
 
-  up() {
-    return this.parent ? this.parent : this;
+  up(steps = 1) {
+    let returnValue: ComponentElement | undefined;
+
+    for (let i = 0; i < steps; i++) {
+      returnValue = this.parent;
+    }
+
+    if (!returnValue) {
+      returnValue = this;
+    }
+
+    return returnValue;
   }
 
   clearChildren() {
