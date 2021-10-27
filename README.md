@@ -30,6 +30,7 @@
 * Front-end - TypeScript/SCSS/CSS Grid/Flexbox
 * API - JSON REST API
 * Back-end - TypeScript/Fastify/PostgreSQL
+* Testing - Jest
 
 ### Implementation Flow
 
