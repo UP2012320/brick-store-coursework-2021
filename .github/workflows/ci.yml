@@ -1,5 +1,11 @@
 name: CI
-on: [ push, pull_request ]
+on:
+  push:
+    paths-ignore:
+      - updateDependencies.yml
+      - LICENSE
+      - .gitignore
+      - README.md
 jobs:
   TestClient:
     runs-on: self-hosted
