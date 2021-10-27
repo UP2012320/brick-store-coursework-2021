@@ -2,7 +2,8 @@
   "name": "server",
   "scripts": {
     "start": "",
-    "build": "exit 0"
+    "build": "exit 0",
+    "test": "exit 0"
   },
   "devDependencies": {
     "@types/node": "^16.11.6",
