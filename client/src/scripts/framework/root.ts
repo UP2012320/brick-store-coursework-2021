@@ -7,7 +7,7 @@ import styles from 'Styles/root.module.scss';
 import {createElement} from 'Scripts/uiUtils';
 
 export default class Root extends Component {
-  _build(componentRoot: ComponentElement): Element {
+  _internalBuild(componentRoot: ComponentElement): Element {
     const root = createElement('div', {
       id: styles.root
     });

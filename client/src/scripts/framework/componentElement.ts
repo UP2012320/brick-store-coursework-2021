@@ -1,3 +1,5 @@
+import Component from 'Scripts/framework/component';
+
 export default class ComponentElement {
   element: Element;
   parent?: ComponentElement;
@@ -26,8 +28,8 @@ export default class ComponentElement {
     return this;
   }
 
-  thenComponent(func: (parent?: ComponentElement) => void) {
-    func(this);
+  thenComponent(component: Component) {
+    component.build(this);
 
     return this;
   }
@@ -38,10 +40,14 @@ export default class ComponentElement {
   }
 
   up(steps = 1) {
-    let returnValue: ComponentElement | undefined;
+    let returnValue = this.parent;
 
     for (let i = 0; i < steps; i++) {
-      returnValue = this.parent;
+      if (!returnValue?.parent) {
+        break;
+      }
+
+      returnValue = returnValue?.parent;
     }
 
     if (!returnValue) {

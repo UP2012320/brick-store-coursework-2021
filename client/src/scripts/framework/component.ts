@@ -19,14 +19,16 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
     this._componentRoot = componentRoot;
   }
 
-  build() {
+  build(parent?: ComponentElement) {
     let result: Element;
 
-    if (!this._componentRoot) {
+    if (parent) {
+      result = this._internalBuild(parent);
+    } else if (!this._componentRoot) {
       this._componentRoot = this._setComponentRoot();
-      result = this._build(this._componentRoot);
+      result = this._internalBuild(this._componentRoot);
     } else {
-      result = this._build(this._componentRoot);
+      result = this._internalBuild(this._componentRoot);
     }
 
     this._renderCounter++;
@@ -38,7 +40,7 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
     return new ComponentElement(createElement('div'));
   }
 
-  protected abstract _build(componentRoot: ComponentElement): Element;
+  protected abstract _internalBuild(componentRoot: ComponentElement): Element;
 
   protected _registerEffect(callback: () => void, dependencies?: unknown[]) {
     const id = this._nextStoreIndex++;

@@ -10,7 +10,7 @@ export default class Main extends Component {
     }));
   }
 
-  _build(componentRoot: ComponentElement): Element {
+  _internalBuild(componentRoot: ComponentElement): Element {
     return componentRoot.end();
   }
 }

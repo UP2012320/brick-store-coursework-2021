@@ -87,10 +87,9 @@ test('using thenComponent', () => {
 
   const element = new ComponentElement(div1);
 
-  const result = element.then(div2).down(div3).thenComponent((parent) => {
-    const navbar = new Navbar({}, parent);
-    navbar.build();
-  }).end();
+  const navbar = new Navbar({});
+
+  const result = element.then(div2).down(div3).thenComponent(navbar).end();
 
   expect(result.children[1].hasChildNodes()).toBeTruthy();
 });

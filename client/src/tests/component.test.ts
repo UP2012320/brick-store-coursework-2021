@@ -3,7 +3,7 @@ import ComponentElement from 'Scripts/framework/componentElement';
 import {createElement} from 'Scripts/uiUtils';
 
 class TestComponent extends Component {
-  protected _build(componentRoot: ComponentElement): Element {
+  protected _internalBuild(componentRoot: ComponentElement): Element {
     const [counter, setCounter] = this._createStore(0);
     const multiplication = this._createRef(0);
     const randomNumber = this._createRef(0);

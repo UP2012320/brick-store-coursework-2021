@@ -8,7 +8,7 @@ export default class Footer extends Component {
     return new ComponentElement(createElement('footer'));
   }
 
-  protected _build(componentRoot: ComponentElement): Element {
+  protected _internalBuild(componentRoot: ComponentElement): Element {
     return componentRoot.end();
   }
 }
