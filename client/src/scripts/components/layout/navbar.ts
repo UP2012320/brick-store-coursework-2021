@@ -12,9 +12,18 @@ export default class Navbar extends Component {
     const leftSideElement = createElementWithStyles('div', undefined, styles.navSideElement);
     const mainElement = createElementWithStyles('div', undefined, styles.navSideElement);
     const rightSideElement = createElementWithStyles('div', undefined, styles.navSideElement);
+    const title = createElement('h1', {
+      id: styles.title,
+    });
+    const titleHref = createElement('a', {
+      href: '/',
+      textContent: 'The Super Brick Store',
+    });
 
     return componentRoot
-      .then(leftSideElement)
+      .down(leftSideElement)
+      .down(title)
+      .then(titleHref).up(2)
       .then(mainElement)
       .then(rightSideElement)
       .end();

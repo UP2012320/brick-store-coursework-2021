@@ -4,6 +4,7 @@ declare namespace NavbarModuleScssNamespace {
   export interface INavbarModuleScss {
     navMainElement: string;
     navSideElement: string;
+    title: string;
   }
 }
 

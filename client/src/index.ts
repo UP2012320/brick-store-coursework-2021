@@ -1,5 +1,3 @@
-import 'Styles/reset.scss';
-
 import Root from 'Scripts/framework/root';
 import ComponentElement from 'Scripts/framework/componentElement';
 

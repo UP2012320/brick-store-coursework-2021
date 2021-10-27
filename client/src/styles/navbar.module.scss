@@ -1,17 +1,43 @@
+@use 'reset';
+@import 'theme';
+
 nav {
-  border-bottom: 1px solid black;
+  border-bottom: 5px solid $primary-colour;
   flex: 1 0 6%;
   display: flex;
+  max-height: 100px;
 }
 
 .nav-side-element {
   flex: 1 0 8%;
+  display: flex;
+  align-items: center;
 }
 
 .nav-main-element {
   flex: 1 0 84%;
 }
 
-#test {
+#title {
+  font-size: 18pt;
+  font-weight: 500;
+  margin-top: 0.3rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 0.3rem;
+  background-color: $secondary-colour;
 
+  a {
+    color: $font-colour;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    a {
+      color: $highlight-colour;
+    }
+  }
 }
