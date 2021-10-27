@@ -2,7 +2,7 @@ name: CI
 on:
   push:
     paths-ignore:
-      - '.github/workflows/updateDependencies.yml'
+      - '**/updateDependencies.yml'
       - 'LICENSE'
       - '.gitignore'
       - '**/README.md'
