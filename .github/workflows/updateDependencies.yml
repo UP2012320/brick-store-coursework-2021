@@ -1,5 +1,7 @@
 name: UpdateDependencies
-on: [push]
+on:
+  schedule:
+    - '0 0 * * 0'
 jobs:
   RunUpgrade:
     runs-on: self-hosted
