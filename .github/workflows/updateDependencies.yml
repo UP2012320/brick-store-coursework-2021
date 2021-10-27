@@ -1,0 +1,27 @@
+name: UpdateDependencies
+on: [push]
+jobs:
+  RunUpgrade:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: 16
+      - uses: actions/cache@v1
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
+      - run: curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
+      - run: pnpm up -r
+      - run: pnpm run test
+      - run: pnpm run build
+      - uses: peter-evans/create-pull-request@v3.10.1
+        with:
+          token: ${{ secrets.PULL_REQUEST_TOKEN }}
+          commit-message: 'Updated dependencies'
+          committer: 'UP2012320 <up2012320@myport.ac.uk>'
+          author: 'UP2012320 <up2012320@myport.ac.uk>'
+          delete-branch: true
+          labels: update
+          branch: dependancies-update

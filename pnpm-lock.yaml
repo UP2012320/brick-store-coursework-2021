@@ -46,7 +46,7 @@ importers:
       is-windows: ~1.0.2
       jest: ^27.3.1
       jest-transform-stub: ^2.0.0
-      lint-staged: ~11.2.4
+      lint-staged: ~11.2.6
       mini-css-extract-plugin: ~2.4.3
       path: ~0.12.7
       postcss: ^8.3.11
@@ -56,7 +56,7 @@ importers:
       pretty-quick: ~3.1.1
       regenerator-runtime: ~0.13.9
       resolve-url-loader: ~4.0.0
-      sass: ~1.43.3
+      sass: ~1.43.4
       sass-loader: ~12.2.0
       sass-resources-loader: ~2.2.4
       style-loader: ~3.3.1
@@ -111,7 +111,7 @@ importers:
       is-windows: 1.0.2
       jest: 27.3.1
       jest-transform-stub: 2.0.0
-      lint-staged: 11.2.4
+      lint-staged: 11.2.6
       mini-css-extract-plugin: 2.4.3_webpack@5.60.0
       path: 0.12.7
       postcss: 8.3.11
@@ -121,8 +121,8 @@ importers:
       pretty-quick: 3.1.1_prettier@2.4.1
       regenerator-runtime: 0.13.9
       resolve-url-loader: 4.0.0
-      sass: 1.43.3
-      sass-loader: 12.2.0_sass@1.43.3+webpack@5.60.0
+      sass: 1.43.4
+      sass-loader: 12.2.0_sass@1.43.4+webpack@5.60.0
       sass-resources-loader: 2.2.4
       style-loader: 3.3.1_webpack@5.60.0
       svg-url-loader: 7.1.1_webpack@5.60.0
@@ -2696,7 +2696,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001271
-      electron-to-chromium: 1.3.879
+      electron-to-chromium: 1.3.880
       escalade: 3.1.1
       node-releases: 2.0.1
       picocolors: 1.0.0
@@ -3513,8 +3513,8 @@ packages:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
     dev: true
 
-  /electron-to-chromium/1.3.879:
-    resolution: {integrity: sha512-zJo+D9GwbJvM31IdFmwcGvychhk4KKbKYo2GWlsn+C/dxz2NwmbhGJjWwTfFSF2+eFH7VvfA8MCZ8SOqTrlnpw==}
+  /electron-to-chromium/1.3.880:
+    resolution: {integrity: sha512-iwIP/6WoeSimzUKJIQtjtpVDsK8Ir8qQCMXsUBwg+rxJR2Uh3wTNSbxoYRfs+3UWx/9MAnPIxVZCyWkm8MT0uw==}
     dev: true
 
   /emittery/0.8.1:
@@ -5815,18 +5815,17 @@ packages:
     resolution: {integrity: sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=}
     dev: true
 
-  /lint-staged/11.2.4:
-    resolution: {integrity: sha512-aTUqcPDSV05EyKlMT4N5h7tmnevKfAxI3xZkRb+DHfmcFaoCxfxVvpqlLMCVGy3EYle9JYER2nA5zc4eNTkZVQ==}
+  /lint-staged/11.2.6:
+    resolution: {integrity: sha512-Vti55pUnpvPE0J9936lKl0ngVeTdSZpEdTNhASbkaWX7J5R9OEifo1INBGQuGW4zmy6OG+TcWPJ3m5yuy5Q8Tg==}
     hasBin: true
     dependencies:
       cli-truncate: 2.1.0
       colorette: 1.4.0
       commander: 8.3.0
+      cosmiconfig: 7.0.1
       debug: 4.3.2_supports-color@8.1.1
       enquirer: 2.3.6
       execa: 5.1.1
-      js-yaml: 4.1.0
-      lilconfig: 2.0.3
       listr2: 3.13.1_enquirer@2.3.6
       micromatch: 4.0.4
       normalize-path: 3.0.0
@@ -7461,7 +7460,7 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
 
-  /sass-loader/12.2.0_sass@1.43.3+webpack@5.60.0:
+  /sass-loader/12.2.0_sass@1.43.4+webpack@5.60.0:
     resolution: {integrity: sha512-qducnp5vSV+8A8MZxuH6zV0MUg4MOVISScl2wDTCAn/2WJX+9Auxh92O/rnkdR2bvi5QxZBafnzkzRrWGZvm7w==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
@@ -7479,7 +7478,7 @@ packages:
     dependencies:
       klona: 2.0.4
       neo-async: 2.6.2
-      sass: 1.43.3
+      sass: 1.43.4
       webpack: 5.60.0_webpack-cli@4.9.1
     dev: true
 
@@ -7492,8 +7491,8 @@ packages:
       loader-utils: 2.0.0
     dev: true
 
-  /sass/1.43.3:
-    resolution: {integrity: sha512-BJnLngqWpMeS65UvlYYEuCb3/fLxDxhHtOB/gWPxs6NKrslTxGt3ZxwIvOe/0Jm4tWwM/+tIpE3wj4dLEhPDeQ==}
+  /sass/1.43.4:
+    resolution: {integrity: sha512-/ptG7KE9lxpGSYiXn7Ar+lKOv37xfWsZRtFYal2QHNigyVQDx685VFT/h7ejVr+R8w7H4tmUgtulsKl5YpveOg==}
     engines: {node: '>=8.9.0'}
     hasBin: true
     dependencies:
