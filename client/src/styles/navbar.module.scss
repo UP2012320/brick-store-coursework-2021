@@ -16,6 +16,12 @@ nav {
 
 .nav-main-element {
   flex: 1 0 84%;
+  display: flex;
+}
+
+.nav-main-element-container {
+  flex: 1;
+  display: flex;
 }
 
 #title {
