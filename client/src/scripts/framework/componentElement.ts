@@ -41,15 +41,15 @@ export default class ComponentElement {
     return this;
   }
 
-  useMapping(mapping: Record<string, unknown>[]) {
+  useMapping(mapping: (Record<string, object> | object)[]) {
     mapping.forEach(map => {
-      this._unwrapMapping(map, this);
+      this._unwrapMappingChild(map, this);
     });
 
     return this;
   }
 
-  private _unwrapMapping(map: Record<string, unknown>, parent: ComponentElement) {
+  private _unwrapMapping(map: Record<string, object>, parent: ComponentElement) {
     const values = Object.values(map);
     const children = values.find(value => Array.isArray(value)) as object[];
     let newParent = parent;
@@ -114,7 +114,7 @@ export default class ComponentElement {
           break;
       }
     } else {
-      this._unwrapMapping(child as Record<string, unknown>, parent);
+      this._unwrapMapping(child as Record<string, object>, parent);
     }
   }
 

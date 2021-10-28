@@ -103,3 +103,29 @@ test('up won\'t fail when there is no parent', () => {
 
   expect(result).toBeTruthy();
 });
+
+test('useMapping with elements works correctly', () => {
+  const div = createElement('div');
+  const div2 = createElement('div');
+  const div3 = createElement('div');
+  const div4 = createElement('div');
+  const div5 = createElement('div');
+  const div6 = createElement('div');
+
+  const element = new ComponentElement(div);
+
+  const result = element.useMapping([
+    {
+      div2,
+      children: [
+        div3,
+        div4,
+      ],
+    },
+    div5,
+    div6,
+  ]).end();
+
+  expect(result.children.length).toBe(3);
+  expect(result?.firstChild?.childNodes.length).toBe(2);
+});
