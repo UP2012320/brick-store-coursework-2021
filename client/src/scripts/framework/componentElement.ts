@@ -84,6 +84,8 @@ export default class ComponentElement {
             throw new Error('When using a Component directly in the mapping, you cannot have any children');
           }
           break;
+        case MappingType.unknown:
+          throw new Error(`Unknown type passed - ${value}`);
       }
     });
 
@@ -95,7 +97,7 @@ export default class ComponentElement {
   }
 
   private _unwrapMappingChild(child: object, parent: ComponentElement) {
-    if (Object.values(child).length === 0) {
+    if (Object.values(child).length === 0 || '_nextStoreIndex' in child) {
       const type = Helpers.getType(child);
 
       switch (type) {
@@ -112,6 +114,8 @@ export default class ComponentElement {
 
           parent.thenComponent(component);
           break;
+        case MappingType.unknown:
+          throw new Error(`Unknown type passed - ${child}`);
       }
     } else {
       this._unwrapMapping(child as Record<string, object>, parent);
@@ -121,6 +125,11 @@ export default class ComponentElement {
   private _internalThen(element: Element) {
     const e = new ComponentElement(element, this);
     this.children.push(e);
+  }
+
+  merge(componentElement: ComponentElement) {
+    componentElement.parent = this;
+    this.children.push(componentElement);
   }
 
   up(steps = 1) {

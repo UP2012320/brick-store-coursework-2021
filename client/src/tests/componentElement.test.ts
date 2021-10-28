@@ -129,3 +129,72 @@ test('useMapping with elements works correctly', () => {
   expect(result.children.length).toBe(3);
   expect(result?.firstChild?.childNodes.length).toBe(2);
 });
+
+test('useMapping with elements and components works correctly', () => {
+  const div = createElement('div');
+  const div2 = createElement('div');
+  const div3 = createElement('div');
+  const div4 = createElement('div');
+  const div5 = createElement('div');
+  const div6 = createElement('div');
+  const navbar = new Navbar({});
+
+  const element = new ComponentElement(div);
+
+  const result = element.useMapping([
+    {
+      div2,
+      children: [
+        div3,
+        div4,
+        navbar
+      ],
+    },
+    div5,
+    div6,
+    {
+      navbar
+    }
+  ]).end();
+
+  expect(result.children.length).toBe(4);
+  expect(result?.firstChild?.childNodes.length).toBe(3);
+});
+
+test('useMapping fails when children are passed with a component', () => {
+  const div = createElement('div');
+  const div2 = createElement('div');
+
+  const navbar = new Navbar({});
+
+  const element = new ComponentElement(div);
+
+  const call = () => {
+    element.useMapping([
+      {
+        navbar,
+        children: [
+          div2
+        ]
+      }
+    ]).end();
+  };
+
+  expect(call).toThrow('When using a Component directly in the mapping, you cannot have any children');
+});
+
+test('useMapping fails when an unknown type is passed', () => {
+  const div = createElement('div');
+  const div2 = createElement('div');
+
+  const element = new ComponentElement(div);
+
+  const call = () => {
+    element.useMapping([
+      div2,
+      {name: ''},
+    ]).end();
+  };
+
+  expect(call).toThrow('Unknown type passed - ');
+});

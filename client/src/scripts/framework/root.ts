@@ -15,11 +15,15 @@ export default class Root extends Component {
     const main = new Main({}).build();
     const footer = new Footer({}).build();
 
-    return componentRoot
-      .down(root)
-      .then(navbar)
-      .then(main)
-      .then(footer)
-      .end();
+    return componentRoot.useMapping([
+      {
+        root,
+        children: [
+          navbar,
+          main,
+          footer
+        ]
+      }
+    ]).end();
   }
 }

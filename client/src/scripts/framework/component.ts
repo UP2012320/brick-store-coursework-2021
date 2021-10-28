@@ -23,10 +23,16 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
     let result: Element;
 
     if (parent) {
-      result = this._internalBuild(parent);
+      const componentRoot = this._setComponentRoot();
+
+      if (componentRoot) {
+        parent.merge(componentRoot);
+      }
+
+      result = this._internalBuild(componentRoot ?? parent);
     } else if (!this._componentRoot) {
       this._componentRoot = this._setComponentRoot();
-      result = this._internalBuild(this._componentRoot);
+      result = this._internalBuild(this._componentRoot ?? new ComponentElement(createElement('div')));
     } else {
       result = this._internalBuild(this._componentRoot);
     }
@@ -36,8 +42,8 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
     return result;
   }
 
-  protected _setComponentRoot() {
-    return new ComponentElement(createElement('div'));
+  protected _setComponentRoot(): ComponentElement | undefined {
+    return undefined;
   }
 
   protected abstract _internalBuild(componentRoot: ComponentElement): Element;
