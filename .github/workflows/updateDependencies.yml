@@ -1,7 +1,7 @@
 name: UpdateDependencies
 on:
   schedule:
-    - cron: '0 0 * * 4'
+    - cron: '0 0 * * 0'
 jobs:
   RunUpgrade:
     runs-on: self-hosted
@@ -31,6 +31,8 @@ jobs:
           commit-message: 'Updated dependencies'
           committer: 'UP2012320 <up2012320@myport.ac.uk>'
           author: 'UP2012320 <up2012320@myport.ac.uk>'
+          title: 'Update dependencies'
+          body: 'Update dependencies'
           delete-branch: true
           labels: update
           branch: dependancies-update
