@@ -266,3 +266,12 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/node,webstorm,linux,yarn
 
 .yarn/cache/*
+
+### CypressIO ###
+# gitignore template for the CypressIO, browser test framework
+# website: https://www.cypress.io/
+
+client/cypress/results/*
+client/cypress/reports/*
+client/cypress/screenshots/*
+client/cypress/videos/*
