@@ -25,14 +25,28 @@ export default class Navbar extends Component {
       textContent: 'The Super Brick Store',
     });
 
-    return componentRoot
-      .down(leftSideElement)
-      .down(leftSideTitle)
-      .then(titleHref).up()
-      .down(mainElement)
-      .thenComponent(navbarBrowseItem).up()
-      .then(rightSideElement)
-      .end();
+    return componentRoot.useMapping([
+      {
+        leftSideElement,
+        children: [
+          {
+            leftSideTitle,
+            children: [
+              titleHref,
+            ],
+          },
+        ],
+      },
+      {
+        mainElement,
+        children: [
+          navbarBrowseItem,
+        ],
+      },
+      {
+        rightSideElement,
+      },
+    ]).end();
   }
 }
 
