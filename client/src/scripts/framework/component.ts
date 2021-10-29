@@ -56,6 +56,12 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
     dispatchEvent(new Event('popstate'));
   }
 
+  protected _registerElementAsLink(element: Element, path: string) {
+    element.addEventListener('click', () => {
+      this._changePath(path);
+    });
+  }
+
   protected _registerEffect(callback: () => void | (() => void), dependencies?: unknown[]) {
     const id = this._nextStoreIndex++;
 
