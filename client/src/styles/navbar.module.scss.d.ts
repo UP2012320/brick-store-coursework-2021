@@ -5,7 +5,6 @@ declare namespace NavbarModuleScssNamespace {
     navMainElement: string;
     navMainElementContainer: string;
     navSideElement: string;
-    title: string;
   }
 }
 

@@ -13,34 +13,34 @@ export default class Navbar extends Component {
     const leftSideElement = createElementWithStyles('div', undefined, styles.navSideElement);
     const mainElement = createElementWithStyles('div', undefined, styles.navMainElement);
 
-    const navbarBrowseItem = this._componentInstances.createInstance(new NavbarMainElementItem({title: 'Browse'}), 'navbarBrowseItem');
+    const navbarBrowseItem = this._componentInstances.createInstance(new NavbarMainElementItem({title: 'Browse'}),
+      'navbarBrowseItem');
+    const navbarBrowseItem2 = this._componentInstances.createInstance(new NavbarMainElementItem({title: 'Browse'}),
+      'navbarBrowseItem2');
+    const navbarBrowseItem3 = this._componentInstances.createInstance(new NavbarMainElementItem({title: 'Browse'}),
+      'navbarBrowseItem3');
 
     const rightSideElement = createElementWithStyles('div', undefined, styles.navSideElement);
 
     const leftSideTitle = createElement('h1', {
-      id: styles.title,
-    });
-    const titleHref = createElement('a', {
-      href: '/',
       textContent: 'The Super Brick Store',
     });
+
+    this._registerElementAsLink(leftSideTitle, '/');
 
     return componentRoot.useMapping([
       {
         leftSideElement,
         children: [
-          {
-            leftSideTitle,
-            children: [
-              titleHref,
-            ],
-          },
+          leftSideTitle,
         ],
       },
       {
         mainElement,
         children: [
           navbarBrowseItem,
+          navbarBrowseItem2,
+          navbarBrowseItem3,
         ],
       },
       {

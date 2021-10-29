@@ -1,5 +1,8 @@
 @use 'reset';
 @import 'theme';
+@import "utils";
+
+$nav-side-basis: 20%;
 
 nav {
   border-bottom: 5px solid $primary-colour;
@@ -9,41 +12,63 @@ nav {
 }
 
 .nav-side-element {
-  flex: 1 0 8%;
+  flex: 1 0 $nav-side-basis;
   display: flex;
   align-items: center;
-}
 
-.nav-main-element {
-  flex: 1 0 84%;
-  display: flex;
-}
-
-.nav-main-element-container {
-  flex: 1;
-  display: flex;
-}
-
-#title {
-  font-size: 18pt;
-  font-weight: 500;
-  margin-top: 0.3rem;
-  margin-left: 0.3rem;
-  margin-right: 0.3rem;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  padding: 0.3rem;
-  background-color: $secondary-colour;
-
-  a {
-    color: $font-colour;
+  h1 {
+    @include font-xlarge;
+    margin-top: $spacing-medium;
+    margin-left: $spacing-medium;
+    margin-right: $spacing-medium;
+    padding: $spacing-medium;
   }
 
   &:hover {
     cursor: pointer;
 
-    a {
+    color: $highlight-colour;
+  }
+}
+
+.nav-main-element {
+  flex: 1 0 (100 - $nav-side-basis * 2);
+  display: flex;
+  justify-content: center;
+
+  div:not(:last-child) {
+    margin-right: $spacing-xlarge;
+  }
+}
+
+.nav-main-element-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  max-width: 128px;
+
+  h1 {
+    @include font-xlarge;
+    padding: $spacing-medium;
+    color: $font-colour;
+    margin-top: auto;
+    user-select: none;
+  }
+
+  svg {
+    padding: $spacing-medium;
+    flex: 1;
+    height: max-content;
+    width: max-content;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    * {
       color: $highlight-colour;
+      fill: $highlight-colour;
     }
   }
 }
