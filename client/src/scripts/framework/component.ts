@@ -13,6 +13,7 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
   private _renderCounter = 0;
   private _stateChanged = false;
   private _componentRoot?: ComponentElement;
+  private _unmountCallback?: () => void;
 
   constructor(props: T, componentRoot?: ComponentElement) {
     this._props = props;
@@ -48,21 +49,32 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
 
   protected abstract _internalBuild(componentRoot: ComponentElement): Element;
 
-  protected _registerEffect(callback: () => void, dependencies?: unknown[]) {
+  protected _changePath(newPath: string) {
+    history.pushState({}, '', newPath);
+    dispatchEvent(new Event('popstate'));
+  }
+
+  protected _registerEffect(callback: () => void | (() => void), dependencies?: unknown[]) {
     const id = this._nextStoreIndex++;
 
     const value = this._store[id] as unknown[] | undefined;
 
+    let returnedCallback: (() => void) | void;
+
     if (value) {
       if (value.length !== 0 && !Object.is(value, dependencies)) {
-        callback();
+        returnedCallback = callback();
       }
     } else if (dependencies === undefined) {
-      callback();
+      returnedCallback =  callback();
     } else if (dependencies.length === 0 && this._renderCounter === 0) {
-      callback();
+      returnedCallback =  callback();
     } else {
       this._store[id] = dependencies;
+    }
+
+    if (typeof returnedCallback === 'function') {
+      this._unmountCallback = returnedCallback;
     }
   }
 
@@ -87,6 +99,11 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
   }
 
   protected _rebuildTree() {
+    if (this._unmountCallback) {
+      this._unmountCallback();
+      this._unmountCallback = undefined;
+    }
+
     this._componentRoot?.clearChildren();
     this._nextStoreIndex = 0;
 

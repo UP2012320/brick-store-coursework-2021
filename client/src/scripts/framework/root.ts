@@ -11,16 +11,31 @@ export default class Root extends Component {
     const root = createElement('div', {
       id: styles.root
     });
-    const navbar = new Navbar({}).build();
-    const main = new Main({}).build();
-    const footer = new Footer({}).build();
+    const navbar = new Navbar({});
+    const main = new Main({});
+    const footer = new Footer({});
+
+    const onPopStateHandler = () => {
+      this._rebuildTree();
+    };
+
+    this._registerEffect(() => {
+      window.addEventListener('popstate', onPopStateHandler);
+
+      return () => {
+        window.removeEventListener('popstate', onPopStateHandler);
+      };
+    });
 
     return componentRoot.useMapping([
       {
         root,
         children: [
           navbar,
-          main,
+          {
+            route: '/',
+            main
+          },
           footer
         ]
       }
