@@ -198,3 +198,37 @@ test('useMapping fails when an unknown type is passed', () => {
 
   expect(call).toThrow('Unknown type passed - ');
 });
+
+test('mapping route stops component from rendering', () => {
+  const div = createElement('div');
+  const div2 = createElement('div');
+
+  const element = new ComponentElement(div);
+
+  const result = element.useMapping([
+    {
+      div2,
+      route: '/test'
+    }
+  ]).end();
+
+  expect(result.hasChildNodes()).toBe(false);
+});
+
+test('mapping route with correct path allows component to render', () => {
+  const div = createElement('div');
+  const div2 = createElement('div');
+
+  const element = new ComponentElement(div);
+
+  window.history.pushState({}, '', '/test');
+
+  const result = element.useMapping([
+    {
+      div2,
+      route: '/test'
+    }
+  ]).end();
+
+  expect(result.hasChildNodes()).toBe(true);
+});
