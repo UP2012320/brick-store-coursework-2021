@@ -49,40 +49,65 @@ export default class ComponentElement {
     return this;
   }
 
-  private _unwrapMapping(map: Record<string, object>, parent: ComponentElement) {
-    const values = Object.values(map);
-    const children = values.find(value => Array.isArray(value)) as object[];
+  private _unwrapMapping(map: Record<string, object | string>, parent: ComponentElement) {
+    const values = Object.entries(map)
+      .filter(([key]) => key !== 'children' && key !== 'route')
+      .map(([, value]) => value);
+
+    const children = map['children'] as object[] | undefined;
+    const route = map['route'] as string | undefined;
+
+    const isRoute = window.location.pathname === route;
+
+    const runIfRouteMatches = (func: () => void) => {
+      if (route) {
+        if (isRoute) {
+          func();
+        }
+      } else {
+        func();
+      }
+    };
+
     let newParent = parent;
 
-    values.filter(value => !Array.isArray(value)).forEach(value => {
+    values.forEach(value => {
       const type = Helpers.getType(value);
 
       switch (type) {
         case MappingType.element:
           const element = value as Element;
 
-          if (children) {
-            newParent = parent.down(element);
-          } else {
-            parent.then(element);
-          }
+          runIfRouteMatches(() => {
+            if (children) {
+              newParent = parent.down(element);
+            } else {
+              parent.then(element);
+            }
+          });
           break;
         case MappingType.componentElement:
           const componentElement = value as ComponentElement;
           parent.children.push(componentElement);
 
-          if (children) {
-            newParent = componentElement;
-          }
+          runIfRouteMatches(() => {
+            parent.children.push(componentElement);
+
+            if (children) {
+              newParent = componentElement;
+            }
+          });
           break;
         case MappingType.component:
           const component = value as Component;
 
-          parent.thenComponent(component);
+          runIfRouteMatches(() => {
+            parent.thenComponent(component);
 
-          if (children) {
-            throw new Error('When using a Component directly in the mapping, you cannot have any children');
-          }
+            if (children) {
+              throw new Error('When using a Component directly in the mapping, you cannot have any children');
+            }
+          });
           break;
         case MappingType.unknown:
           throw new Error(`Unknown type passed - ${value}`);
@@ -118,7 +143,7 @@ export default class ComponentElement {
           throw new Error(`Unknown type passed - ${child}`);
       }
     } else {
-      this._unwrapMapping(child as Record<string, object>, parent);
+      this._unwrapMapping(child as Record<string, object | string>, parent);
     }
   }
 
