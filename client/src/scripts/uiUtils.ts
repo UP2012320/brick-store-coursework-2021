@@ -15,3 +15,14 @@ export function createElementWithStyles<K extends keyof HTMLElementTagNameMap>(t
 
   return newElement;
 }
+
+export function createSvgElementFromFile(svg: string, options?: Partial<SVGSVGElement>, ...styles: string[]) {
+  const parser = new DOMParser();
+  const parsedDocument = parser.parseFromString(svg, 'application/xml');
+
+  const element = parsedDocument.documentElement;
+
+  element.classList.add(...styles);
+
+  return Object.assign(element, options) as SVGSVGElement;
+}
