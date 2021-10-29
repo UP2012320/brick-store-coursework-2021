@@ -13,7 +13,7 @@ export default class Navbar extends Component {
     const leftSideElement = createElementWithStyles('div', undefined, styles.navSideElement);
     const mainElement = createElementWithStyles('div', undefined, styles.navMainElement);
 
-    const navbarBrowseItem = new NavbarMainElementItem({title: 'Browse'});
+    const navbarBrowseItem = this._componentInstances.createInstance(new NavbarMainElementItem({title: 'Browse'}), 'navbarBrowseItem');
 
     const rightSideElement = createElementWithStyles('div', undefined, styles.navSideElement);
 

@@ -1,6 +1,7 @@
 import ComponentElement from 'Scripts/framework/componentElement';
 import Ref from 'Scripts/framework/ref';
 import {createElement} from 'Scripts/uiUtils';
+import {ComponentInstances} from 'Scripts/framework/componentInstances';
 
 // If I cannot use React, I will create my own React! :D
 // * 200% Extra Bugs
@@ -8,6 +9,7 @@ import {createElement} from 'Scripts/uiUtils';
 export default abstract class Component<T extends Record<string, unknown> = Record<string, unknown>,
   > {
   protected _props: T;
+  protected _componentInstances: ComponentInstances = new ComponentInstances();
   private _nextStoreIndex = 0;
   private _store: Record<number, unknown> = {};
   private _renderCounter = 0;
@@ -66,9 +68,9 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
         returnedCallback = callback();
       }
     } else if (dependencies === undefined) {
-      returnedCallback =  callback();
+      returnedCallback = callback();
     } else if (dependencies.length === 0 && this._renderCounter === 0) {
-      returnedCallback =  callback();
+      returnedCallback = callback();
     } else {
       this._store[id] = dependencies;
     }
@@ -98,7 +100,7 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
     };
   }
 
-  protected _rebuildTree() {
+  protected _clearTree() {
     if (this._unmountCallback) {
       this._unmountCallback();
       this._unmountCallback = undefined;
@@ -106,7 +108,10 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
 
     this._componentRoot?.clearChildren();
     this._nextStoreIndex = 0;
+  }
 
+  protected _rebuildTree() {
+    this._clearTree();
     this.build();
   }
 

@@ -11,9 +11,10 @@ export default class Root extends Component {
     const root = createElement('div', {
       id: styles.root
     });
-    const navbar = new Navbar({});
-    const main = new Main({});
-    const footer = new Footer({});
+
+    const navbar = this._componentInstances.createInstance(new Navbar({}), 'nav');
+    const main = this._componentInstances.createInstance(new Main({}), 'main');
+    const footer = this._componentInstances.createInstance(new Footer({}), 'footer');
 
     const onPopStateHandler = () => {
       this._rebuildTree();
