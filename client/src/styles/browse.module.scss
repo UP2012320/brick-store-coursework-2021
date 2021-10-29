@@ -1,0 +1,92 @@
+@use 'reset';
+@import "utils";
+
+#browse {
+  flex: 1 0 88%;
+  flex-wrap: wrap;
+  padding: $spacing-large;
+}
+
+.shop-card-container {
+  flex: 1 0 20%;
+  display: grid;
+  grid-template-areas: 'img img'
+                       'img img'
+                       'img img'
+                       'title title'
+                       'idRow idRow'
+                       'price .'
+                       'actionsRow actionsRow';
+
+  padding: $spacing-medium;
+  border-radius: $medium-radius;
+  border: 1px solid black;
+  width: max-content;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+@mixin shop-card-row-mixin {
+  display: flex;
+}
+
+.shop-card-row-id {
+  @include shop-card-row-mixin;
+}
+
+.shop-card-row-actions {
+  @include shop-card-row-mixin;
+
+  padding-top: $spacing-large;
+
+  & div:first-child {
+    margin-right: $spacing-medium;
+  }
+}
+
+.shop-card-img {
+  grid-area: img;
+  margin: auto;
+  width: 150px;
+  height: 150px;
+}
+
+.shop-card-title {
+  @include font-large;
+  grid-area: title;
+}
+
+.shop-card-id {
+  flex: 1;
+  @include font-small;
+  color: $grey;
+}
+
+.shop-card-stock {
+  @include font-small;
+  margin-left: auto;
+  margin-right: $spacing-medium;
+  color: $valid-green;
+}
+
+.shop-card-price {
+  @include font-small;
+  grid-area: price;
+  color: $grey;
+}
+
+.shop-card-button {
+  flex: 1;
+  border-radius: $small-radius;
+  border: 1px solid black;
+  padding: $spacing-medium;
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+    color: white;
+    background-color: black;
+  }
+}

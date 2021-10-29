@@ -5,6 +5,7 @@ import Navbar from 'Scripts/components/layout/navbar';
 import Footer from 'Scripts/components/layout/footer';
 import styles from 'Styles/root.module.scss';
 import {createElement} from 'Scripts/uiUtils';
+import Browse from 'Scripts/components/browse';
 
 export default class Root extends Component {
   _internalBuild(componentRoot: ComponentElement): Element {
@@ -14,6 +15,7 @@ export default class Root extends Component {
 
     const navbar = this._componentInstances.createInstance(new Navbar({}), 'nav');
     const main = this._componentInstances.createInstance(new Main({}), 'main');
+    const browse = this._componentInstances.createInstance(new Browse({}), 'browse');
     const footer = this._componentInstances.createInstance(new Footer({}), 'footer');
 
     const onPopStateHandler = () => {
@@ -36,6 +38,10 @@ export default class Root extends Component {
           {
             route: '/',
             main
+          },
+          {
+            route: '/browse',
+            browse
           },
           footer
         ]
