@@ -1,0 +1,29 @@
+$spacing-small: 0.1rem;
+$spacing-medium: 0.3rem;
+$spacing-large: 0.7rem;
+$spacing-xlarge: 1.5rem;
+$grey: #333;
+$valid-green: green;
+
+$medium-radius: 10px;
+$small-radius: 7px;
+
+@mixin font-xlarge {
+  font-size: 18pt;
+  font-weight: 500;
+}
+
+@mixin font-large {
+  font-size: 14pt;
+  font-weight: 500;
+}
+
+@mixin font-medium {
+  font-size: 12pt;
+  font-weight: 500;
+}
+
+@mixin font-small {
+  font-size: 10pt;
+  font-weight: 400;
+}
