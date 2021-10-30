@@ -82,6 +82,7 @@ export default abstract class Component<T extends Record<string, unknown> = Reco
     }
 
     if (typeof returnedCallback === 'function') {
+      // This is wrong, needs to be placed in a map of callbacks[index]
       this._unmountCallback = returnedCallback;
     }
   }

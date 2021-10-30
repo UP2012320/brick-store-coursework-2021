@@ -12,18 +12,18 @@ export default class Browse extends Component {
   }
 
   protected _internalBuild(componentRoot: ComponentElement): Element {
-    const card = this._componentInstances.createInstance(new ShopCard({}), 'card');
+    const f = [];
 
-    const cardContainer = createElementWithStyles('div', undefined, styles.shopCardContainer);
-
-    return componentRoot.useMapping([
-      {
-        cardContainer,
+    for (let i = 0; i < 10; i++) {
+      f.push({
+        cardContainer: createElementWithStyles('div', undefined, styles.shopCardContainer),
         children: [
-          card,
-        ],
-      },
-    ]).end();
+          this._componentInstances.createInstance(new ShopCard({}), `card${i}`)
+        ]
+      });
+    }
+
+    return componentRoot.useMapping(f).end();
   }
 }
 

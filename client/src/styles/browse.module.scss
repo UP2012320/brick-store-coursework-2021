@@ -3,8 +3,11 @@
 
 #browse {
   flex: 1 0 88%;
+  display: flex;
   flex-wrap: wrap;
-  padding: $spacing-large;
+  align-content: flex-start;
+  overflow-y: scroll;
+  padding: $spacing-small;
 }
 
 .shop-card-container {
@@ -21,7 +24,10 @@
   padding: $spacing-medium;
   border-radius: $medium-radius;
   border: 1px solid black;
-  width: max-content;
+  height: max-content;
+  max-width: 180px;
+  min-width: max-content;
+  margin: $spacing-large;
 
   &:hover {
     cursor: pointer;
@@ -88,5 +94,25 @@
     cursor: pointer;
     color: white;
     background-color: black;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  #browse {
+    margin: $spacing-small;
+  }
+
+  .shop-card-container {
+    margin: $spacing-medium;
+  }
+}
+
+@media only screen and (min-width: 641px) and (max-width: 768px) {
+  #browse {
+    align-content: center;
+  }
+
+  .shop-card-container {
+    max-width: max-content;
   }
 }
