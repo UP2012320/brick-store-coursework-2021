@@ -36,4 +36,3 @@ jobs:
           delete-branch: true
           labels: update
           branch: dependancies-update
-      - run: rm -rf *
