@@ -9,7 +9,8 @@
       "Styles/*": ["styles/*"],
       "Types/*": ["types/*"],
       "Scripts/*": ["scripts/*"],
-      "Assets/*": ["assets/*"]
+      "Assets/*": ["assets/*"],
+      "Tests/*": ["tests/*"]
     }
   },
   "include": ["src"]

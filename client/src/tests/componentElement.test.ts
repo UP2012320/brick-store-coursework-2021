@@ -1,6 +1,6 @@
 import ComponentElement from 'Scripts/framework/componentElement';
 import {createElement} from 'Scripts/uiUtils';
-import Navbar from 'Scripts/components/layout/navbar';
+import {TestComponent} from 'Tests/testingVariables';
 
 test('building with single element', () => {
   const div = createElement('div');
@@ -87,9 +87,9 @@ test('using thenComponent', () => {
 
   const element = new ComponentElement(div1);
 
-  const navbar = new Navbar({});
+  const component = new TestComponent({});
 
-  const result = element.then(div2).down(div3).thenComponent(navbar).end();
+  const result = element.then(div2).down(div3).thenComponent(component).end();
 
   expect(result.children[1].hasChildNodes()).toBeTruthy();
 });
@@ -137,7 +137,7 @@ test('useMapping with elements and components works correctly', () => {
   const div4 = createElement('div');
   const div5 = createElement('div');
   const div6 = createElement('div');
-  const navbar = new Navbar({});
+  const component = new TestComponent({});
 
   const element = new ComponentElement(div);
 
@@ -147,13 +147,13 @@ test('useMapping with elements and components works correctly', () => {
       children: [
         div3,
         div4,
-        navbar
+        component
       ],
     },
     div5,
     div6,
     {
-      navbar
+      component
     }
   ]).end();
 
@@ -165,14 +165,14 @@ test('useMapping fails when children are passed with a component', () => {
   const div = createElement('div');
   const div2 = createElement('div');
 
-  const navbar = new Navbar({});
+  const component = new TestComponent({});
 
   const element = new ComponentElement(div);
 
   const call = () => {
     element.useMapping([
       {
-        navbar,
+        navbar: component,
         children: [
           div2
         ]

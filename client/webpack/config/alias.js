@@ -11,4 +11,5 @@ export const aliasItems = {
   Types: join(rootDir, '/src/types'),
   Scripts: join(rootDir, '/src/scripts'),
   Assets: join(rootDir, '/src/assets'),
+  Tests: join(rootDir, '/src/tests'),
 };
