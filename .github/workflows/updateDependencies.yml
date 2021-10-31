@@ -1,5 +1,10 @@
 name: UpdateDependencies
 on:
+  workflow_dispatch:
+    inputs:
+      git-ref:
+        description: SHA (Leave Blank)
+        required: false
   schedule:
     - cron: '0 0 * * 0'
 jobs:
