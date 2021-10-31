@@ -22,3 +22,4 @@ The component has to be instantiated, then afterwards an identifier must be crea
 
 The first solution is to require a component to be registered on every instance with a unique human provided ID.
 
+test
