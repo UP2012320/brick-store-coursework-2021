@@ -172,7 +172,7 @@ test('useMapping fails when children are passed with a component', () => {
   const call = () => {
     element.useMapping([
       {
-        navbar: component,
+        component,
         children: [
           div2
         ]
