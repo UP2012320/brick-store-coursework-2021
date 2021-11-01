@@ -6,6 +6,8 @@ on:
       - 'LICENSE'
       - '.gitignore'
       - '**/README.md'
+    branches:
+      - main
 jobs:
   TestClient:
     runs-on: self-hosted
