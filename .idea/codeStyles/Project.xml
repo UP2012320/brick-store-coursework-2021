@@ -78,6 +78,9 @@
         <option name="TAB_SIZE" value="2" />
       </indentOptions>
     </codeStyleSettings>
+    <codeStyleSettings language="Markdown">
+      <option name="WRAP_ON_TYPING" value="1" />
+    </codeStyleSettings>
     <codeStyleSettings language="TypeScript">
       <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
       <option name="CALL_PARAMETERS_WRAP" value="5" />

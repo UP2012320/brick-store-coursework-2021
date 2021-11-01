@@ -26,34 +26,13 @@ I don't like having to do this everytime and would prefer to avoid it.
 
 The second solution is to for an unintelligent index based system accompanied by comparisons with sibling nodes.
 
-This would work in the following way.
+### The bigger picture
 
-#### Initialise the component instances
+Ultimately, the second solution would also require the creation of a virtual DOM and diffing.
 
-```typescript
-const component = new Component();
-const component2 = new Component();
+This would mean one big change to the current way components are built.
 
-return [
-  component,
-  component2
-];
-```
+Currently, upon calling build(), a component and all it's children are added directly to the DOM.
 
-* Component would be assigned the index 0 and component2 the index of 1.
-* This order does not follow the order of instantiation but the order in the return
+Now, a call to build() is not a call to add to the DOM but to enqueue its creation in the virtual DOM.
 
-#### Added to the global store
-
-The components would then be indexed by and with the following.
-
-* Order index as the key
-* The value would be an object containing all the various states
-
-#### Accessing the global store
-
-If the order of the elements in the return does not change, nothing happens and the state data is returned.
-
-But if the order has changed then two things need to happen.
-
-1. 
