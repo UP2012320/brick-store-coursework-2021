@@ -23,7 +23,7 @@ export default class Navbar extends Component {
     const rightSideElement = createElementWithStyles('div', undefined, styles.navSideElement);
 
     const leftSideTitle = createElement('h1', {
-      textContent: 'The Super Brick Store',
+      textContent: 'The Super Super Brick Store',
     });
 
     this._registerElementAsLink(leftSideTitle, '/');
