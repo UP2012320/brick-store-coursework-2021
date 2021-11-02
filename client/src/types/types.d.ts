@@ -3,3 +3,10 @@ export type InitMapping = Record<string, HTMLElement | (HTMLElement | InitCompon
 export type InitComponentMapping = Record<string, Mapping | string> | HTMLElement | Mapping;
 export type MergedMapping = InitMapping | InitComponentMapping;
 export type Mapping = MergedMapping[];
+
+declare global {
+  interface Array<T> {
+    skip(amount: number): Array<T>;
+    skipLast(amount: number): Array<T>;
+  }
+}

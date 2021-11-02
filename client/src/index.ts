@@ -1,12 +1,6 @@
-import Root from 'Scripts/framework/root';
-import ComponentElement from 'Scripts/framework/componentElement';
-import {render} from 'Scripts/newFramework/virtualDom';
-import {createElement} from 'Scripts/uiUtils';
-import {Component, Mapping} from 'Types/types';
-import {template} from '@babel/core';
-
 type HtmlNode = {
-  depth?: number
+  depth?: number,
+  tag: string
 }
 
 type HtmlTag = {
@@ -32,6 +26,35 @@ interface HtmlAttribute {
   valueIsArg?: boolean
 }
 
+class ParsedElement {
+  parent?: ParsedElement;
+  children: ParsedElement[] = [];
+  attributes: HtmlAttribute[] = [];
+  tag: string;
+  text?: string;
+
+  constructor(tag: string, attributes: HtmlAttribute[] = [], text?: string, parent?: ParsedElement) {
+    this.tag = tag;
+    this.parent = parent;
+    this.text = text;
+    this.attributes = attributes;
+  }
+
+  getSiblings() {
+    if (this.parent) {
+      return this.parent.children.filter(x => x !== this);
+    } else {
+      return [this];
+    }
+  }
+
+  appendChild(tag: string, attributes: HtmlAttribute[] = [], text?: string) {
+    const newElement = new ParsedElement(tag, attributes, text, this);
+    this.children.push(newElement);
+    return newElement;
+  }
+}
+
 function matchAttributesFromHtmlTagOpening(tag: string) {
   const attributeRegex = /\s+(?<key>.+?)=['"`](?<value>.+?)['"`]/gmi;
 
@@ -39,6 +62,10 @@ function matchAttributesFromHtmlTagOpening(tag: string) {
   let m;
 
   while ((m = attributeRegex.exec(tag)) !== null) {
+    if (m.index === attributeRegex.lastIndex) {
+      attributeRegex.lastIndex++;
+    }
+
     if (m.groups) {
       attributes.push({
         key: m.groups['key'],
@@ -52,36 +79,73 @@ function matchAttributesFromHtmlTagOpening(tag: string) {
 }
 
 function parseHtmlTag(tag: string): HtmlTags {
-  if (tag.match(/^<\w+(?:(?=>)|.*[^\/])>$/gmi)) {
+  let match;
+
+  if ((match = /^<(?<tag>\w+)(?:(?=>)|.*[^\/])>$/gmi.exec(tag))) {
     return {
       type: 'opening',
       attributes: matchAttributesFromHtmlTagOpening(tag),
+      tag: match?.groups?.tag ?? 'unknown'
     };
-  } else if (tag.match(/^<\/\w+>$/gmi)) {
+  } else if ((match = /^<\/(?<tag>\w+)>$/gmi.exec(tag))) {
     return {
       type: 'closing',
+      tag: match.groups?.tag ?? 'unknown'
     };
-  } else if (tag.match(/^<\w+.*\/>$/gmi)) {
+  } else if ((match = /^<(?<tag>\w+).*\/>$/gmi.exec(tag))) {
     return {
       type: 'selfClosing',
       attributes: matchAttributesFromHtmlTagOpening(tag),
+      tag: match.groups?.tag ?? 'unknown'
     };
   } else if (tag.match(/^###\d+###$/gmi)) {
     return {
       type: 'text',
       value: tag,
       valueIsArg: true,
+      tag: '#text'
     };
   } else {
     return {
       type: 'text',
       value: tag,
+      tag: '#text'
     };
   }
 }
 
+Array.prototype.skip = function(amount) {
+  if (amount >= this.length) {
+    return [];
+  }
+
+  const newArray = [];
+
+  for (let i = amount; i < this.length; i++) {
+    newArray.push(this[i]);
+  }
+
+  return newArray;
+};
+
+Array.prototype.skipLast = function(amount) {
+  if ((this.length - amount) <= 0) {
+    return [];
+  }
+
+  const newArray = [];
+
+  for (let i = 0; i < this.length - amount; i++) {
+    newArray.push(this[i]);
+  }
+
+  return newArray;
+};
+
 function html(templates: TemplateStringsArray, ...args: unknown[]) {
   let combinedHtml = '';
+
+  console.debug(templates, args);
 
   templates.forEach((template, index) => {
     if (index >= args.length) {
@@ -91,7 +155,7 @@ function html(templates: TemplateStringsArray, ...args: unknown[]) {
     }
   });
 
-  console.log(combinedHtml);
+  console.debug(combinedHtml);
 
   const htmlTags = combinedHtml
     .split(/(<[^>]+>)/gmi)
@@ -111,57 +175,46 @@ function html(templates: TemplateStringsArray, ...args: unknown[]) {
     }
   });
 
-  console.log(htmlTags);
+  console.debug(htmlTags);
+
+  const openTags: HtmlTags[] = [];
+
+  let root: ParsedElement;
+
+  if (htmlTags[0].type === 'opening' || htmlTags[0].type === 'selfClosing') {
+    root = new ParsedElement(htmlTags[0].tag, htmlTags[0].attributes);
+  } else {
+    throw new Error('Invalid HTML passed');
+  }
+
+  let currentParent = root;
+
+  htmlTags.skip(1).skipLast(1).forEach(tag => {
+    switch (tag.type) {
+      case 'opening':
+        currentParent = currentParent.appendChild(tag.tag, tag.attributes);
+        openTags.push(tag);
+        break;
+      case 'selfClosing':
+        currentParent.appendChild(tag.tag, tag.attributes);
+        break;
+      case 'closing':
+        const openTag = openTags.pop();
+        console.debug(openTag);
+
+        if (currentParent.parent) {
+          currentParent = currentParent.parent;
+        }
+        break;
+      case 'text':
+        currentParent.appendChild(tag.tag, undefined, tag.value);
+        break;
+    }
+  });
+
+  console.debug(root);
 
   return;
-
-  /*const cleanedTemplates = templates.map(template => template.replaceAll(/((\s)\s+|\n+|\r+)/gmi, ''));
-
-  const currentlyOpenTags: HtmlTags[] = [];
-  let depth = 0;
-
-  cleanedTemplates.forEach((line, index) => {
-    const isLastLine = index === cleanedTemplates.length - 1;
-
-    const htmlTags = line
-      .split(/(<[^>]+>)/gmi).filter(x => x)
-      .map(tag => parseHtmlTag(tag));
-
-    console.log(htmlTags, index);
-
-    for (let i = 0; i < htmlTags.length; i++) {
-      const tag = htmlTags[i];
-      const isLastTag = i === htmlTags.length - 1;
-      const nextTag = isLastTag ? undefined : htmlTags[i + 1];
-
-      switch (tag.type) {
-        case 'opening':
-          tag.depth = depth++;
-
-          if (tag.attributes.some(tag => tag.valueIsArg)) {
-            tag.attributes.forEach(attribute => {
-              if (attribute.valueIsArg) {
-                attribute.value = args.shift();
-              }
-            });
-
-            if (isLastTag || nextTag?.type === 'attributeCollection') {
-              currentlyOpenTags.push(tag);
-            } else {
-
-            }
-          } else {
-
-          }
-
-          break;
-        case 'closing':
-          depth--;
-      }
-
-      console.log(tag);
-    }
-  });*/
 }
 
 const d = () => {
@@ -171,31 +224,13 @@ const d = () => {
 const p = html`
   <div id='id'>
     <input value='test' maxlength='${1}' />
-    <div class='${'my-class'}' id='test' onclick='${() => d()}'>
-      <div>
-        <p>hello</p>
-      </div>
-    </div>
-    <div>
+    <label class='${'my-class'}' id='test' onclick='${() => d()}'>
+      <main>
+        <b>hello</b>
+      </main>
+    </label>
+    <select>
       <p>${'customText'}</p>
-    </div>
+    </select>
   </div>
 `;
-
-function test2(): Mapping {
-  return [
-    createElement('p'),
-  ];
-}
-
-function test(): Mapping {
-  return [
-    createElement('div'),
-    createElement('p'),
-  ];
-}
-
-render(test(), document.getElementById('root'));
-
-//const root = new Root({}, new ComponentElement(document.body));
-//root.build();
