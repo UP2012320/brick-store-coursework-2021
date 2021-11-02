@@ -43,7 +43,7 @@ function matchAttributesFromHtmlTagOpening(tag: string) {
       attributes.push({
         key: m.groups['key'],
         value: m.groups['value'],
-        valueIsArg: m.groups['value']?.match(/###\d+###/gmi) !== null,
+        valueIsArg: m.groups['value']?.match(/^###\d+###$/gmi) !== null,
       });
     }
   }
@@ -61,7 +61,7 @@ function parseHtmlTag(tag: string): HtmlTags {
     return {
       type: 'closing',
     };
-  } else if (tag.match(/###\d+###/gmi)) {
+  } else if (tag.match(/^###\d+###$/gmi)) {
     return {
       type: 'text',
       value: tag,
