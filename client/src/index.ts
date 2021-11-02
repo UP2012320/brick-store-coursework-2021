@@ -20,7 +20,7 @@ type HtmlText = {
 } & HtmlNode;
 
 type HtmlTagWithAttributes = {
-  type: 'opening',
+  type: 'opening' | 'selfClosing',
   attributes: HtmlAttribute[]
 } & HtmlNode;
 
@@ -33,7 +33,7 @@ interface HtmlAttribute {
 }
 
 function matchAttributesFromHtmlTagOpening(tag: string) {
-  const attributeRegex = /(?<key>[\w-]+)=(?<quotes>['"](?<value>[\w#]+)?['"])?/gmi;
+  const attributeRegex = /\s+(?<key>.+?)=['"`](?<value>.+?)['"`]/gmi;
 
   const attributes: HtmlAttribute[] = [];
   let m;
@@ -52,14 +52,19 @@ function matchAttributesFromHtmlTagOpening(tag: string) {
 }
 
 function parseHtmlTag(tag: string): HtmlTags {
-  if (tag.match(/<[^\/]/gmi)) {
+  if (tag.match(/^<\w+.+[^\/]>$/gmi)) {
     return {
       type: 'opening',
       attributes: matchAttributesFromHtmlTagOpening(tag),
     };
-  } else if (tag.match(/<\//gmi)) {
+  } else if (tag.match(/^<\/\w+/gmi)) {
     return {
       type: 'closing',
+    };
+  } else if (tag.match(/^<\w+.+\/>$/gmi)) {
+    return {
+      type: 'selfClosing',
+      attributes: matchAttributesFromHtmlTagOpening(tag)
     };
   } else if (tag.match(/^###\d+###$/gmi)) {
     return {
@@ -165,6 +170,7 @@ const d = () => {
 
 const p = html`
   <div id='id'>
+    <input/>
     <div class='${'my-class'}' id='test' onclick='${() => d()}'>
       <div>
         <p>hello</p>
