@@ -52,30 +52,30 @@ function matchAttributesFromHtmlTagOpening(tag: string) {
 }
 
 function parseHtmlTag(tag: string): HtmlTags {
-  if (tag.match(/^<\w+.+[^\/]>$/gmi)) {
+  if (tag.match(/^<\w+(?:(?=>)|.*[^\/])>$/gmi)) {
     return {
       type: 'opening',
       attributes: matchAttributesFromHtmlTagOpening(tag),
     };
-  } else if (tag.match(/^<\/\w+/gmi)) {
+  } else if (tag.match(/^<\/\w+>$/gmi)) {
     return {
       type: 'closing',
     };
-  } else if (tag.match(/^<\w+.+\/>$/gmi)) {
+  } else if (tag.match(/^<\w+.*\/>$/gmi)) {
     return {
       type: 'selfClosing',
-      attributes: matchAttributesFromHtmlTagOpening(tag)
+      attributes: matchAttributesFromHtmlTagOpening(tag),
     };
   } else if (tag.match(/^###\d+###$/gmi)) {
     return {
       type: 'text',
       value: tag,
-      valueIsArg: true
+      valueIsArg: true,
     };
   } else {
     return {
       type: 'text',
-      value: tag
+      value: tag,
     };
   }
 }
@@ -100,7 +100,7 @@ function html(templates: TemplateStringsArray, ...args: unknown[]) {
 
 
   htmlTags.forEach(tag => {
-    if (tag.type === 'opening') {
+    if (tag.type === 'opening' || tag.type === 'selfClosing') {
       tag.attributes.forEach(attribute => {
         if (attribute.valueIsArg) {
           attribute.value = args.shift();
@@ -170,7 +170,7 @@ const d = () => {
 
 const p = html`
   <div id='id'>
-    <input/>
+    <input value='test' maxlength='${1}' />
     <div class='${'my-class'}' id='test' onclick='${() => d()}'>
       <div>
         <p>hello</p>
