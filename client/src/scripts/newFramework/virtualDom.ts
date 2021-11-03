@@ -1,19 +1,21 @@
-import {Mapping, MergedMapping} from 'Types/types';
+import {ParsedElement} from 'Scripts/newFramework/parsedElement';
 
-export function render(initElements: Mapping, appParent: HTMLElement | null) {
-  if (!appParent) {
-    throw new Error('App parent was null or undefined');
+export default class VirtualDom {
+  private _rootElement: ParsedElement;
+
+  constructor(rootElement: ParsedElement) {
+    this._rootElement = rootElement;
   }
 
-  traverse(initElements);
-}
+  static render(element: ParsedElement, root: Element | null | undefined) {
+    if (!root) {
+      throw new Error('Root element was undefined');
+    }
 
-function traverse(mapping: Mapping) {
-  mapping.forEach(map => {
-    traverseNode(map);
-  });
-}
+    const rootParsedElement = ParsedElement.fromElement(root);
 
-function traverseNode(mapping: MergedMapping) {
-  const a = 1;
+    rootParsedElement.appendParsedElement(element);
+
+    return new VirtualDom(rootParsedElement);
+  }
 }
