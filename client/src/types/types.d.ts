@@ -10,3 +10,31 @@ declare global {
     skipLast(amount: number): Array<T>;
   }
 }
+
+type HtmlNode = {
+  depth?: number,
+  tag: string
+}
+
+type HtmlTag = {
+  type: 'closing',
+} & HtmlNode;
+
+type HtmlText = {
+  type: 'text',
+  value: string,
+  valueIsArg?: boolean
+} & HtmlNode;
+
+type HtmlTagWithAttributes = {
+  type: 'opening' | 'selfClosing',
+  attributes: HtmlAttribute[]
+} & HtmlNode;
+
+type HtmlTags = HtmlTag | HtmlTagWithAttributes | HtmlText;
+
+interface HtmlAttribute {
+  key: string,
+  value: unknown,
+  valueIsArg?: boolean
+}
