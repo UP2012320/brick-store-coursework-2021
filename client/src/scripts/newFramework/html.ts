@@ -2,7 +2,7 @@ import {ParsedElement} from 'Scripts/newFramework/parsedElement';
 import {HtmlAttribute, HtmlTags} from 'Types/types';
 
 function matchAttributesFromHtmlTagOpening(tag: string) {
-  const attributeRegex = /\s+(?<key>.+?)=['"`](?<value>.+?)['"`]/gmi;
+  const attributeRegex = /\s+(?<key>.+?)=(['"`](?<value>.+?)['"`])?/gmi;
 
   const attributes: HtmlAttribute[] = [];
   let m;
@@ -25,37 +25,44 @@ function matchAttributesFromHtmlTagOpening(tag: string) {
 }
 
 function parseHtmlTag(tag: string): HtmlTags {
+  console.debug(tag);
   let match;
 
   if ((match = /^<(?<tag>\w+)(?:(?=>)|.*[^\/])>$/gmi.exec(tag))) {
     return {
       type: 'opening',
       attributes: matchAttributesFromHtmlTagOpening(tag),
-      tag: match?.groups?.tag ?? 'unknown'
+      tag: match?.groups?.tag ?? 'unknown',
     };
   } else if ((match = /^<\/(?<tag>\w+)>$/gmi.exec(tag))) {
     return {
       type: 'closing',
-      tag: match.groups?.tag ?? 'unknown'
+      tag: match.groups?.tag ?? 'unknown',
     };
   } else if ((match = /^<(?<tag>\w+).*\/>$/gmi.exec(tag))) {
     return {
       type: 'selfClosing',
       attributes: matchAttributesFromHtmlTagOpening(tag),
-      tag: match.groups?.tag ?? 'unknown'
+      tag: match.groups?.tag ?? 'unknown',
+    };
+  } else if (tag.match(/^<###\d+###.+\/>$/gmi)) {
+    return {
+      type: 'selfClosing',
+      tag: 'component',
+      attributes: matchAttributesFromHtmlTagOpening(tag),
     };
   } else if (tag.match(/^###\d+###$/gmi)) {
     return {
       type: 'text',
       value: tag,
       valueIsArg: true,
-      tag: '#text'
+      tag: '#text',
     };
   } else {
     return {
       type: 'text',
       value: tag,
-      tag: '#text'
+      tag: '#text',
     };
   }
 }

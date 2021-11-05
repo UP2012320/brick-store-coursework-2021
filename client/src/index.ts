@@ -5,7 +5,26 @@ const d = () => {
   console.log('d');
 };
 
-const o = VirtualDom.render(html`
+function AnotherComponent(props: {age: number}) {
+
+  return html`
+  <p>Hello World!</p>`;
+}
+
+function Component() {
+
+  return html`
+    <div>
+      <${AnotherComponent} age=${0}/>
+    </div>
+  `;
+}
+
+const a = Component();
+
+console.debug(a);
+
+/*const o = VirtualDom.render(html`
   <div id='id'>
     <input value='test' maxlength='${1}' />
     <label class='${'my-class'}' id='test' onclick='${() => d()}'>
@@ -19,4 +38,4 @@ const o = VirtualDom.render(html`
   </div>
 `, document.querySelector('#root'));
 
-console.debug(o);
+console.debug(o);*/

@@ -17,7 +17,7 @@ type HtmlNode = {
 }
 
 type HtmlTag = {
-  type: 'closing',
+  type: 'closing' | 'component',
 } & HtmlNode;
 
 type HtmlText = {
