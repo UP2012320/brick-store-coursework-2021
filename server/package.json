@@ -6,19 +6,19 @@
     "test": "exit 0"
   },
   "devDependencies": {
-    "@types/node": "^16.11.6",
+    "@types/node": "^16.11.10",
     "@types/pg": "^8.6.1",
-    "@typescript-eslint/eslint-plugin": "~5.2.0",
-    "@typescript-eslint/parser": "~5.2.0",
-    "eslint": "^8.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-import-resolver-alias": "~1.1.2",
-    "eslint-plugin-import": "~2.25.2",
-    "fastify": "^3.22.1",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.25.3",
+    "fastify": "^3.24.0",
     "pg": "^8.7.1",
-    "prettier": "~2.4.1",
-    "prettier-plugin-import-sort": "~0.0.7",
-    "typescript": "^4.4.4"
+    "prettier": "^2.4.1",
+    "prettier-plugin-import-sort": "^0.0.7",
+    "typescript": "^4.5.2"
   },
   "importSort": {
     ".ts, .tsx": {
