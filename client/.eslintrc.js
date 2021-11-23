@@ -23,7 +23,8 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'quotes': ['error', 'single'],
     'semi': 'error',
-    'no-constant-condition': 'off'
+    'no-constant-condition': 'off',
+    'prefer-const': 'off'
   },
   ignorePatterns: ['.eslintrc.js']
 };
