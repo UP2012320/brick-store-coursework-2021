@@ -4,11 +4,11 @@ export class ParsedElement {
   parent?: ParsedElement;
   children: ParsedElement[] = [];
   attributes: HtmlAttribute[] = [];
-  tag: string;
+  tag: string | ((...args: unknown[]) => ParsedElement);
   text?: string;
 
-  constructor(tag: string, attributes: HtmlAttribute[] = [], text?: string, parent?: ParsedElement) {
-    this.tag = tag.toLowerCase();
+  constructor(tag: string | ((...args: unknown[]) => ParsedElement), attributes: HtmlAttribute[] = [], text?: string, parent?: ParsedElement) {
+    this.tag = tag;
     this.parent = parent;
     this.text = text;
     this.attributes = attributes;
@@ -37,7 +37,7 @@ export class ParsedElement {
     return this.parent ? this.parent.children.filter(x => x !== this) : [];
   }
 
-  appendChild(tag: string, attributes: HtmlAttribute[] = [], text?: string) {
+  appendChild(tag: string | ((...args: unknown[]) => ParsedElement), attributes: HtmlAttribute[] = [], text?: string) {
     const newElement = new ParsedElement(tag, attributes, text, this);
     this.children.push(newElement);
     return newElement;
