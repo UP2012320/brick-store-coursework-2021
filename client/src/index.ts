@@ -1,28 +1,8 @@
 import html from 'Scripts/newFramework/html';
 import VirtualDom from 'Scripts/newFramework/virtualDom';
+import Test from 'Scripts/newFramework/test';
 
-const d = () => {
-  console.log('d');
-};
-
-function AnotherComponent(props: {age: number}) {
-
-  return html`
-  <p>Hello World!</p>`;
-}
-
-function Component() {
-
-  return html`
-    <div>
-      <${AnotherComponent} age=${0}/>
-    </div>
-  `;
-}
-
-const a = Component();
-
-console.debug(a);
+console.debug(Test());
 
 /*const o = VirtualDom.render(html`
   <div id='id'>
