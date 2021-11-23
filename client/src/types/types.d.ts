@@ -1,3 +1,5 @@
+import {ParsedElement} from 'Scripts/newFramework/parsedElement';
+
 export type Component = (props?: Record<string, unknown>) => Mapping;
 export type InitMapping = Record<string, HTMLElement | (HTMLElement | InitComponentMapping)[] | string> | HTMLElement | Mapping;
 export type InitComponentMapping = Record<string, Mapping | string> | HTMLElement | Mapping;
@@ -17,8 +19,17 @@ type HtmlNode = {
 }
 
 type HtmlTag = {
-  type: 'closing' | 'component',
+  type: 'closing',
 } & HtmlNode;
+
+type HtmlComponentTag = {
+  type: 'component'
+  func: (...args: unknown[]) => ParsedElement
+} & HtmlAttributes;
+
+type HtmlTagsWithAttributes = {
+  type: 'opening' | 'selfClosing'
+} & HtmlAttributes;
 
 type HtmlText = {
   type: 'text',
@@ -26,12 +37,11 @@ type HtmlText = {
   valueIsArg?: boolean
 } & HtmlNode;
 
-type HtmlTagWithAttributes = {
-  type: 'opening' | 'selfClosing',
+type HtmlAttributes = {
   attributes: HtmlAttribute[]
 } & HtmlNode;
 
-type HtmlTags = HtmlTag | HtmlTagWithAttributes | HtmlText;
+type HtmlTags = HtmlTag | HtmlTagsWithAttributes | HtmlText | HtmlComponentTag;
 
 interface HtmlAttribute {
   key: string,
