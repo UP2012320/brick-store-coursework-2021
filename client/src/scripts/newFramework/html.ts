@@ -117,7 +117,10 @@ export default function html(templates: TemplateStringsArray, ...args: unknown[]
 
 
   htmlTags.forEach(tag => {
-    if (tag.type === 'opening' || tag.type === 'selfClosing') {
+    if (tag.type === 'opening' || tag.type === 'selfClosing' || tag.type === 'component') {
+      if (tag.type === 'component') {
+        tag.func = args.shift() as (...args: unknown[]) => ParsedElement;
+      }
       tag.attributes.forEach(attribute => {
         if (attribute.valueIsArg) {
           attribute.value = args.shift();
@@ -147,6 +150,10 @@ export default function html(templates: TemplateStringsArray, ...args: unknown[]
       case 'opening':
         currentParent = currentParent.appendChild(tag.tag, tag.attributes);
         openTags.push(tag);
+        break;
+      case 'component':
+        console.debug(tag.func);
+        currentParent.appendChild(tag.func, tag.attributes);
         break;
       case 'selfClosing':
         currentParent.appendChild(tag.tag, tag.attributes);
