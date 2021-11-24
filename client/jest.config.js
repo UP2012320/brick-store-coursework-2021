@@ -14,8 +14,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleNameMapper: mapping,
   transform: {
-    '^.+\\.(ts|tsx)?$': 'ts-jest',
-    '^.+\\.(js|jsx)$': 'babel-jest',
+    '^.+\\.[tj]sx?$': '@swc/jest',
     '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
   },
   extensionsToTreatAsEsm: ['.ts'],

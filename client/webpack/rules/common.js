@@ -1,26 +1,24 @@
 /**
  * Created by: Andrey Polyakov (andrey@polyakov.im)
  */
-import {babelLoader} from './useLoaderRuleItems';
 
-/**
- * @see https://webpack.js.org/guides/typescript/#loader
- */
-export const typescriptRule = {
-    test: /\.tsx?$/,
-    loader: 'ts-loader',
-    options: {
-        transpileOnly: true,
-    },
-    exclude: /node_modules/,
-};
-/**
- * @see https://webpack.js.org/loaders/babel-loader
- */
 export const javascriptRule = {
-    test: /\.(js|jsx)$/,
-    use: [babelLoader],
-    exclude: /node_modules/,
+    test: /\.tsx?$/,
+    exclude: /(node_modules|bower_components)/,
+    use: {
+        // `.swcrc` can be used to configure swc
+        loader: 'swc-loader',
+        options: {
+            jsc: {
+                parser: {
+                    syntax: 'typescript',
+                    tsx: false,
+                    decorators: false,
+                    dynamicImport: true,
+                },
+            },
+        },
+    },
 };
 
 /**

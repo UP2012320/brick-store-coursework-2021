@@ -9,11 +9,6 @@ module.exports = (api) => {
   api.cache.using(() => mode);
 
   return {
-    "env": {
-      "test": {
-        "plugins": ["@babel/plugin-transform-modules-commonjs"]
-      }
-    },
     presets: [
       [
         '@babel/preset-env',
@@ -26,13 +21,6 @@ module.exports = (api) => {
           corejs: 3,
         },
       ]
-    ],
-    plugins: [
-      '@babel/plugin-syntax-dynamic-import',
-      '@babel/plugin-proposal-class-properties',
-      '@babel/plugin-proposal-export-namespace-from',
-      '@babel/plugin-proposal-throw-expressions',
-      '@babel/proposal-object-rest-spread'
-    ].filter(Boolean),
+    ]
   };
 };

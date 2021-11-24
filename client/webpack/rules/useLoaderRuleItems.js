@@ -6,7 +6,7 @@ import {join} from 'path';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 import {sassResourceItems} from '../config';
-import {isProd, rootDir, webpackDir} from '../utils/env';
+import {isProd, webpackDir} from '../utils/env';
 
 export const cssLoader = {
   loader: 'css-loader',
@@ -84,13 +84,6 @@ export const resolveUrlLoader = {
   loader: 'resolve-url-loader',
   options: {
     sourceMap: true,
-  },
-};
-
-export const babelLoader = {
-  loader: 'babel-loader',
-  options: {
-    configFile: join(rootDir, '/.babelrc.js'),
   },
 };
 
