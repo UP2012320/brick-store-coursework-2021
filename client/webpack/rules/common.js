@@ -13,7 +13,7 @@ export const javascriptRule = {
                 parser: {
                     syntax: 'typescript',
                     tsx: false,
-                    decorators: false,
+                    decorators: true,
                     dynamicImport: true,
                 },
             },
