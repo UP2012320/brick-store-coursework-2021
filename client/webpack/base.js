@@ -17,7 +17,7 @@ export default {
   mode: isProd ? 'production' : 'development',
   entry,
   output: {
-    path: path.join(__dirname, '../dist'),
+    path: path.join(__dirname, '../../dist/public'),
     publicPath: isDevServer ? devServerUrl : './',
     filename: isDevServer
         ? '[name].[fullhash].js'
