@@ -1,12 +1,14 @@
 {
   "name": "server",
   "scripts": {
-    "start": "",
-    "build": "exit 0",
+    "start": "npm run build && node dist/index.js",
+    "build": "tsc",
+    "build-submission": "tsc -p tsconfig.submission.json && prettier ",
     "test": "exit 0"
   },
+  "main": "dist/index.js",
   "devDependencies": {
-    "@types/node": "^16.11.10",
+    "@types/node": "^16.11.11",
     "@types/pg": "^8.6.1",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
