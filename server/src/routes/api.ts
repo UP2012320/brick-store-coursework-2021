@@ -5,8 +5,8 @@ export default function api(
   opts: FastifyServerOptions,
   done: (err?: Error) => void,
 ) {
-  fastify.get<{Querystring: {sort: string}}>('/', (request, reply) => {
-    reply.send('hello world');
+  fastify.get<{Querystring: {sort: string}}>('/', async (request, reply) => {
+    return 'Hello World!';
   });
 
   done();
