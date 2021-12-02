@@ -3,7 +3,9 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
+    "lib": ["ESNext"],
     "sourceMap": false,
-    "outDir": "../submission/server"
+    "outDir": "../submission/client",
+    "moduleResolution": "Node"
   }
 }
