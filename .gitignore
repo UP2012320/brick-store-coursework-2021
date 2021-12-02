@@ -275,3 +275,4 @@ client/cypress/results/*
 client/cypress/reports/*
 client/cypress/screenshots/*
 client/cypress/videos/*
+submission/*
