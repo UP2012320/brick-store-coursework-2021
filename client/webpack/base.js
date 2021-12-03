@@ -11,6 +11,12 @@ import * as rules from './rules';
 import {isDevServer, isProd} from './utils/env';
 import {arrayFilterEmpty} from './utils/helpers';
 
+const publicPath = isDevServer
+  ? devServerUrl
+  : process.env.ENV === 'vercel'
+  ? './'
+  : './public';
+
 export default {
   context: __dirname,
   target: isDevServer ? 'web' : ['web', 'es6'],
@@ -18,7 +24,7 @@ export default {
   entry,
   output: {
     path: path.join(__dirname, '../../dist/public'),
-    publicPath: isDevServer ? devServerUrl : './public/',
+    publicPath: publicPath,
     filename: isDevServer ? '[name].[fullhash].js' : '[name].[contenthash].js',
   },
   module: {
