@@ -38,7 +38,7 @@ export default function api(
     }
 
     try {
-      const f = await pg.query(
+      /*const f = await pg.query(
         `SELECT *
          FROM inventory
          WHERE item_name ILIKE '%' || $1 || '%'
@@ -60,9 +60,18 @@ export default function api(
           body.sort ?? 'item_name',
           50 * (body.page ?? 0),
         ],
+      );*/
+
+      const f = await pg.query(
+        `SELECT *
+                                FROM inventory
+                                WHERE item_name ILIKE '%' || $1 || '%'
+                                LIMIT 10;`,
+        [body.query],
       );
 
       console.debug(f.rows);
+      return f.rows;
     } catch (e) {
       console.debug(e);
     }

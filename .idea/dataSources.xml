@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="brick_store_coursework@localhost" uuid="c34eba66-9c80-445a-ade2-566cb9b97465">
+    <data-source source="LOCAL" name="brick_store_coursework@82.44.109.236" uuid="c34eba66-9c80-445a-ade2-566cb9b97465">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/brick_store_coursework</jdbc-url>
+      <jdbc-url>jdbc:postgresql://82.44.109.236:5432/brick_store_coursework</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

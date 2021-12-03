@@ -9,7 +9,7 @@ import path from 'path';
 const PORT = process.env.PORT || 8080;
 const PG_CONNECTION_STRING =
   process.env.PG_CONNECTION_STRING ||
-  'postgresql://brick_store_user:y*_dwYx7CkTbaQQ!@localhost:5432/brick_store_coursework';
+  'postgresql://brick_store_user:y*_dwYx7CkTbaQQ!@82.44.109.236:5432/brick_store_coursework';
 const app = fastify();
 
 app.register(fastifyHelmet, {contentSecurityPolicy: false});

@@ -13,7 +13,7 @@ import {arrayFilterEmpty} from './utils/helpers';
 
 const publicPath = isDevServer
   ? devServerUrl
-  : process.env.ENV === 'vercel'
+  : process.env.IS_VERCEL
   ? './'
   : './public';
 
