@@ -6,11 +6,13 @@ import {isProd} from '../utils/env';
 import {arrayFilterEmpty} from '../utils/helpers';
 
 module.exports = () => {
-    const plugins = arrayFilterEmpty([
-        'autoprefixer',
-        isProd ? 'cssnano' : null,
-    ]);
-    return {
-        plugins,
-    };
+  const plugins = arrayFilterEmpty([
+    'postcss-preset-env',
+    'postcss-url',
+    'autoprefixer',
+    isProd ? 'cssnano' : null,
+  ]);
+  return {
+    plugins,
+  };
 };
