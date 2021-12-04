@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "setup": "cd client && npm run build && cd ../server && npm run build",
+    "build-client-and-start": "cd client && npm run build && cd .. && npm run start",
     "start": "cd server && npm run start"
   },
   "workspaces": [

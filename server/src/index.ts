@@ -1,14 +1,15 @@
 import fastify from 'fastify';
 import api from './routes/api.js';
-import fastifyHelmet from 'fastify-helmet';
 import fastifyPostgres from 'fastify-postgres';
 import fastifySensible from 'fastify-sensible';
 import fastifyStatic from 'fastify-static';
 import path from 'path';
+import fastifyHelmet from 'fastify-helmet';
 
-const PORT = process.env.PORT || 8080;
+const ADDRESS = process.env.BRICK_STORE_ADDRESS || '127.0.0.1';
+const PORT = process.env.BRICK_STORE_PORT || 8080;
 const PG_CONNECTION_STRING =
-  process.env.PG_CONNECTION_STRING ||
+  process.env.BRICK_STORE_PG_CONNECTION_STRING ||
   'postgresql://brick_store_user:y*_dwYx7CkTbaQQ!@82.44.109.236:5432/brick_store_coursework';
 const app = fastify();
 
@@ -28,7 +29,7 @@ app.get('*', (request, reply) => {
 
 app.register(api, {prefix: '/api'});
 
-app.listen(PORT, (err, address) => {
+app.listen(PORT, ADDRESS, (err, address) => {
   if (err) {
     console.debug(err);
     return;

@@ -15,7 +15,7 @@ const publicPath = isDevServer
   ? devServerUrl
   : process.env.IS_VERCEL
   ? './'
-  : './public';
+  : './public/';
 
 export default {
   context: __dirname,
