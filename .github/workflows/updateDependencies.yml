@@ -12,6 +12,8 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@master
+        with:
+          ref: dev
       - uses: actions/setup-node@master
         with:
           node-version: 16
@@ -25,11 +27,11 @@ jobs:
       - uses: peter-evans/create-pull-request@v3.10.1
         with:
           token: ${{ secrets.PULL_REQUEST_TOKEN }}
-          commit-message: 'Updated dependencies'
+          commit-message: 'Updated dev dependencies'
           committer: 'UP2012320 <up2012320@myport.ac.uk>'
           author: 'UP2012320 <up2012320@myport.ac.uk>'
-          title: 'Update dependencies'
-          body: 'Update dependencies'
+          title: 'Update dev dependencies'
+          body: 'Update dev dependencies'
           delete-branch: true
           labels: update
-          branch: dependancies-update
+          branch: dependancies-update-dev
