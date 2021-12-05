@@ -41,3 +41,14 @@
 * Implement client-side javascript to communicate with the API
 * Render front-end skeleton layout with data retrieved from the API
 * Improve and further design and compatibility with other screen sizes
+
+### Lego Info
+
+#### Types
+
+* Bricks
+* Plates
+* Tiles
+* SNOT
+* Slope
+* Technic
