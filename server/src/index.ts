@@ -15,8 +15,6 @@ const PG_ADDRESS = process.env.BRICK_STORE_PG_ADDRESS || 'localhost';
 const PG_CONNECTION_STRING = `postgresql://${PG_USER}:${PG_PASSWORD}@${PG_ADDRESS}:${PG_PORT}/brick_store_coursework`;
 const app = fastify();
 
-console.debug(PG_CONNECTION_STRING);
-
 app.register(fastifyHelmet, {contentSecurityPolicy: false});
 app.register(fastifyPostgres, {
   connectionString: PG_CONNECTION_STRING,
