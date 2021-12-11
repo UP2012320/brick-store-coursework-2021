@@ -12,6 +12,7 @@ declare namespace BrowseModuleScssNamespace {
     shopCardRowId: string;
     shopCardStock: string;
     shopCardTitle: string;
+    shopCardsContainer: string;
   }
 }
 

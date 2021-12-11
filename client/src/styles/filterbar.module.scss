@@ -1,0 +1,35 @@
+@import "utils";
+
+.filter-bar-container {
+  flex: 1 0;
+  display: flex;
+  background-color: lightgrey;
+  margin: $spacing-large;
+  border: 1px solid black;
+}
+
+@mixin filter-bar-item {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  &:hover {
+    cursor: pointer;
+    background-color: darkgrey;
+  }
+}
+
+.filter-bar-item-left {
+  @include filter-bar-item;
+  border-right: 1px solid black;
+}
+
+.filter-bar-item-right {
+  @include filter-bar-item;
+  border-left: 1px solid black;
+  margin-left: auto;
+}
+
+

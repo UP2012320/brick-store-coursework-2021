@@ -1,11 +1,20 @@
 import { createElement, createElementWithStyles } from 'Scripts/uiUtils';
 import browseStyles from 'Styles/browse.module.scss';
 import createShopCard from 'Scripts/components/shopCard';
+import createFilterBar from 'Scripts/components/filterBar';
 
 export default function createBrowse() {
   const container = createElement('div', {
     id: browseStyles.browse,
   });
+
+  const filterBar = createFilterBar();
+
+  const shoppingCardsContainer = createElementWithStyles(
+    'div',
+    undefined,
+    browseStyles.shopCardsContainer,
+  );
 
   const shoppingCards = [];
 
@@ -22,7 +31,10 @@ export default function createBrowse() {
     shoppingCards.push(cardContainer);
   }
 
-  container.append(...shoppingCards);
+  shoppingCardsContainer.append(...shoppingCards);
+
+  container.append(filterBar);
+  container.append(shoppingCardsContainer);
 
   return container;
 }

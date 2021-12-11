@@ -4,10 +4,16 @@
 #browse {
   flex: 1 0 88%;
   display: flex;
+  flex-direction: column;
+  padding: $spacing-medium;
+}
+
+.shop-cards-container {
+  flex: 1 0 75%;
+  display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
   overflow-y: scroll;
-  padding: $spacing-small;
 }
 
 .shop-card-container {
