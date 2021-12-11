@@ -1,4 +1,4 @@
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import { createElementWithStyles } from 'Scripts/uiUtils';
 import styles from 'Styles/browse.module.scss';
 import images from 'Assets/2412b.png';
 
@@ -76,11 +76,9 @@ export default function createShopCard() {
     styles.shopCardButton,
   );
 
-  idStockRow.appendChild(id);
-  idStockRow.appendChild(stock);
+  idStockRow.append(id, stock);
 
-  actionsRow.appendChild(viewButton);
-  actionsRow.appendChild(addButton);
+  actionsRow.append(viewButton, addButton);
 
   return [image, title, idStockRow, price, actionsRow];
 }

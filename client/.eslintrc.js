@@ -21,7 +21,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    'quotes': ['error', 'single'],
+    'quotes': ['error', 'single', { avoidEscape: true }],
     'semi': 'error',
     'no-constant-condition': 'off'
   },

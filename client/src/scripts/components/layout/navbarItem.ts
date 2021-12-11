@@ -7,20 +7,21 @@ import {
 import styles from 'Styles/navbar.module.scss';
 import bag from 'Assets/bag.svg';
 
-export default function createNavbarItem(props: {title: string}) {
-  const container = createElementWithStyles('div', undefined, styles.navMainElementContainer);
+export default function createNavbarItem(props: { title: string }) {
+  const container = createElementWithStyles(
+    'div',
+    undefined,
+    styles.navMainElementContainer,
+  );
   const svg = createSvgElementFromFile(bag);
 
   const link = createElement('h1', {
-    textContent: props.title
+    textContent: props.title,
   });
 
   registerLinkClickHandler(link, '/browse');
 
-  container.appendChild(svg);
-  container.appendChild(link);
+  container.append(svg, link);
 
   return container;
 }
-
-

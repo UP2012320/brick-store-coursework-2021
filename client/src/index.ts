@@ -1,7 +1,7 @@
 import styles from 'Styles/root.module.scss';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createBrowse from 'Scripts/components/browse';
-import {createElement} from 'Scripts/uiUtils';
+import { createElement } from 'Scripts/uiUtils';
 import createFooter from 'Scripts/components/layout/footer';
 import createMain from 'Scripts/components/main';
 
@@ -10,7 +10,7 @@ function render() {
   const root = document.querySelector('#root');
 
   if (!root) {
-    console.error('Something has gone horribly wrong, where\'s #root!??');
+    console.error("Something has gone horribly wrong, where's #root!??");
     return;
   }
 
@@ -19,23 +19,23 @@ function render() {
   }
 
   const internalRoot = createElement('div', {
-    id: styles.root
+    id: styles.root,
   });
 
-  internalRoot.appendChild(createNavbar());
+  internalRoot.append(createNavbar());
 
   switch (window.location.pathname) {
     case '/':
-      internalRoot.appendChild(createMain());
+      internalRoot.append(createMain());
       break;
     case '/browse':
-      internalRoot.appendChild(createBrowse());
+      internalRoot.append(createBrowse());
       break;
   }
 
-  internalRoot.appendChild(createFooter());
+  internalRoot.append(createFooter());
 
-  root.appendChild(internalRoot);
+  root.append(internalRoot);
 }
 
 function main() {

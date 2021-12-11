@@ -1,8 +1,4 @@
-import {
-  appendAllNodes,
-  createElement,
-  createElementWithStyles,
-} from 'Scripts/uiUtils';
+import { createElement, createElementWithStyles } from 'Scripts/uiUtils';
 import browseStyles from 'Styles/browse.module.scss';
 import createShopCard from 'Scripts/components/shopCard';
 
@@ -21,12 +17,12 @@ export default function createBrowse() {
     );
     const card = createShopCard();
 
-    appendAllNodes(cardContainer, card);
+    cardContainer.append(...card);
 
     shoppingCards.push(cardContainer);
   }
 
-  appendAllNodes(container, shoppingCards);
+  container.append(...shoppingCards);
 
   return container;
 }
