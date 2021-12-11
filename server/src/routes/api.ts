@@ -35,33 +35,31 @@ export default function api(
 
     const pg = await fastify.pg.connect();
 
-    let searchQueryResult;
+    const likeQuery = body.query ? `%${body.query}%` : undefined;
 
-    try {
-      const likeQuery = body.query ? `%${body.query}%` : undefined;
+    const [searchQueryResult, err] = await sendQuery(
+      pg,
+      `SELECT *
+       FROM search_inventory($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+      [
+        likeQuery,
+        body.colour,
+        body.type,
+        body.size,
+        body.price?.min,
+        body.price?.max,
+        body.in_stock,
+        body.has_discount,
+        50 * (body.page ?? 0),
+        body.sort,
+        body.sortDirection,
+      ],
+    );
 
-      searchQueryResult = await pg.query(
-        `SELECT *
-         FROM search_inventory($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-        [
-          likeQuery,
-          body.colour,
-          body.type,
-          body.size,
-          body.price?.min,
-          body.price?.max,
-          body.in_stock,
-          body.has_discount,
-          50 * (body.page ?? 0),
-          body.sort,
-          body.sortDirection,
-        ],
-      );
-    } catch (e) {
-      console.debug(e);
-      if (e instanceof DatabaseError) {
-        if (e.code === '22023') {
-          reply.badRequest(e.message);
+    if (err) {
+      if (err instanceof DatabaseError) {
+        if (err.code === '22023') {
+          reply.badRequest(err.message);
           return;
         }
       }
@@ -70,13 +68,18 @@ export default function api(
       return;
     }
 
-    return searchQueryResult.rows;
+    if (searchQueryResult) {
+      return searchQueryResult.rows;
+    }
+
+    reply.internalServerError();
+    return;
   });
 
   fastify.get('/getBrickTypes', async (request, reply) => {
     const pg = await fastify.pg.connect();
 
-    const brickTypes = await sendQuery(pg, 'SELECT * FROM brick_types');
+    const [brickTypes] = await sendQuery(pg, 'SELECT * FROM brick_types');
 
     if (!brickTypes) {
       reply.internalServerError();
@@ -89,7 +92,7 @@ export default function api(
   fastify.get('/getBrickSizes', async (request, reply) => {
     const pg = await fastify.pg.connect();
 
-    const brickSizes = await sendQuery(pg, 'SELECT * FROM brick_sizes');
+    const [brickSizes] = await sendQuery(pg, 'SELECT * FROM brick_sizes');
 
     if (!brickSizes) {
       reply.internalServerError();
@@ -102,7 +105,7 @@ export default function api(
   fastify.get('/getBrickColours', async (request, reply) => {
     const pg = await fastify.pg.connect();
 
-    const brickColours = await sendQuery(pg, 'SELECT * FROM brick_colours');
+    const [brickColours] = await sendQuery(pg, 'SELECT * FROM brick_colours');
 
     if (!brickColours) {
       reply.internalServerError();

@@ -1,10 +1,10 @@
-import {PoolClient, QueryConfig} from 'pg';
+import {PoolClient, QueryConfig, QueryResult} from 'pg';
 
 export async function sendQuery(
   pg: PoolClient,
   query: string | QueryConfig,
-  values?: string[],
-) {
+  values?: unknown[],
+): Promise<[QueryResult | undefined, unknown | undefined]> {
   let queryResponse;
 
   try {
@@ -12,8 +12,8 @@ export async function sendQuery(
   } catch (e) {
     // LOG
     console.debug(e);
-    return undefined;
+    return [undefined, e];
   }
 
-  return queryResponse;
+  return [queryResponse, undefined];
 }
