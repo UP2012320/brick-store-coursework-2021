@@ -4,7 +4,7 @@ import createShopCard from 'Scripts/components/shopCard';
 import createFilterBar from 'Scripts/components/filterBar';
 
 export default function createBrowse() {
-  const container = createElement('div', {
+  const container = createElement('section', {
     id: browseStyles.browse,
   });
 
