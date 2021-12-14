@@ -5,11 +5,11 @@
   flex: 1 0 88%;
   display: flex;
   flex-direction: column;
-  padding: $spacing-medium;
+  padding: $spacing-small;
 }
 
 .shop-cards-container {
-  flex: 1 0 75%;
+  flex: 1 0 90%;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -27,7 +27,7 @@
                        'price .'
                        'actionsRow actionsRow';
 
-  padding: $spacing-medium;
+  padding: $spacing-small;
   border-radius: $medium-radius;
   border: 1px solid black;
   height: max-content;
@@ -54,7 +54,7 @@
   padding-top: $spacing-large;
 
   & div:first-child {
-    margin-right: $spacing-medium;
+    margin-right: $spacing-small;
   }
 }
 
@@ -79,7 +79,7 @@
 .shop-card-stock {
   @include font-small;
   margin-left: auto;
-  margin-right: $spacing-medium;
+  margin-right: $spacing-small;
   color: $valid-green;
 }
 
@@ -93,7 +93,7 @@
   flex: 1;
   border-radius: $small-radius;
   border: 1px solid black;
-  padding: $spacing-medium;
+  padding: $spacing-small;
   text-align: center;
 
   &:hover {
@@ -105,11 +105,11 @@
 
 @media only screen and (max-width: 640px) {
   #browse {
-    margin: $spacing-small;
+    margin: $spacing-xsmall;
   }
 
   .shop-card-container {
-    margin: $spacing-medium;
+    margin: $spacing-small;
   }
 }
 

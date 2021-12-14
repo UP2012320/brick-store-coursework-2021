@@ -18,10 +18,10 @@ nav {
 
   h1 {
     @include font-xlarge;
-    margin-top: $spacing-medium;
-    margin-left: $spacing-medium;
-    margin-right: $spacing-medium;
-    padding: $spacing-medium;
+    margin-top: $spacing-small;
+    margin-left: $spacing-small;
+    margin-right: $spacing-small;
+    padding: $spacing-small;
   }
 
   &:hover {
@@ -50,14 +50,14 @@ nav {
 
   h1 {
     @include font-xlarge;
-    padding: $spacing-medium;
+    padding: $spacing-small;
     color: $font-colour;
     margin-top: auto;
     user-select: none;
   }
 
   svg {
-    padding: $spacing-medium;
+    padding: $spacing-small;
     flex: 1;
     height: max-content;
     width: max-content;

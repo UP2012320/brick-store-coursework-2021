@@ -5,6 +5,9 @@ declare namespace FilterbarModuleScssNamespace {
     filterBarContainer: string;
     filterBarItemLeft: string;
     filterBarItemRight: string;
+    filterBarSearchItem: string;
+    filterBarSectionContainer: string;
+    filterBarSectionContainerRight: string;
   }
 }
 

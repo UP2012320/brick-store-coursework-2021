@@ -3,9 +3,20 @@ import filterBarStyles from 'Styles/filterbar.module.scss';
 
 export default function createFilterBar() {
   const container = createElementWithStyles(
-    'div',
+    'section',
     undefined,
     filterBarStyles.filterBarContainer,
+  );
+
+  const leftSectionContainer = createElementWithStyles(
+    'section',
+    undefined,
+    filterBarStyles.filterBarSectionContainer,
+  );
+  const rightSectionContainer = createElementWithStyles(
+    'section',
+    undefined,
+    filterBarStyles.filterBarSectionContainerRight,
   );
 
   const sortBy = createElementWithStyles(
@@ -25,14 +36,18 @@ export default function createFilterBar() {
   filterBy.append('Filter');
 
   const search = createElementWithStyles(
-    'div',
-    undefined,
-    filterBarStyles.filterBarItemRight,
+    'input',
+    {
+      placeholder: 'Search',
+    },
+    filterBarStyles.filterBarSearchItem,
   );
 
-  search.append('search');
+  leftSectionContainer.append(sortBy, filterBy);
 
-  container.append(sortBy, filterBy, search);
+  rightSectionContainer.append(search);
+
+  container.append(leftSectionContainer, rightSectionContainer);
 
   return container;
 }
