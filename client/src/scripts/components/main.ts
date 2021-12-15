@@ -1,6 +1,4 @@
-import {
-  createElement,
-} from 'Scripts/uiUtils';
+import {createElement} from 'Scripts/uiUtils';
 import mainStyles from 'Styles/main.module.scss';
 
 export default function createMain () {

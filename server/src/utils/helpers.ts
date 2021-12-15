@@ -1,6 +1,4 @@
-import type {
-  PoolClient, QueryConfig, QueryResult,
-} from 'pg';
+import type {PoolClient, QueryConfig, QueryResult} from 'pg';
 
 export const sendQuery = async (
   pg: PoolClient,

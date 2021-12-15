@@ -1,6 +1,4 @@
-import {
-  createElement,
-} from 'Scripts/uiUtils';
+import {createElement} from 'Scripts/uiUtils';
 // eslint-disable-next-line import/no-unassigned-import
 import 'Styles/footer.scss';
 

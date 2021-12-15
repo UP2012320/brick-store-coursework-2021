@@ -2,9 +2,7 @@ import createBrowse from 'Scripts/components/browse';
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createMain from 'Scripts/components/main';
-import {
-  createElement,
-} from 'Scripts/uiUtils';
+import {createElement} from 'Scripts/uiUtils';
 import styles from 'Styles/root.module.scss';
 
 const render = () => {
@@ -12,7 +10,7 @@ const render = () => {
   const root = document.querySelector('#root');
 
   if (!root) {
-    console.error("Something has gone horribly wrong, where's #root!??");
+    console.error('Something has gone horribly wrong, where\'s #root!??');
     return;
   }
 

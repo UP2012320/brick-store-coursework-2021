@@ -1,12 +1,6 @@
-import type {
-  FastifyInstance, FastifyServerOptions,
-} from 'fastify';
-import {
-  DatabaseError,
-} from 'pg';
-import {
-  sendQuery,
-} from '../utils/helpers';
+import type {FastifyInstance, FastifyServerOptions} from 'fastify';
+import {DatabaseError} from 'pg';
+import {sendQuery} from '../utils/helpers';
 
 type SearchBody = {
   colour?: number,

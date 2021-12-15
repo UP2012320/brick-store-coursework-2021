@@ -1,8 +1,6 @@
 import createFilterBar from 'Scripts/components/filterBar';
 import createShopCard from 'Scripts/components/shopCard';
-import {
-  createElement, createElementWithStyles,
-} from 'Scripts/uiUtils';
+import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
 import browseStyles from 'Styles/browse.module.scss';
 
 export default function createBrowse () {

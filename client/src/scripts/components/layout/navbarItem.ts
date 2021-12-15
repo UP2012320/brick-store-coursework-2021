@@ -1,10 +1,8 @@
 import bag from 'Assets/bag.svg';
-import {
-  createElement,
+import {createElement,
   createElementWithStyles,
   createSvgElementFromFile,
-  registerLinkClickHandler,
-} from 'Scripts/uiUtils';
+  registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/navbar.module.scss';
 
 export default function createNavbarItem (props: { title: string, }) {
