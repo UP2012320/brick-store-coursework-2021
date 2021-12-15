@@ -16,16 +16,9 @@ jobs:
       run:
         working-directory: ./client
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
+      - uses: ./.github/workflows/pnpm-setup@latest
         with:
-          node-version: 16
-      - uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: npm i -g pnpm
-      - run: pnpm i
+          workingDir: ./client
       - run: pnpm run lint-no-fix
   TestClient:
     runs-on: self-hosted
@@ -33,16 +26,9 @@ jobs:
       run:
         working-directory: ./client
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
+      - uses: ./.github/workflows/pnpm-setup@latest
         with:
-          node-version: 16
-      - uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: npm i -g pnpm
-      - run: pnpm i
+          workingDir: ./client
       - run: pnpm run test
   BuildClient:
     runs-on: self-hosted
@@ -51,16 +37,9 @@ jobs:
         working-directory: ./client
     needs: TestClient
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
+      - uses: ./.github/workflows/pnpm-setup@latest
         with:
-          node-version: 16
-      - uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: npm i -g pnpm
-      - run: pnpm i
+          workingDir: ./client
       - run: pnpm run build
   LintServer:
     runs-on: self-hosted
@@ -68,16 +47,9 @@ jobs:
       run:
         working-directory: ./server
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
+      - uses: ./.github/workflows/pnpm-setup@latest
         with:
-          node-version: 16
-      - uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: npm i -g pnpm
-      - run: pnpm i
+          workingDir: ./server
       - run: pnpm run lint-no-fix
   TestServer:
     runs-on: self-hosted
@@ -85,16 +57,9 @@ jobs:
       run:
         working-directory: ./server
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
+      - uses: ./.github/workflows/pnpm-setup@latest
         with:
-          node-version: 16
-      - uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: npm i -g pnpm
-      - run: pnpm i
+          workingDir: ./server
       - run: pnpm run test
   BuildServer:
     runs-on: self-hosted
@@ -102,14 +67,7 @@ jobs:
       run:
         working-directory: ./server
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@master
+      - uses: ./.github/workflows/pnpm-setup@latest
         with:
-          node-version: 16
-      - uses: actions/cache@v1
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node16-${{ hashFiles('**/pnpm-lock.yaml') }}
-      - run: npm i -g pnpm
-      - run: pnpm i
+          workingDir: ./server
       - run: pnpm run build
