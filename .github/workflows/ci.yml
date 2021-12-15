@@ -11,63 +11,63 @@ on:
       - dev
 jobs:
   LintClient:
+    uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@dev
+    with:
+      workingDir: ./client
     runs-on: self-hosted
     defaults:
       run:
         working-directory: ./client
     steps:
-      - uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@main
-        with:
-          workingDir: ./client
       - run: pnpm run lint-no-fix
   TestClient:
+    uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@dev
+    with:
+      workingDir: ./client
     runs-on: self-hosted
     defaults:
       run:
         working-directory: ./client
     steps:
-      - uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@main
-        with:
-          workingDir: ./client
       - run: pnpm run test
   BuildClient:
+    uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@dev
+    with:
+      workingDir: ./client
     runs-on: self-hosted
     defaults:
       run:
         working-directory: ./client
     needs: TestClient
     steps:
-      - uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@main
-        with:
-          workingDir: ./client
       - run: pnpm run build
   LintServer:
+    uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@dev
+    with:
+      workingDir: ./server
     runs-on: self-hosted
     defaults:
       run:
         working-directory: ./server
     steps:
-      - uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@main
-        with:
-          workingDir: ./server
       - run: pnpm run lint-no-fix
   TestServer:
+    uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@dev
+    with:
+      workingDir: ./server
     runs-on: self-hosted
     defaults:
       run:
         working-directory: ./server
     steps:
-      - uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@main
-        with:
-          workingDir: ./server
       - run: pnpm run test
   BuildServer:
+    uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@dev
+    with:
+      workingDir: ./server
     runs-on: self-hosted
     defaults:
       run:
         working-directory: ./server
     steps:
-      - uses: UP2012320/brick-store-coursework-2021/.github/workflows/pnpm-setup.yml@main
-        with:
-          workingDir: ./server
       - run: pnpm run build
