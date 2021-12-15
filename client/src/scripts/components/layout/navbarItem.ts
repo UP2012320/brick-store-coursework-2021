@@ -1,3 +1,4 @@
+import bag from 'Assets/bag.svg';
 import {
   createElement,
   createElementWithStyles,
@@ -5,9 +6,8 @@ import {
   registerLinkClickHandler,
 } from 'Scripts/uiUtils';
 import styles from 'Styles/navbar.module.scss';
-import bag from 'Assets/bag.svg';
 
-export default function createNavbarItem(props: { title: string }) {
+export default function createNavbarItem (props: { title: string, }) {
   const container = createElementWithStyles(
     'div',
     undefined,

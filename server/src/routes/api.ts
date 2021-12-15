@@ -1,29 +1,35 @@
-import {FastifyInstance, FastifyServerOptions} from 'fastify';
-import {sendQuery} from '../utils/helpers';
-import {DatabaseError} from 'pg';
+import type {
+  FastifyInstance, FastifyServerOptions,
+} from 'fastify';
+import {
+  DatabaseError,
+} from 'pg';
+import {
+  sendQuery,
+} from '../utils/helpers';
 
-interface SearchBody {
-  query: string;
-  colour?: number;
-  size?: number;
-  type?: number;
+type SearchBody = {
+  colour?: number,
+  has_discount?: boolean,
+  in_stock?: boolean,
+  page?: number,
   price?: {
-    min?: number;
-    max?: number;
-  };
-  in_stock?: boolean;
-  has_discount?: boolean;
-  page?: number;
-  sort?: string;
-  sortDirection?: string;
-}
+    max?: number,
+    min?: number,
+  },
+  query: string,
+  size?: number,
+  sort?: string,
+  sortDirection?: string,
+  type?: number,
+};
 
-export default function api(
+export default function api (
   fastify: FastifyInstance,
-  opts: FastifyServerOptions,
-  done: (err?: Error) => void,
+  options: FastifyServerOptions,
+  done: (error?: Error) => void,
 ) {
-  fastify.post<{Body: SearchBody}>('/search', async (request, reply) => {
+  fastify.post<{ Body: SearchBody, }>('/search', async (request, reply) => {
     const body = request.body;
 
     if (!body) {
@@ -37,7 +43,7 @@ export default function api(
 
     const likeQuery = body.query ? `%${body.query}%` : undefined;
 
-    const [searchQueryResult, err] = await sendQuery(
+    const [searchQueryResult, error] = await sendQuery(
       pg,
       `SELECT *
        FROM search_inventory($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
@@ -56,12 +62,10 @@ export default function api(
       ],
     );
 
-    if (err) {
-      if (err instanceof DatabaseError) {
-        if (err.code === '22023') {
-          reply.badRequest(err.message);
-          return;
-        }
+    if (error) {
+      if (error instanceof DatabaseError && error.code === '22023') {
+        reply.badRequest(error.message);
+        return;
       }
 
       reply.internalServerError();
@@ -69,11 +73,10 @@ export default function api(
     }
 
     if (searchQueryResult) {
-      return searchQueryResult.rows;
+      await reply.send(searchQueryResult.rows);
     }
 
     reply.internalServerError();
-    return;
   });
 
   fastify.get('/getBrickTypes', async (request, reply) => {
@@ -86,7 +89,7 @@ export default function api(
       return;
     }
 
-    return brickTypes.rows;
+    await reply.send(brickTypes.rows);
   });
 
   fastify.get('/getBrickSizes', async (request, reply) => {
@@ -99,7 +102,7 @@ export default function api(
       return;
     }
 
-    return brickSizes.rows;
+    await reply.send(brickSizes.rows);
   });
 
   fastify.get('/getBrickColours', async (request, reply) => {
@@ -112,7 +115,7 @@ export default function api(
       return;
     }
 
-    return brickColours.rows;
+    await reply.send(brickColours.rows);
   });
 
   done();

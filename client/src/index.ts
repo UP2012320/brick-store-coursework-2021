@@ -1,11 +1,13 @@
-import styles from 'Styles/root.module.scss';
-import createNavbar from 'Scripts/components/layout/navbar';
 import createBrowse from 'Scripts/components/browse';
-import { createElement } from 'Scripts/uiUtils';
 import createFooter from 'Scripts/components/layout/footer';
+import createNavbar from 'Scripts/components/layout/navbar';
 import createMain from 'Scripts/components/main';
+import {
+  createElement,
+} from 'Scripts/uiUtils';
+import styles from 'Styles/root.module.scss';
 
-function render() {
+const render = () => {
   console.debug('rendering');
   const root = document.querySelector('#root');
 
@@ -15,7 +17,7 @@ function render() {
   }
 
   while (root.firstChild) {
-    root.removeChild(root.firstChild);
+    root.firstChild.remove();
   }
 
   const internalRoot = createElement('div', {
@@ -25,23 +27,23 @@ function render() {
   internalRoot.append(createNavbar());
 
   switch (window.location.pathname) {
-    case '/':
-      internalRoot.append(createMain());
-      break;
     case '/browse':
       internalRoot.append(createBrowse());
+      break;
+    default:
+      internalRoot.append(createMain());
       break;
   }
 
   internalRoot.append(createFooter());
 
   root.append(internalRoot);
-}
+};
 
-function main() {
+const main = () => {
   render();
 
   window.addEventListener('popstate', render);
-}
+};
 
 main();

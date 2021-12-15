@@ -1,12 +1,12 @@
-import styles from 'Styles/navbar.module.scss';
+import createNavbarItem from 'Scripts/components/layout/navbarItem';
 import {
   createElement,
   createElementWithStyles,
   registerLinkClickHandler,
 } from 'Scripts/uiUtils';
-import createNavbarItem from 'Scripts/components/layout/navbarItem';
+import styles from 'Styles/navbar.module.scss';
 
-export default function createNavbar() {
+export default function createNavbar () {
   const navbar = createElement('nav');
   const leftSideElement = createElementWithStyles(
     'div',

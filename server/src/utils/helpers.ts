@@ -1,19 +1,21 @@
-import {PoolClient, QueryConfig, QueryResult} from 'pg';
+import type {
+  PoolClient, QueryConfig, QueryResult,
+} from 'pg';
 
-export async function sendQuery(
+export const sendQuery = async (
   pg: PoolClient,
-  query: string | QueryConfig,
+  query: QueryConfig | string,
   values?: unknown[],
-): Promise<[QueryResult | undefined, unknown | undefined]> {
+): Promise<[QueryResult | undefined, unknown | undefined]> => {
   let queryResponse;
 
   try {
     queryResponse = await pg.query(query, values);
-  } catch (e) {
+  } catch (error) {
     // LOG
-    console.debug(e);
-    return [undefined, e];
+    console.debug(error);
+    return [undefined, error];
   }
 
   return [queryResponse, undefined];
-}
+};

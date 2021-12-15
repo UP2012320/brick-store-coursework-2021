@@ -1,30 +1,48 @@
-const path = require('path');
 module.exports = {
-  parser: '@typescript-eslint/parser', // Specifies the ESLint parser
-  plugins: ['@typescript-eslint'],
-  env: {
-    browser: true
-  },
   extends: [
-    'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
-    'prettier', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+    'canonical',
   ],
-  parserOptions: {
-    project: path.resolve(__dirname, './tsconfig.json'),
-    tsconfigRootDir: __dirname,
-    ecmaVersion: 2021, // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module', // Allows for the use of imports
-  },
-  rules: {
-    // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
-    // e.g. "@typescript-eslint/explicit-function-return-type": "off",
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
-    '@typescript-eslint/ban-ts-comment': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    'quotes': ['error', 'single'],
-    'semi': 'error',
-    'no-constant-condition': 'off'
-  },
-  ignorePatterns: ['.eslintrc.js', 'dist']
+  overrides: [
+    {
+      extends: [
+        'canonical/typescript',
+        'canonical/node',
+      ],
+      files: '*.ts',
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+      rules: {
+        'import/extensions': 'off',
+        'canonical/filename-match-exported': 'off',
+        'no-console': 'off',
+        'quotes': ['error', 'single', { avoidEscape: true }],
+        '@typescript-eslint/quotes': ['error', 'single', { avoidEscape: true }],
+        'canonical/filename-match-regex': [2, '^[a-z.]+([A-Z][a-z.]+)*$', true]
+      },
+    },
+    {
+      extends: [
+        'canonical/jest',
+      ],
+      files: '*.test.{ts,tsx}',
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    {
+      extends: [
+        'canonical/json',
+      ],
+      files: '*.json',
+    },
+    {
+      extends: [
+        'canonical/yaml',
+      ],
+      files: '*.yaml',
+    },
+  ],
+  root: true,
+  ignorePatterns: ['.eslintrc.js'],
 };
