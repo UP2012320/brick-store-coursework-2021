@@ -5,7 +5,8 @@
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.babel.js",
     "start": "cross-env WEBPACK_IS_DEV_SERVER=true NODE_ENV=development webpack serve --config webpack.config.babel.js",
     "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --passWithNoTests",
-    "e2e": "pnpm cypress open"
+    "e2e": "pnpm cypress open",
+    "lint": "eslint --cache --fix -c .eslintrc.js src"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

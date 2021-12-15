@@ -4,7 +4,8 @@
     "start": "npm run build && node dist/index.js",
     "build": "tsc",
     "build-submission": "tsc -p tsconfig.submission.json",
-    "test": "exit 0"
+    "test": "exit 0",
+    "lint": "eslint --cache --fix -c .eslintrc.js src"
   },
   "main": "dist/index.js",
   "devDependencies": {
