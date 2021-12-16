@@ -2,6 +2,7 @@ import createBrowse from 'Scripts/components/browse';
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createMain from 'Scripts/components/main';
+import createRouter from 'Scripts/createRouter';
 import {createElement} from 'Scripts/uiUtils';
 import styles from 'Styles/root.module.scss';
 
@@ -24,12 +25,27 @@ const render = () => {
 
   internalRoot.append(createNavbar());
 
-  switch (window.location.pathname) {
-    case '/browse':
+  const targetedRoute = createRouter([
+    {
+      name: 'browse',
+      route: '/browse',
+    },
+    {
+      name: 'main',
+      route: '/',
+    },
+  ]);
+
+  switch (targetedRoute) {
+    case 'browse':
       internalRoot.append(createBrowse());
       break;
-    default:
+    case 'main':
       internalRoot.append(createMain());
+      break;
+    case undefined:
+    default:
+      // Insert 404 page
       break;
   }
 

@@ -21,7 +21,8 @@ module.exports = {
         'object-curly-newline': [2, {
           "ImportDeclaration": "never",
         }],
-        'object-curly-spacing': [2, 'never']
+        'object-curly-spacing': [2, 'never'],
+        '@typescript-eslint/consistent-type-definitions': ['error', 'interface']
       },
     },
     {
