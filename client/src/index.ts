@@ -5,7 +5,7 @@ import createBrowse from 'Scripts/pages/browse';
 import createMain from 'Scripts/pages/main';
 import createNotFound from 'Scripts/pages/notFound';
 import {createElement} from 'Scripts/uiUtils';
-import rootStyles from 'Styles/root.module.scss';
+import rootStyles from 'Styles/components/root.module.scss';
 
 const render = () => {
   console.debug('rendering');

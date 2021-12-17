@@ -1,5 +1,5 @@
-@use 'reset';
-@import "utils";
+@use 'src/styles/reset';
+@import "src/styles/utils";
 
 #content-root {
   flex: 1 0 88%;
@@ -7,12 +7,6 @@
   flex-direction: column;
   padding: $spacing-small;
   height: 100vh;
-}
-
-@media only screen and (max-width: 640px) {
-  #content-root {
-    margin: $spacing-xsmall;
-  }
 }
 
 @media only screen and (min-width: 641px) and (max-width: 768px) {

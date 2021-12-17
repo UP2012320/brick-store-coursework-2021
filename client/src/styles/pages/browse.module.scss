@@ -1,12 +1,12 @@
-@use 'reset';
-@import "utils";
+@use 'src/styles/reset';
+@import "src/styles/utils";
 
 .shop-cards-container {
   flex: 1 0 90%;
   display: flex;
   flex-wrap: wrap;
-  align-content: flex-start;
   overflow-y: scroll;
+  align-content: flex-start;
 }
 
 .shop-card-container {
@@ -26,7 +26,7 @@
   height: max-content;
   max-width: 180px;
   min-width: max-content;
-  margin: $spacing-large;
+  margin: $spacing-medium;
 
   &:hover {
     cursor: pointer;
@@ -96,9 +96,21 @@
   }
 }
 
+@media only screen and (max-width: 360px) {
+  .shop-card-container {
+    max-width: unset;
+  }
+}
+
 @media only screen and (max-width: 640px) {
   .shop-card-container {
     margin: $spacing-small;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .shop-cards-container {
+    justify-content: center;
   }
 }
 

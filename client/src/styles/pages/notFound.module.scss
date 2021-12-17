@@ -1,6 +1,6 @@
-@use 'reset';
-@import "utils";
-@import "theme";
+@use 'src/styles/reset';
+@import "src/styles/utils";
+@import "src/styles/theme";
 
 .error-container {
   flex: 1 0;
@@ -44,11 +44,11 @@
 
 @media only screen and (max-width: 400px) {
   .text-container {
-    h1 {
+    header {
       font-size: 32pt;
     }
 
-    p {
+    summary {
       font-size: 14pt;
     }
   }

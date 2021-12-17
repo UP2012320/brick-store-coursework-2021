@@ -1,5 +1,5 @@
 import {createElement} from 'Scripts/uiUtils';
-import contentRootStyles from 'Styles/contentRoot.module.scss';
+import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 
 export default function createMain () {
   const mainContainer = createElement('section', {

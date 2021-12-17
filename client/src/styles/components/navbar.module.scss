@@ -1,6 +1,6 @@
-@use 'reset';
-@import 'theme';
-@import "utils";
+@use 'src/styles/reset';
+@import 'src/styles/theme';
+@import "src/styles/utils";
 
 $nav-side-basis: 20%;
 

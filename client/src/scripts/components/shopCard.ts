@@ -1,6 +1,6 @@
 import images from 'Assets/2412b.png';
 import {createElementWithStyles} from 'Scripts/uiUtils';
-import styles from 'Styles/browse.module.scss';
+import styles from 'Styles/pages/browse.module.scss';
 
 export default function createShopCard () {
   const image = createElementWithStyles(

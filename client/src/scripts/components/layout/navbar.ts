@@ -1,6 +1,6 @@
 import createNavbarItem from 'Scripts/components/layout/navbarItem';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
-import styles from 'Styles/navbar.module.scss';
+import styles from 'Styles/components/navbar.module.scss';
 
 export default function createNavbar () {
   const navbar = createElement('nav');

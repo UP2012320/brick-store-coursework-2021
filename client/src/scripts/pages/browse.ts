@@ -1,8 +1,8 @@
 import createFilterBar from 'Scripts/components/filterBar';
 import createShopCard from 'Scripts/components/shopCard';
 import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
-import browseStyles from 'Styles/browse.module.scss';
-import contentRootStyles from 'Styles/contentRoot.module.scss';
+import contentRootStyles from 'Styles/components/contentRoot.module.scss';
+import browseStyles from 'Styles/pages/browse.module.scss';
 
 export default function createBrowse () {
   const browseContainer = createElement('section', {
