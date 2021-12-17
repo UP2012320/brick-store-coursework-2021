@@ -1,5 +1,5 @@
 import {createElementWithStyles} from 'Scripts/uiUtils';
-import filterBarStyles from 'Styles/filterbar.module.scss';
+import filterBarStyles from 'Styles/filterBar.module.scss';
 
 export default function createFilterBar () {
   const container = createElementWithStyles(
