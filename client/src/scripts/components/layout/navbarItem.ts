@@ -1,8 +1,5 @@
 import bag from 'Assets/bag.svg';
-import {createElement,
-  createElementWithStyles,
-  createSvgElementFromFile,
-  registerLinkClickHandler} from 'Scripts/uiUtils';
+import {createElementWithStyles, createSvgElementFromFile, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/navbar.module.scss';
 
 export default function createNavbarItem (props: { title: string, }) {
@@ -13,11 +10,12 @@ export default function createNavbarItem (props: { title: string, }) {
   );
   const svg = createSvgElementFromFile(bag);
 
-  const link = createElement('h1', {
+  const link = createElementWithStyles('a', {
+    href: '/browse',
     textContent: props.title,
-  });
+  }, styles.linkTitle);
 
-  registerLinkClickHandler(link, '/browse');
+  registerLinkClickHandler(link);
 
   container.append(svg, link);
 

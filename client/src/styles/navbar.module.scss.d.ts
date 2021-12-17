@@ -2,9 +2,11 @@
 // Please do not change this file!
 declare namespace NavbarModuleScssNamespace {
   export interface INavbarModuleScss {
+    linkTitle: string;
     navMainElement: string;
     navMainElementContainer: string;
     navSideElement: string;
+    storeTitle: string;
   }
 }
 

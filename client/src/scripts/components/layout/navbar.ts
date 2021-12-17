@@ -25,11 +25,12 @@ export default function createNavbar () {
     styles.navSideElement,
   );
 
-  const leftSideTitle = createElement('h1', {
+  const leftSideTitle = createElementWithStyles('a', {
+    href: '/',
     textContent: 'The Super Brick Store',
-  });
+  }, styles.storeTitle);
 
-  registerLinkClickHandler(leftSideElement, '/');
+  registerLinkClickHandler(leftSideTitle);
 
   leftSideElement.append(leftSideTitle);
 

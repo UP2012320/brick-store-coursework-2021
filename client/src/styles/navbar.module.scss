@@ -16,7 +16,7 @@ nav {
   display: flex;
   align-items: center;
 
-  h1 {
+  .store-title {
     @include font-xlarge;
     margin-top: $spacing-small;
     margin-left: $spacing-small;
@@ -48,7 +48,7 @@ nav {
   flex-direction: column;
   max-width: 128px;
 
-  h1 {
+  .link-title {
     @include font-xlarge;
     padding: $spacing-small;
     color: $font-colour;

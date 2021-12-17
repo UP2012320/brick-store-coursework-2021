@@ -1,4 +1,4 @@
-import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
+import {createElement, createElementWithStyles, preventHrefDefault, registerLinkClickHandler} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/contentRoot.module.scss';
 import notFoundStyles from 'Styles/notFound.module.scss';
 
@@ -25,6 +25,9 @@ const createNotFound = () => {
     href: '/',
     textContent: 'Let\'s get back on track',
   });
+
+  preventHrefDefault(redirectLink);
+  registerLinkClickHandler(redirectButton, '/');
 
   redirectButton.append(redirectLink);
   textContainer.append(heading);

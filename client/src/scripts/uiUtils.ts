@@ -1,4 +1,4 @@
-export const createElement = <K extends keyof HTMLElementTagNameMap>(
+export const createElement = <K extends keyof HTMLElementTagNameMap> (
   type: K,
   options?: Partial<HTMLElementTagNameMap[K]>,
 ): HTMLElementTagNameMap[K] => {
@@ -7,7 +7,7 @@ export const createElement = <K extends keyof HTMLElementTagNameMap>(
   return Object.assign(newElement, options);
 };
 
-export const createElementWithStyles = <K extends keyof HTMLElementTagNameMap>(
+export const createElementWithStyles = <K extends keyof HTMLElementTagNameMap> (
   type: K,
   options?: Partial<HTMLElementTagNameMap[K]>,
   ...styles: string[]
@@ -33,9 +33,27 @@ export const createSvgElementFromFile = (
   return Object.assign(element, options) as SVGSVGElement;
 };
 
-export const registerLinkClickHandler = (element: HTMLElement, path: string) => {
-  element.addEventListener('click', () => {
-    history.pushState({}, '', path);
+export const preventHrefDefault = (href: HTMLAnchorElement) => {
+  href.addEventListener('click', (event) => {
+    event.preventDefault();
+  });
+};
+
+interface RegisterLinkClickHandlerOverloads {
+  (container: HTMLElement, path: string): void;
+  (container: HTMLAnchorElement): void;
+}
+
+export const registerLinkClickHandler: RegisterLinkClickHandlerOverloads = (element: HTMLElement, path?: string) => {
+  element.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    if (path) {
+      history.pushState({}, '', path);
+    } else if (element instanceof HTMLAnchorElement) {
+      history.pushState({}, '', element.href);
+    }
+
     dispatchEvent(new Event('popstate'));
   });
 };
