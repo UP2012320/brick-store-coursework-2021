@@ -1,22 +1,7 @@
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
 import {DatabaseError} from 'pg';
+import type {SearchBody} from 'types/types';
 import {sendQuery} from '../utils/helpers';
-
-type SearchBody = {
-  colour?: number,
-  has_discount?: boolean,
-  in_stock?: boolean,
-  page?: number,
-  price?: {
-    max?: number,
-    min?: number,
-  },
-  query: string,
-  size?: number,
-  sort?: string,
-  sortDirection?: string,
-  type?: number,
-};
 
 export default function api (
   fastify: FastifyInstance,
