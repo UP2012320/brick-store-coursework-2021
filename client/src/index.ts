@@ -1,10 +1,11 @@
-import createBrowse from 'Scripts/components/browse';
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
-import createMain from 'Scripts/components/main';
 import createRouter from 'Scripts/createRouter';
+import createBrowse from 'Scripts/pages/browse';
+import createMain from 'Scripts/pages/main';
+import createNotFound from 'Scripts/pages/notFound';
 import {createElement} from 'Scripts/uiUtils';
-import styles from 'Styles/root.module.scss';
+import rootStyles from 'Styles/root.module.scss';
 
 const render = () => {
   console.debug('rendering');
@@ -20,7 +21,7 @@ const render = () => {
   }
 
   const internalRoot = createElement('div', {
-    id: styles.root,
+    id: rootStyles.root,
   });
 
   internalRoot.append(createNavbar());
@@ -45,7 +46,7 @@ const render = () => {
       break;
     case undefined:
     default:
-      // Insert 404 page
+      internalRoot.append(createNotFound());
       break;
   }
 
