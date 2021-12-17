@@ -1,9 +1,9 @@
 import {createElement} from 'Scripts/uiUtils';
-import mainStyles from 'Styles/main.module.scss';
+import contentRootStyles from 'Styles/contentRoot.module.scss';
 
 export default function createMain () {
   const mainContainer = createElement('section', {
-    id: mainStyles.main,
+    id: contentRootStyles.contentRoot,
   });
 
   return mainContainer;

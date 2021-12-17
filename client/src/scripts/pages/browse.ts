@@ -2,10 +2,11 @@ import createFilterBar from 'Scripts/components/filterBar';
 import createShopCard from 'Scripts/components/shopCard';
 import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
 import browseStyles from 'Styles/browse.module.scss';
+import contentRootStyles from 'Styles/contentRoot.module.scss';
 
 export default function createBrowse () {
-  const container = createElement('section', {
-    id: browseStyles.browse,
+  const browseContainer = createElement('section', {
+    id: contentRootStyles.contentRoot,
   });
 
   const filterBar = createFilterBar();
@@ -33,8 +34,8 @@ export default function createBrowse () {
 
   shoppingCardsContainer.append(...shoppingCards);
 
-  container.append(filterBar);
-  container.append(shoppingCardsContainer);
+  browseContainer.append(filterBar);
+  browseContainer.append(shoppingCardsContainer);
 
-  return container;
+  return browseContainer;
 }

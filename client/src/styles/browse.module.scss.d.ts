@@ -2,7 +2,6 @@
 // Please do not change this file!
 declare namespace BrowseModuleScssNamespace {
   export interface IBrowseModuleScss {
-    browse: string;
     shopCardButton: string;
     shopCardContainer: string;
     shopCardId: string;

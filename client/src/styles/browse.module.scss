@@ -1,14 +1,6 @@
 @use 'reset';
 @import "utils";
 
-#browse {
-  flex: 1 0 88%;
-  display: flex;
-  flex-direction: column;
-  padding: $spacing-small;
-  height: 100vh;
-}
-
 .shop-cards-container {
   flex: 1 0 90%;
   display: flex;
@@ -105,20 +97,12 @@
 }
 
 @media only screen and (max-width: 640px) {
-  #browse {
-    margin: $spacing-xsmall;
-  }
-
   .shop-card-container {
     margin: $spacing-small;
   }
 }
 
 @media only screen and (min-width: 641px) and (max-width: 768px) {
-  #browse {
-    align-content: center;
-  }
-
   .shop-card-container {
     max-width: max-content;
   }
