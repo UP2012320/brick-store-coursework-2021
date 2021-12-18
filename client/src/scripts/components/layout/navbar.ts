@@ -1,4 +1,5 @@
 import createNavbarItem from 'Scripts/components/layout/navbarItem';
+import html from 'Scripts/htmlTemplate';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
 
@@ -32,11 +33,18 @@ export default function createNavbar () {
 
   registerLinkClickHandler(leftSideTitle);
 
-  leftSideElement.append(leftSideTitle);
-
-  mainElement.append(navbarBrowseItem, navbarBrowseItem2, navbarBrowseItem3);
-
-  navbar.append(leftSideElement, mainElement, rightSideElement);
-
-  return navbar;
+  return html`
+    <${navbar}>
+      <${leftSideElement}>
+        <${leftSideTitle}/>
+      </leftSideElement>
+      <${mainElement}>
+        <${navbarBrowseItem}/>
+        <${navbarBrowseItem2}/>
+        <${navbarBrowseItem3}/>
+      </mainElement>
+      <${rightSideElement}>
+      </rightSideElement>
+    </navbar>
+  `;
 }

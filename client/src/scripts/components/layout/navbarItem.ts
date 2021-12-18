@@ -1,4 +1,5 @@
 import bag from 'Assets/bag.svg';
+import html from 'Scripts/htmlTemplate';
 import {createElementWithStyles, createSvgElementFromFile, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
 
@@ -19,5 +20,10 @@ export default function createNavbarItem (props: { title: string, }) {
 
   container.append(svg, link);
 
-  return container;
+  return html`
+    <${container}>
+      <${svg}/>
+      <${link}/>
+    </container>
+  `;
 }
