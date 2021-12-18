@@ -1,3 +1,4 @@
+import html from 'Scripts/htmlTemplate';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 
@@ -21,19 +22,15 @@ export default function createFilterBar () {
 
   const sortBy = createElementWithStyles(
     'div',
-    undefined,
+    {textContent: 'Sort'},
     filterBarStyles.filterBarItemLeft,
   );
-
-  sortBy.append('Sort');
 
   const filterBy = createElementWithStyles(
     'div',
-    undefined,
+    {textContent: 'Filter'},
     filterBarStyles.filterBarItemLeft,
   );
-
-  filterBy.append('Filter');
 
   const search = createElementWithStyles(
     'input',
@@ -43,11 +40,15 @@ export default function createFilterBar () {
     filterBarStyles.filterBarSearchItem,
   );
 
-  leftSectionContainer.append(sortBy, filterBy);
-
-  rightSectionContainer.append(search);
-
-  container.append(leftSectionContainer, rightSectionContainer);
-
-  return container;
+  return html`
+    <${container}>
+      <${leftSectionContainer}>
+        <${sortBy}/>
+        <${filterBy}/>
+      </leftSectionContainer>
+      <${rightSectionContainer}>
+        <${search}/>
+      </rightSectionContainer>
+    </container>
+  `;
 }
