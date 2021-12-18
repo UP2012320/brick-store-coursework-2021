@@ -44,6 +44,7 @@ const html = (strings: TemplateStringsArray, ...args: Array<Array<HTMLElement | 
 
   for (const [htmlTag, argumentIndex] of htmlTags.slice(1, -1)) {
     if (argumentIndex === -1) {
+      console.debug(`Unknown argumentIndex of ${argumentIndex} with tag ${htmlTag}`);
       continue;
     }
 
@@ -52,7 +53,7 @@ const html = (strings: TemplateStringsArray, ...args: Array<Array<HTMLElement | 
     switch (htmlTag) {
       case 'opening':
         if (Array.isArray(htmlElement)) {
-          throw new TypeError('An opening tag should not an array');
+          throw new TypeError('An opening tag should not be an array');
         }
 
         currentParent.append(htmlElement);
@@ -74,7 +75,7 @@ const html = (strings: TemplateStringsArray, ...args: Array<Array<HTMLElement | 
 
         break;
       default:
-        console.debug(`Unknown tag of ${htmlTag} of argIndex ${argumentIndex}`);
+        console.debug(`Unknown tag of ${htmlTag} with argumentIndex ${argumentIndex}`);
         break;
     }
   }

@@ -18,8 +18,6 @@ export default function createNavbarItem (props: { title: string, }) {
 
   registerLinkClickHandler(link);
 
-  container.append(svg, link);
-
   return html`
     <${container}>
       <${svg}/>
