@@ -1,3 +1,4 @@
+import html from 'Scripts/htmlTemplate';
 import {createElement, createElementWithStyles, preventHrefDefault, registerLinkClickHandler} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import notFoundStyles from 'Styles/pages/notFound.module.scss';
@@ -29,16 +30,19 @@ const createNotFound = () => {
   preventHrefDefault(redirectLink);
   registerLinkClickHandler(redirectButton, '/');
 
-  redirectButton.append(redirectLink);
-  textContainer.append(heading);
-  textContainer.append(message);
-  textContainer.append(redirectButton);
-
-  errorContainer.append(textContainer);
-
-  container.append(errorContainer);
-
-  return container;
+  return html`
+    <${container}>
+      <${errorContainer}>
+        <${textContainer}>
+          <${heading}/>
+          <${message}/>
+          <${redirectButton}>
+            <${redirectLink}/>
+          </redirectButton>
+        </textContainer>
+      </errorContainer>
+    </container>
+  `;
 };
 
 export default createNotFound;
