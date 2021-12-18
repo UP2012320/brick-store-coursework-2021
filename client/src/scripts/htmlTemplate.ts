@@ -15,7 +15,7 @@ const parseHtmlTag = (tag: string) => {
   return ['unknown', -1];
 };
 
-const html = (strings: TemplateStringsArray, ...args: Array<HTMLElement | HTMLElement[]>) => {
+const html = (strings: TemplateStringsArray, ...args: Array<Array<HTMLElement | SVGSVGElement> | HTMLElement | SVGSVGElement>) => {
   let combinedHtml = '';
 
   for (const [index, template] of strings.entries()) {
