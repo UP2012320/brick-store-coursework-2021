@@ -15,7 +15,7 @@ const parseHtmlTag = (tag: string) => {
   return ['unknown', -1];
 };
 
-const html = (strings: TemplateStringsArray, ...args: HTMLElement[]) => {
+const html = (strings: TemplateStringsArray, ...args: Array<HTMLElement | HTMLElement[]>) => {
   let combinedHtml = '';
 
   for (const [index, template] of strings.entries()) {
@@ -36,6 +36,10 @@ const html = (strings: TemplateStringsArray, ...args: HTMLElement[]) => {
       return parseHtmlTag(tag) as [string, number];
     });
 
+  if (Array.isArray(args[0])) {
+    throw new TypeError('The first argument cannot be an array');
+  }
+
   let currentParent = args[0];
 
   for (const [htmlTag, argumentIndex] of htmlTags.slice(1, -1)) {
@@ -47,8 +51,13 @@ const html = (strings: TemplateStringsArray, ...args: HTMLElement[]) => {
 
     switch (htmlTag) {
       case 'opening':
+        if (Array.isArray(htmlElement)) {
+          throw new TypeError('An opening tag should not an array');
+        }
+
         currentParent.append(htmlElement);
         currentParent = htmlElement;
+
         break;
       case 'closing':
         if (currentParent.parentElement) {
@@ -57,7 +66,12 @@ const html = (strings: TemplateStringsArray, ...args: HTMLElement[]) => {
 
         break;
       case 'selfClosing':
-        currentParent.append(htmlElement);
+        if (Array.isArray(htmlElement)) {
+          currentParent.append(...htmlElement);
+        } else {
+          currentParent.append(htmlElement);
+        }
+
         break;
       default:
         console.debug(`Unknown tag of ${htmlTag} of argIndex ${argumentIndex}`);
@@ -65,7 +79,7 @@ const html = (strings: TemplateStringsArray, ...args: HTMLElement[]) => {
     }
   }
 
-  return args[0];
+  return args[0] as HTMLElement;
 };
 
 export default html;

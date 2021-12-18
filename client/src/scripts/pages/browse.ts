@@ -26,12 +26,12 @@ export default function createBrowse () {
     shoppingCards.push(card);
   }
 
-  shoppingCardsContainer.append(...shoppingCards);
-
   return html`
     <${browseContainer}>
       <${filterBar}/>
-      <${shoppingCardsContainer}/>
+      <${shoppingCardsContainer}>
+        <${shoppingCards}/>
+      </shoppingCardsContainer>
     </browseContainer>
   `;
 }
