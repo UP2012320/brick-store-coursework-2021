@@ -1,15 +1,22 @@
 import images from 'Assets/2412b.png';
+import html from 'Scripts/htmlTemplate';
 import {createElementWithStyles} from 'Scripts/uiUtils';
-import styles from 'Styles/pages/browse.module.scss';
+import browseStyles from 'Styles/pages/browse.module.scss';
 
 export default function createShopCard () {
+  const cardContainer = createElementWithStyles(
+    'div',
+    undefined,
+    browseStyles.shopCardContainer,
+  );
+
   const image = createElementWithStyles(
     'img',
     {
       loading: 'lazy',
       src: images,
     },
-    styles.shopCardImg,
+    browseStyles.shopCardImg,
   );
 
   const title = createElementWithStyles(
@@ -17,13 +24,13 @@ export default function createShopCard () {
     {
       textContent: 'Lego Brick #1',
     },
-    styles.shopCardTitle,
+    browseStyles.shopCardTitle,
   );
 
   const idStockRow = createElementWithStyles(
     'div',
     undefined,
-    styles.shopCardRowId,
+    browseStyles.shopCardRowId,
   );
 
   idStockRow.style.gridArea = 'idRow';
@@ -33,7 +40,7 @@ export default function createShopCard () {
     {
       textContent: '#E438O-RF2HE',
     },
-    styles.shopCardId,
+    browseStyles.shopCardId,
   );
 
   const stock = createElementWithStyles(
@@ -41,7 +48,7 @@ export default function createShopCard () {
     {
       textContent: '4+ Stock',
     },
-    styles.shopCardStock,
+    browseStyles.shopCardStock,
   );
 
   const price = createElementWithStyles(
@@ -49,13 +56,13 @@ export default function createShopCard () {
     {
       textContent: '£0.10',
     },
-    styles.shopCardPrice,
+    browseStyles.shopCardPrice,
   );
 
   const actionsRow = createElementWithStyles(
     'div',
     undefined,
-    styles.shopCardRowActions,
+    browseStyles.shopCardRowActions,
   );
 
   actionsRow.style.gridArea = 'actionsRow';
@@ -65,7 +72,7 @@ export default function createShopCard () {
     {
       textContent: 'View',
     },
-    styles.shopCardButton,
+    browseStyles.shopCardButton,
   );
 
   const addButton = createElementWithStyles(
@@ -73,12 +80,22 @@ export default function createShopCard () {
     {
       textContent: 'Add',
     },
-    styles.shopCardButton,
+    browseStyles.shopCardButton,
   );
 
-  idStockRow.append(id, stock);
-
-  actionsRow.append(viewButton, addButton);
-
-  return [image, title, idStockRow, price, actionsRow];
+  return html`
+    <${cardContainer}>
+      <${image}/>
+      <${title}/>
+      <${idStockRow}>
+        <${id}/>
+        <${stock}/>
+      </idStockRow>
+      <${price}/>
+      <${actionsRow}>
+        <${viewButton}/>
+        <${addButton}/>
+      </actionsRow>
+    </cardContainer>
+  `;
 }
