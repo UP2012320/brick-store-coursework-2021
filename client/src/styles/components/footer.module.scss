@@ -1,0 +1,12 @@
+@use 'src/styles/reset';
+
+footer {
+  border-top: 1px solid black;
+  justify-self: flex-end;
+  margin-top: auto;
+  height: max-content;
+}
+
+@media only screen and (max-width: 768px) {
+
+}
