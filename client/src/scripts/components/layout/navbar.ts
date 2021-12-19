@@ -1,49 +1,59 @@
-import createNavbarItem from 'Scripts/components/layout/navbarItem';
+import logo from 'Assets/drawing512.png';
+import createNavbarMainContainerItem from 'Scripts/components/layout/navbarMainContainerItem';
 import html from 'Scripts/htmlTemplate';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
 
 export default function createNavbar () {
   const navbar = createElement('nav');
-  const leftSideElement = createElementWithStyles(
+
+  const leftSideContainer = createElementWithStyles(
     'div',
     undefined,
-    styles.navSideElement,
+    styles.navSideContainer,
   );
-  const mainElement = createElementWithStyles(
+
+  const mainContainer = createElementWithStyles(
     'div',
     undefined,
-    styles.navMainElement,
+    styles.navMainContainer,
   );
 
-  const navbarBrowseItem = createNavbarItem({title: 'Browse'});
-  const navbarBrowseItem2 = createNavbarItem({title: 'Browse'});
-  const navbarBrowseItem3 = createNavbarItem({title: 'Browse'});
-
-  const rightSideElement = createElementWithStyles(
+  const rightSideContainer = createElementWithStyles(
     'div',
     undefined,
-    styles.navSideElement,
+    styles.navRightSideContainer,
   );
 
-  const leftSideTitle = createElementWithStyles('a', {
-    href: '/',
-    textContent: 'The Super Brick Store',
-  }, styles.storeTitle);
+  const shoppingCartContainer = createElementWithStyles('div', undefined, styles.cartContainer);
 
-  registerLinkClickHandler(leftSideTitle);
+  const shoppingCart = createElementWithStyles('i', undefined, styles.biCart2);
+
+  const shoppingCartAmount = createElement('p', {
+    textContent: '4',
+  });
+
+  const navbarBrowseItem = createNavbarMainContainerItem({title: 'Browse'});
+
+  const leftSideContainerLogo = createElementWithStyles('img', {
+    src: logo,
+  }, styles.navbarLogo);
+
+  registerLinkClickHandler(leftSideContainerLogo, '/');
 
   return html`
     <${navbar}>
-      <${leftSideElement}>
-        <${leftSideTitle}/>
+      <${leftSideContainer}>
+        <${leftSideContainerLogo}/>
       </leftSideElement>
-      <${mainElement}>
+      <${mainContainer}>
         <${navbarBrowseItem}/>
-        <${navbarBrowseItem2}/>
-        <${navbarBrowseItem3}/>
       </mainElement>
-      <${rightSideElement}>
+      <${rightSideContainer}>
+        <${shoppingCartContainer}>
+          <${shoppingCart}/>
+          <${shoppingCartAmount}/>
+        </shoppingCartContainer>
       </rightSideElement>
     </navbar>
   `;

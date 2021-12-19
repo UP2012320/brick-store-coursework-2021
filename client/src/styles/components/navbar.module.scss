@@ -1,6 +1,6 @@
-@use 'src/styles/reset';
 @import 'src/styles/theme';
-@import "src/styles/utils";
+@import 'src/styles/utils';
+@import '~bootstrap-icons/font/bootstrap-icons';
 
 $nav-side-basis: 20%;
 
@@ -11,27 +11,57 @@ nav {
   max-height: 100px;
 }
 
-.nav-side-element {
+.nav-side-container {
   flex: 1 0 $nav-side-basis;
   display: flex;
   align-items: center;
 
-  .store-title {
-    @include font-xlarge;
-    margin-top: $spacing-small;
-    margin-left: $spacing-small;
-    margin-right: $spacing-small;
+  .navbar-logo {
+    margin: $spacing-small;
     padding: $spacing-small;
-  }
+    max-height: 100%;
+    max-width: 100%;
 
-  &:hover {
-    cursor: pointer;
-
-    color: $highlight-colour;
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 
-.nav-main-element {
+.nav-right-side-container {
+  @extend .nav-side-container;
+  position: relative;
+  justify-content: flex-end;
+
+  .cart-container {
+    display: flex;
+    justify-content: center;
+
+    &:hover {
+      cursor: pointer;
+      color: $primary-colour;
+    }
+
+    .bi-cart2 {
+      transform: scale(2.75);
+      margin-right: $spacing-xlarge;
+    }
+
+    p {
+      position: absolute;
+      @include font-medium;
+      font-weight: 700;
+      right: 13.5px;
+      top: 100% - 64%;
+      width: 34px;
+      text-align: center;
+      font-style: normal;
+      user-select: none;
+    }
+  }
+}
+
+.nav-main-container {
   flex: 1 0 (100 - $nav-side-basis * 2);
   display: flex;
   justify-content: center;
@@ -41,8 +71,7 @@ nav {
   }
 }
 
-.nav-main-element-container {
-  flex: 1;
+.nav-main-container-item {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -56,11 +85,9 @@ nav {
     user-select: none;
   }
 
-  svg {
-    padding: $spacing-small;
-    flex: 1;
-    height: max-content;
-    width: max-content;
+  .bi-bag {
+    transform-origin: top;
+    transform: scale(2.5);
   }
 
   &:hover {

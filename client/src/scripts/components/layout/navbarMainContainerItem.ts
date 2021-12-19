@@ -1,15 +1,15 @@
-import bag from 'Assets/bag.svg';
 import html from 'Scripts/htmlTemplate';
-import {createElementWithStyles, createSvgElementFromFile, registerLinkClickHandler} from 'Scripts/uiUtils';
+import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
 
-export default function createNavbarItem (props: { title: string, }) {
+export default function createNavbarMainContainerItem (props: { title: string, }) {
   const container = createElementWithStyles(
     'div',
     undefined,
-    styles.navMainElementContainer,
+    styles.navMainContainerItem,
   );
-  const svg = createSvgElementFromFile(bag);
+
+  const browseIcon = createElementWithStyles('i', undefined, styles.biBag);
 
   const link = createElementWithStyles('a', {
     href: '/browse',
@@ -20,7 +20,7 @@ export default function createNavbarItem (props: { title: string, }) {
 
   return html`
     <${container}>
-      <${svg}/>
+      <${browseIcon}/>
       <${link}/>
     </container>
   `;
