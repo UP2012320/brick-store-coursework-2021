@@ -19,4 +19,9 @@ export const devServerConfig = {
     proxy: devServerProxyConfig,
     hot: true,
     host: devServerHost,
+  client: {
+    overlay: {
+      warnings: false
+    }
+  }
 };
