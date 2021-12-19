@@ -48,7 +48,6 @@ const render = () => {
       break;
     case 'product':
       internalRoot.append(createProduct({qs}));
-
       break;
     case 'main':
       internalRoot.append(createMain());

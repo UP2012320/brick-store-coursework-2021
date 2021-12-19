@@ -16,8 +16,6 @@ const createRouter = <T extends Record<string, unknown>>(args: RouterArgs[]): [s
     routeRegexString = trimCharactersFromEnd(routeRegexString, '/');
     routeRegexString = `^${routeRegexString}$`;
 
-    console.debug(routeRegexString);
-
     const routeRegex = new RegExp(routeRegexString, 'gimu');
 
     let result;
