@@ -28,13 +28,9 @@ const html = (strings: TemplateStringsArray, ...args: Array<Array<HTMLElement | 
 
   const htmlTags = combinedHtml
     .split(/(<[^>]+>)/gimu)
-    .filter((x) => {
-      return x.trim();
-    })
-    .map((tag) => {
-      // I don't understand why I need this explicit type cast...
-      return parseHtmlTag(tag) as [string, number];
-    });
+    .filter((x) => x.trim())
+    // I don't understand why I need this explicit type cast...
+    .map((tag) => parseHtmlTag(tag) as [string, number]);
 
   if (Array.isArray(args[0])) {
     throw new TypeError('The first argument cannot be an array');
