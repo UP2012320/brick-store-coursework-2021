@@ -7,6 +7,7 @@ import createNotFound from 'Scripts/pages/notFound';
 import createProduct from 'Scripts/pages/product';
 import {createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
+import type {productProps} from 'Types/types';
 
 const render = () => {
   console.debug('rendering');
@@ -27,7 +28,7 @@ const render = () => {
 
   internalRoot.append(createNavbar());
 
-  const [targetedRoute, qs] = createRouter<{ slug: string, }>([
+  const [targetedRoute, qs] = createRouter([
     {
       name: 'browse',
       route: '/browse',
@@ -47,7 +48,7 @@ const render = () => {
       internalRoot.append(createBrowse());
       break;
     case 'product':
-      internalRoot.append(createProduct({qs}));
+      internalRoot.append(createProduct({qs} as productProps));
       break;
     case 'main':
       internalRoot.append(createMain());

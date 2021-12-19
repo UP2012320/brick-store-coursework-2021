@@ -1,10 +1,5 @@
 import {createElement} from 'Scripts/uiUtils';
-
-export interface productProps {
-  qs?: {
-    slug: string,
-  };
-}
+import type {productProps} from 'Types/types';
 
 // eslint-disable-next-line arrow-body-style
 const createProduct = (props: productProps) => {

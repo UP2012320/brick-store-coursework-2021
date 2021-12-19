@@ -1,7 +1,7 @@
 import {trimCharactersFromEnd} from 'Scripts/helpers';
 import type {RouterArgs} from 'Types/types';
 
-const createRouter = <T extends Record<string, unknown>>(args: RouterArgs[]): [string | undefined, T | undefined] => {
+const createRouter = (args: RouterArgs[]): [string | undefined, Record<string, string> | undefined] => {
   const path = trimCharactersFromEnd(window.location.pathname, '/');
 
   for (const routerArgument of args) {
@@ -22,7 +22,7 @@ const createRouter = <T extends Record<string, unknown>>(args: RouterArgs[]): [s
 
     // eslint-disable-next-line @typescript-eslint/no-extra-parens
     if ((result = routeRegex.exec(path))) {
-      return [routerArgument.name, result.groups as T];
+      return [routerArgument.name, result.groups];
     }
   }
 
