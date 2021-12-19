@@ -4,6 +4,7 @@ import createRouter from 'Scripts/createRouter';
 import createBrowse from 'Scripts/pages/browse';
 import createMain from 'Scripts/pages/main';
 import createNotFound from 'Scripts/pages/notFound';
+import createProduct from 'Scripts/pages/product';
 import {createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
 
@@ -26,10 +27,14 @@ const render = () => {
 
   internalRoot.append(createNavbar());
 
-  const targetedRoute = createRouter([
+  const [targetedRoute, qs] = createRouter<{ slug: string, }>([
     {
       name: 'browse',
       route: '/browse',
+    },
+    {
+      name: 'product',
+      route: '/product/:slug',
     },
     {
       name: 'main',
@@ -40,6 +45,10 @@ const render = () => {
   switch (targetedRoute) {
     case 'browse':
       internalRoot.append(createBrowse());
+      break;
+    case 'product':
+      internalRoot.append(createProduct({qs}));
+
       break;
     case 'main':
       internalRoot.append(createMain());

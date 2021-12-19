@@ -22,7 +22,13 @@ module.exports = {
           "ImportDeclaration": "never",
         }],
         'object-curly-spacing': [2, 'never'],
-        '@typescript-eslint/consistent-type-definitions': ['error', 'interface']
+        '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+        'arrow-body-style': [2, 'as-needed'],
+        '@typescript-eslint/no-unused-vars': 1,
+        'no-trailing-spaces': 1,
+        'no-empty': 1,
+        'id-length': 1,
+        'unicorn/prevent-abbreviations': 1
       },
     },
     {
