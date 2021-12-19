@@ -42,6 +42,7 @@ const html = (strings: TemplateStringsArray, ...args: Array<Array<HTMLElement | 
 
   let currentParent = args[0];
 
+  // I remembered slice this time! :D
   for (const [htmlTag, argumentIndex] of htmlTags.slice(1, -1)) {
     if (argumentIndex === -1) {
       console.debug(`Unknown argumentIndex of ${argumentIndex} with tag ${htmlTag}`);
