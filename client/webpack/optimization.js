@@ -1,6 +1,8 @@
 /**
  * Created by: Andrey Polyakov (andrey@polyakov.im)
  */
+import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
+
 export default {
     runtimeChunk: {
         name: 'runtime',
@@ -14,4 +16,18 @@ export default {
             },
         },
     },
+  minimizer: [
+    new ImageMinimizerPlugin({
+      minimizer: {
+        implementation: ImageMinimizerPlugin.imageminMinify,
+        options: {
+          plugins: [
+            ['gifsicle'],
+            ['mozjpeg'],
+            ['pngquant']
+          ]
+        }
+      }
+                             })
+  ]
 };

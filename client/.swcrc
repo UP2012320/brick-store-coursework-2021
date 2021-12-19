@@ -1,0 +1,13 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "decorators": true,
+      "dynamicImport": true
+    },
+    "externalHelpers": true
+  },
+  "env": {
+    "targets": ">.25%, not dead"
+  }
+}

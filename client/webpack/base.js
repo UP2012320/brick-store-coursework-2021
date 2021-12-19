@@ -44,7 +44,6 @@ export default {
     plugins.definePlugin,
     plugins.forkTsCheckerWebpackPlugin,
     plugins.esLintPlugin,
-    plugins.copyPlugin,
   ]),
   resolve: {
     alias: aliasItems,

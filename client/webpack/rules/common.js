@@ -8,16 +8,6 @@ export const javascriptRule = {
     use: {
         // `.swcrc` can be used to configure swc
         loader: 'swc-loader',
-        options: {
-            jsc: {
-                parser: {
-                    syntax: 'typescript',
-                    tsx: false,
-                    decorators: true,
-                    dynamicImport: true,
-                },
-            },
-        },
     },
 };
 
@@ -35,7 +25,7 @@ export const htmlRule = {
  */
 export const imagesRule = {
     test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
-    type: 'asset/resource',
+    type: 'asset',
 };
 /**
  * @see https://webpack.js.org/guides/asset-modules/
