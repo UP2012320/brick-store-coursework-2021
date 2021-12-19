@@ -1,10 +1,10 @@
 import path from 'node:path';
-import config from 'config';
 import fastify from 'fastify';
 import fastifyHelmet from 'fastify-helmet';
 import fastifyPostgres from 'fastify-postgres';
 import fastifySensible from 'fastify-sensible';
 import fastifyStatic from 'fastify-static';
+import config from './config.js';
 import api from './routes/api.js';
 
 const ADDRESS = config.address;
