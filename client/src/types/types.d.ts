@@ -1,5 +1,5 @@
-export interface RouterArgs {
-  name: string;
+export interface RouterArgs<T extends string> {
+  name: T;
   route: string;
 }
 

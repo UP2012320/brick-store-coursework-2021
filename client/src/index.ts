@@ -53,7 +53,6 @@ const render = () => {
     case 'main':
       internalRoot.append(createMain());
       break;
-    case undefined:
     default:
       internalRoot.append(createNotFound());
       break;

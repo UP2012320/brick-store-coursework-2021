@@ -1,7 +1,7 @@
 import {trimCharactersFromEnd} from 'Scripts/helpers';
 import type {RouterArgs} from 'Types/types';
 
-const createRouter = (args: RouterArgs[]): [string | undefined, Record<string, string> | undefined] => {
+const createRouter = <T extends string>(args: Array<RouterArgs<T>>): [T | undefined, Record<string, string> | undefined] => {
   const path = trimCharactersFromEnd(window.location.pathname, '/');
 
   for (const routerArgument of args) {
