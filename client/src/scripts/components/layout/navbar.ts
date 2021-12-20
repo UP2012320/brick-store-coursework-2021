@@ -1,6 +1,6 @@
 import logo from 'Assets/drawing512.png';
 import createNavbarMainContainerItem from 'Scripts/components/layout/navbarMainContainerItem';
-import html from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlTemplate';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
 
@@ -41,7 +41,7 @@ export default function createNavbar () {
 
   registerLinkClickHandler(leftSideContainerLogo, '/');
 
-  return html`
+  return htmlx`
     <${navbar}>
       <${leftSideContainer}>
         <${leftSideContainerLogo}/>

@@ -1,5 +1,5 @@
 import images from 'Assets/2412b.png';
-import html from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlTemplate';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import browseStyles from 'Styles/pages/browse.module.scss';
 
@@ -83,7 +83,7 @@ export default function createShopCard () {
     browseStyles.shopCardButton,
   );
 
-  return html`
+  return htmlx`
     <${cardContainer}>
       <${image}/>
       <${title}/>

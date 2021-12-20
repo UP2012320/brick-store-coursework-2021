@@ -1,4 +1,4 @@
-import html from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlTemplate';
 import {createElement, createElementWithStyles, preventHrefDefault, registerLinkClickHandler} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import notFoundStyles from 'Styles/pages/notFound.module.scss';
@@ -30,7 +30,7 @@ const createNotFound = () => {
   preventHrefDefault(redirectLink);
   registerLinkClickHandler(redirectButton, '/');
 
-  return html`
+  return htmlx`
     <${container}>
       <${errorContainer}>
         <${textContainer}>

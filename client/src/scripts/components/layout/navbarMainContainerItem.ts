@@ -1,4 +1,4 @@
-import html from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlTemplate';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
 
@@ -18,7 +18,7 @@ export default function createNavbarMainContainerItem (props: { title: string, }
 
   registerLinkClickHandler(link);
 
-  return html`
+  return htmlx`
     <${container}>
       <${browseIcon}/>
       <${link}/>

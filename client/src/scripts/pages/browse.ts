@@ -1,6 +1,6 @@
 import createFilterBar from 'Scripts/components/filterBar';
 import createShopCard from 'Scripts/components/shopCard';
-import html from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlTemplate';
 import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';
@@ -26,7 +26,7 @@ export default function createBrowse () {
     shoppingCards.push(card);
   }
 
-  return html`
+  return htmlx`
     <${browseContainer}>
       <${filterBar}/>
       <${shoppingCardsContainer}>

@@ -1,4 +1,4 @@
-import html from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlTemplate';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 
@@ -40,7 +40,7 @@ export default function createFilterBar () {
     filterBarStyles.filterBarSearchItem,
   );
 
-  return html`
+  return htmlx`
     <${container}>
       <${leftSectionContainer}>
         <${sortBy}/>
