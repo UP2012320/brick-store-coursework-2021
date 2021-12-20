@@ -36,6 +36,7 @@ export default function createNavbar () {
   const navbarBrowseItem = createNavbarMainContainerItem({title: 'Browse'});
 
   const leftSideContainerLogo = createElementWithStyles('img', {
+    alt: 'The Super Brick Store logo',
     src: logo,
   }, styles.navbarLogo);
 

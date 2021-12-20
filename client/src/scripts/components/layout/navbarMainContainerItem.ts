@@ -16,7 +16,7 @@ export default function createNavbarMainContainerItem (props: { title: string, }
     textContent: props.title,
   }, styles.linkTitle);
 
-  registerLinkClickHandler(link);
+  registerLinkClickHandler(container, '/browse');
 
   return htmlx`
     <${container}>
