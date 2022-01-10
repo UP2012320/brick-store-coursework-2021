@@ -3,11 +3,25 @@
 @import 'src/styles/theme';
 
 .filter-bar-container {
-  flex: 0 1;
   display: flex;
-  background-color: $not-quite-white;
+  flex-direction: column;
   margin: $spacing-medium;
   border: 1px solid $not-quite-black;
+  background-color: $not-quite-white;
+}
+
+.filter-bar-row-container {
+  display: flex;
+}
+
+.filter-bar-options-row-container {
+  @extend .filter-bar-row-container;
+  height: 10px;
+  transition: height 1s ease-in-out;
+
+  &.open {
+    height: 100px;
+  }
 }
 
 .filter-bar-section-container {

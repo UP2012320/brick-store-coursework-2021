@@ -33,18 +33,19 @@ export const createSvgElementFromFile = (
   return Object.assign(element, options) as SVGSVGElement;
 };
 
+export const forceReRender = () => {
+  dispatchEvent(new Event('popstate'));
+};
+
 export const preventHrefDefault = (href: HTMLAnchorElement) => {
   href.addEventListener('click', (event) => {
     event.preventDefault();
   });
 };
 
-interface RegisterLinkClickHandlerOverloads {
-  (container: HTMLElement, path: string): void;
-  (container: HTMLAnchorElement): void;
-}
-
-export const registerLinkClickHandler: RegisterLinkClickHandlerOverloads = (element: HTMLElement, path?: string) => {
+export function registerLinkClickHandler (container: HTMLElement, path: string): void;
+export function registerLinkClickHandler (container: HTMLAnchorElement): void;
+export function registerLinkClickHandler (element: HTMLElement, path?: string) {
   element.addEventListener('click', (event) => {
     event.preventDefault();
 
@@ -54,6 +55,6 @@ export const registerLinkClickHandler: RegisterLinkClickHandlerOverloads = (elem
       history.pushState({}, '', element.href);
     }
 
-    dispatchEvent(new Event('popstate'));
+    forceReRender();
   });
-};
+}

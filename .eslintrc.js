@@ -28,7 +28,9 @@ module.exports = {
         'no-trailing-spaces': 1,
         'no-empty': 1,
         'id-length': 1,
-        'unicorn/prevent-abbreviations': 1
+        'unicorn/prevent-abbreviations': 1,
+        'func-style': 0,
+        'spaced-comment': 1
       },
     },
     {

@@ -8,3 +8,12 @@ export interface productProps {
     slug: string,
   };
 }
+
+export interface Ref<T> {
+  current: T;
+}
+
+export interface CallerState {
+  index: number;
+  states: Record<number, unknown>;
+}
