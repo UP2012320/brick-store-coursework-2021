@@ -29,7 +29,7 @@ export function useState<T> (callerName: string, initialState: T): unknown {
     stateStore[callerName] = {
       index: 0,
       states: {
-        0: state,
+        '0': state,
       },
     };
   }

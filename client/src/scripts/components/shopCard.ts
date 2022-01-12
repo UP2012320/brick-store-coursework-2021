@@ -1,5 +1,5 @@
 import images from 'Assets/2412b.png';
-import htmlx from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import browseStyles from 'Styles/pages/browse.module.scss';
 

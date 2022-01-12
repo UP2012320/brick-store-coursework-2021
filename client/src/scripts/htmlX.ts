@@ -3,19 +3,16 @@ import type {HtmlTagResult} from 'Types/types';
 const parseHtmlTag = (tag: string): HtmlTagResult => {
   let match: RegExpMatchArray | null;
 
-  // eslint-disable-next-line @typescript-eslint/no-extra-parens
   if ((match = /^<(?<tag>\w+)(?:(?=>)|.*[^/])>$/gimu.exec(tag))) {
     return {
       literalArgumentIndex: Number.parseInt(match.groups?.tag ?? '-1', 10),
       tagType: 'opening',
     };
-    // eslint-disable-next-line @typescript-eslint/no-extra-parens
   } else if ((match = /^<\/(?<tag>\w+)>$/gimu.exec(tag))) {
     return {
       literalArgumentIndex: Number.parseInt(match.groups?.tag ?? '-1', 10),
       tagType: 'closing',
     };
-    // eslint-disable-next-line @typescript-eslint/no-extra-parens
   } else if ((match = /^<(?<tag>\w+).*\/>$/gimu.exec(tag))) {
     return {
       literalArgumentIndex: Number.parseInt(match.groups?.tag ?? '-1', 10),
@@ -32,24 +29,30 @@ const parseHtmlTag = (tag: string): HtmlTagResult => {
 const htmlx = (strings: TemplateStringsArray,
   ...args: Array<Array<HTMLElement | SVGSVGElement> | HTMLElement | SVGSVGElement>) => {
   if (Array.isArray(args[0])) {
-    throw new TypeError('The first argument cannot be an array');
+    // eslint-disable-next-line unicorn/prefer-type-error
+    throw new Error('The first argument cannot be an array');
   }
 
   /*
-  The strings array is split upon every argument passed to the template literal.
-  Since the expected format of the code is supposed to be HTML, I need to rebuild
-  the HTML, so I can parse the type of each tag, opening, closing or self-closing.
+  reduce - Merge all the seperated strings and the corresponding index - 1, this index that'll be parsed
+  later on corresponds with an argument in the args array
+  match - Match all html tags in the reduced string
+  map - Pass each matched tag to function used to parse and identify the tag
    */
 
   const htmlTags = strings
     .reduce((previous, current, index) => previous + (index - 1) + current)
-    .split(/(<[^>]+>)/gimu)
-    .filter((tag) => tag.trim())
-    .map((tag) => parseHtmlTag(tag));
+    .match(/(<[^>]+>)/gimu)
+    ?.map((tag) => parseHtmlTag(tag));
+
+  if (!htmlTags) {
+    throw new Error(`htmlTags is null, ${strings.reduce((previous, current, index) => previous + (index - 1) + current)}`);
+  }
 
   let currentParent = args[0];
 
   // I remembered slice this time! :D
+  // The reason we slice here is that the first and last tags will be related to args[0] which is what we start off with above
   for (const htmlTagParseResult of htmlTags.slice(1, -1)) {
     if (htmlTagParseResult.literalArgumentIndex === -1) {
       console.debug(`Unknown argumentIndex of ${htmlTagParseResult.literalArgumentIndex} with tag ${htmlTagParseResult.tagType}`);
@@ -61,7 +64,8 @@ const htmlx = (strings: TemplateStringsArray,
     switch (htmlTagParseResult.tagType) {
       case 'opening':
         if (Array.isArray(htmlElement)) {
-          throw new TypeError('An opening tag should not be an array');
+          // eslint-disable-next-line unicorn/prefer-type-error
+          throw new Error('An opening tag should not be an array');
         }
 
         currentParent.append(htmlElement);
@@ -87,6 +91,8 @@ const htmlx = (strings: TemplateStringsArray,
         break;
     }
   }
+
+  // Return the first argument as that'll always be the root node all child nodes are appended to
 
   return args[0] as HTMLElement;
 };

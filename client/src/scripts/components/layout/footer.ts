@@ -1,4 +1,4 @@
-import htmlx from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlX';
 import {createElement} from 'Scripts/uiUtils';
 // eslint-disable-next-line import/no-unassigned-import
 import 'Styles/components/footer.module.scss';

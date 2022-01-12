@@ -1,4 +1,4 @@
-import htmlx from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
 

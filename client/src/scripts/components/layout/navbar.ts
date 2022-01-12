@@ -1,6 +1,6 @@
 import logo from 'Assets/drawing512.png';
 import createNavbarMainContainerItem from 'Scripts/components/layout/navbarMainContainerItem';
-import htmlx from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlX';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
 

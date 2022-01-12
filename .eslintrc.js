@@ -33,7 +33,9 @@ module.exports = {
         'spaced-comment': 1,
         'array-bracket-newline': 0,
         'canonical/destructuring-property-newline': 0,
-        'array-element-newline': 0
+        'array-element-newline': 0,
+        'canonical/import-specifier-newline': 0,
+        '@typescript-eslint/no-extra-parens': 0
       },
     },
     {

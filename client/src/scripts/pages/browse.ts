@@ -1,6 +1,6 @@
 import createFilterBar from 'Scripts/components/filterBar';
 import createShopCard from 'Scripts/components/shopCard';
-import htmlx from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlX';
 import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';

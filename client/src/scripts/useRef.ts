@@ -28,7 +28,7 @@ export function useRef<T> (callerName: string, initialValue: T): unknown {
     stateStore[callerName] = {
       index: 0,
       states: {
-        0: ref,
+        '0': ref,
       },
     };
   }

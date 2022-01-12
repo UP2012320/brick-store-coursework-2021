@@ -1,6 +1,6 @@
 import createFilterBarOptions from 'Scripts/components/filterBarOptions';
 import {nameof} from 'Scripts/helpers';
-import htmlx from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import {registerUseRef} from 'Scripts/useRef';
 import {registerUseState} from 'Scripts/useState';

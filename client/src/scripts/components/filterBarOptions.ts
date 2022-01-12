@@ -1,4 +1,4 @@
-import htmlx from 'Scripts/htmlTemplate';
+import htmlx from 'Scripts/htmlX';
 import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 
