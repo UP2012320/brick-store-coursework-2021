@@ -35,7 +35,8 @@ module.exports = {
         'canonical/destructuring-property-newline': 0,
         'array-element-newline': 0,
         'canonical/import-specifier-newline': 0,
-        '@typescript-eslint/no-extra-parens': 0
+        '@typescript-eslint/no-extra-parens': 0,
+        'object-property-newline': 0
       },
     },
     {

@@ -149,7 +149,7 @@ export function mergeDomTrees (newTree: HTMLElement, oldTree: HTMLElement) {
     const aNode = [aNodes.shift()] ?? [{children: [], parent: undefined}];
     const bNode = [bNodes.shift()] ?? [{children: [], parent: undefined}];
 
-    while (aNode.length > 0 || bNode.length > 0) {
+    /* while (aNode.length > 0 || bNode.length > 0) {
       const aNodeChild = aNode.pop();
       const bNodeChild = bNode.pop();
 
@@ -188,10 +188,10 @@ export function mergeDomTrees (newTree: HTMLElement, oldTree: HTMLElement) {
       if (compareResults.every((result) => result.action !== 'remove') && bNodeChild) {
         bNodes.push({children: [...bNodeChild.childNodes], parent: bNodeChild as HTMLElement});
       }
-    }
+    }*/
   }
 
-  while (aNodes.length > 0 || bNodes.length > 0) {
+  /* while (aNodes.length > 0 || bNodes.length > 0) {
     const aNode = aNodes.pop() ?? {children: [], parent: undefined};
     const bNode = bNodes.pop() ?? {children: [], parent: undefined};
 
@@ -234,6 +234,5 @@ export function mergeDomTrees (newTree: HTMLElement, oldTree: HTMLElement) {
       if (compareResults.every((result) => result.action !== 'remove') && bNodeChild) {
         bNodes.push({children: [...bNodeChild.childNodes], parent: bNodeChild as HTMLElement});
       }
-    }
-  }
+    }*/
 }
