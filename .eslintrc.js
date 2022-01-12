@@ -30,7 +30,10 @@ module.exports = {
         'id-length': 1,
         'unicorn/prevent-abbreviations': 1,
         'func-style': 0,
-        'spaced-comment': 1
+        'spaced-comment': 1,
+        'array-bracket-newline': 0,
+        'canonical/destructuring-property-newline': 0,
+        'array-element-newline': 0
       },
     },
     {

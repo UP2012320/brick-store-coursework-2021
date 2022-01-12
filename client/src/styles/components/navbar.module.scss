@@ -30,30 +30,28 @@ nav {
 
 .nav-right-side-container {
   @extend .nav-side-container;
-  position: relative;
   justify-content: flex-end;
 
-  .cart-container {
-    display: flex;
-    justify-content: center;
+  &:hover {
+    cursor: pointer;
+    color: $primary-colour;
+  }
 
-    &:hover {
-      cursor: pointer;
-      color: $primary-colour;
-    }
+  .bi-cart2 {
+    $scale: 2.75;
+    $base: 16px;
 
-    .bi-cart2 {
-      transform: scale(2.75);
-      margin-right: $spacing-xlarge;
-    }
+    position: relative;
+    transform: scale($scale);
+    margin-right: $spacing-xlarge;
 
-    p {
+    span {
+      height: $base;
+      width: $base;
       position: absolute;
       @include font-medium;
-      font-weight: 700;
-      right: 13.5px;
-      top: 100% - 64%;
-      width: 34px;
+      font-size: 6pt;
+      right: 0;
       text-align: center;
       font-style: normal;
       user-select: none;

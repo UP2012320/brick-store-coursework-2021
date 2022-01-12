@@ -17,3 +17,10 @@ export interface CallerState {
   index: number;
   states: Record<number, unknown>;
 }
+
+export type HtmlTagResultType = 'closing' | 'opening' | 'selfClosing' | 'unknown';
+
+export interface HtmlTagResult {
+  literalArgumentIndex: number;
+  tagType: HtmlTagResultType;
+}

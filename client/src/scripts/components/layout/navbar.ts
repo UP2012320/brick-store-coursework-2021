@@ -25,11 +25,11 @@ export default function createNavbar () {
     styles.navRightSideContainer,
   );
 
-  const shoppingCartContainer = createElementWithStyles('div', undefined, styles.cartContainer);
+  // const shoppingCartContainer = createElementWithStyles('div', undefined, styles.cartContainer);
 
   const shoppingCart = createElementWithStyles('i', undefined, styles.biCart2);
 
-  const shoppingCartAmount = createElement('p', {
+  const shoppingCartAmount = createElement('span', {
     textContent: '4',
   });
 
@@ -51,10 +51,9 @@ export default function createNavbar () {
         <${navbarBrowseItem}/>
       </mainElement>
       <${rightSideContainer}>
-        <${shoppingCartContainer}>
-          <${shoppingCart}/>
-          <${shoppingCartAmount}/>
-        </shoppingCartContainer>
+          <${shoppingCart}>
+            <${shoppingCartAmount}/>
+          </shoppingCart>
       </rightSideElement>
     </navbar>
   `;

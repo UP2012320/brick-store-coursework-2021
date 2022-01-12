@@ -1538,7 +1538,6 @@ declare namespace NavbarModuleScssNamespace {
     biYoutube: string;
     biZoomIn: string;
     biZoomOut: string;
-    cartContainer: string;
     linkTitle: string;
     navMainContainer: string;
     navMainContainerItem: string;

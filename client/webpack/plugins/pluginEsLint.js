@@ -8,8 +8,10 @@ import ESLintPlugin from 'eslint-webpack-plugin';
 import {rootDir} from '../utils/env';
 
 const config = {
-    context: join(rootDir, '/src'),
-    extensions: ['js', 'jsx', 'ts', 'tsx'],
+  context: join(rootDir, '/src'),
+  extensions: ['js', 'jsx', 'ts', 'tsx'],
+  failOnWarning: false,
+  failOnError: false
 };
 
 export const esLintPlugin = new ESLintPlugin(config);
