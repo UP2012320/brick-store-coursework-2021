@@ -1,7 +1,6 @@
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
-import {domToVirtualDom, mergeDomTrees, virtualDomToDom} from 'Scripts/diffing';
 import createBrowse from 'Scripts/pages/browse';
 import createMain from 'Scripts/pages/main';
 import createNotFound from 'Scripts/pages/notFound';
@@ -12,7 +11,7 @@ import {resetStateIndexes} from 'Scripts/useState';
 import rootStyles from 'Styles/components/root.module.scss';
 import type {productProps} from 'Types/types';
 
-let currentRoot: HTMLElement;
+// let currentRoot: HTMLElement;
 
 const render = () => {
   console.debug('rendering');
@@ -23,9 +22,9 @@ const render = () => {
     return;
   }
 
-  /* while (root.firstChild) {
+  while (root.firstChild) {
     root.firstChild.remove();
-  }*/
+  }
 
   const internalRoot = createElement('div', {
     id: rootStyles.root,
@@ -65,23 +64,19 @@ const render = () => {
 
   internalRoot.append(createFooter());
 
-  internalRoot.onclick = () => {
-    console.debug('do stuff');
-  };
-
-  console.debug(internalRoot);
-
-  const virtualDom = domToVirtualDom(internalRoot);
+  /* const virtualDom = domToVirtualDom(internalRoot);
   console.debug(virtualDom);
   const dom = virtualDomToDom(document, virtualDom);
-  console.debug(dom);
+  console.debug(dom);*/
 
-  if (currentRoot) {
+  /* if (currentRoot) {
     mergeDomTrees(internalRoot, currentRoot);
   } else {
     currentRoot = internalRoot;
     root.append(currentRoot);
-  }
+  }*/
+
+  root.append(internalRoot);
 };
 
 const onPopState = () => {
