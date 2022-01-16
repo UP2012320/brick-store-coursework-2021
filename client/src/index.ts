@@ -3,9 +3,8 @@ import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
 import createBrowse from 'Scripts/pages/browse';
 import createMain from 'Scripts/pages/main';
-import createNotFound from 'Scripts/pages/notFound';
 import createProduct from 'Scripts/pages/product';
-import {createElement} from 'Scripts/uiUtils';
+import {appendElements, createElement} from 'Scripts/uiUtils';
 import {resetRefIndexes} from 'Scripts/useRef';
 import {resetStateIndexes} from 'Scripts/useState';
 import rootStyles from 'Styles/components/root.module.scss';
@@ -30,7 +29,7 @@ const render = () => {
     id: rootStyles.root,
   });
 
-  internalRoot.append(createNavbar());
+  appendElements(internalRoot, createNavbar());
 
   const [targetedRoute, qs] = createRouter([
     {
@@ -49,20 +48,20 @@ const render = () => {
 
   switch (targetedRoute) {
     case 'browse':
-      internalRoot.append(createBrowse());
+      appendElements(internalRoot, createBrowse());
       break;
     case 'product':
-      internalRoot.append(createProduct({qs} as productProps));
+      appendElements(internalRoot, createProduct({qs} as productProps));
       break;
     case 'main':
-      internalRoot.append(createMain());
+      appendElements(internalRoot, createMain());
       break;
     default:
-      internalRoot.append(createNotFound());
+      appendElements(internalRoot, createNavbar());
       break;
   }
 
-  internalRoot.append(createFooter());
+  appendElements(internalRoot, createFooter());
 
   /* const virtualDom = domToVirtualDom(internalRoot);
   console.debug(virtualDom);
