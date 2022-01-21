@@ -1,5 +1,5 @@
 import htmlx from 'Scripts/htmlX';
-import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
+import {createElementWithStyles} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 
 export default function createFilterBarOptions (toggle: boolean) {
@@ -12,8 +12,7 @@ export default function createFilterBarOptions (toggle: boolean) {
   }
 
   return htmlx`
-    <${rowContainer}>
-      <${createElement('p', {textContent: 'test'})}/>
-    </rowContainer>
+    ${toggle ? htmlx`<${rowContainer}>
+    </rowContainer>` : null}
   `;
 }

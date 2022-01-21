@@ -62,7 +62,7 @@ export function registerLinkClickHandler (element: HTMLElement, path?: string) {
 /*
 I implemented this appending function to allow htmlx to take null values. This way I can use conditionals
 such as toggle ? <someElement/> : null, returning null meaning the component shouldn't be rendered at all.
-The normal append or appendChild functions do not allow for null or undefined arguments
+The normal append or appendChild functions do not allow for null or undefined arguments.
  */
 export const appendElements = (parent?: Element | HTMLElement | SVGSVGElement | null, ...nodesOrDOMStrings: Array<Node | string | null | undefined>) => {
   if (!parent) {
