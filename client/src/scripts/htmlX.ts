@@ -1,3 +1,4 @@
+import {appendElements} from 'Scripts/uiUtils';
 import type {HtmlTagResult} from 'Types/types';
 
 const parseHtmlTag = (tag: string): HtmlTagResult => {
@@ -27,7 +28,7 @@ const parseHtmlTag = (tag: string): HtmlTagResult => {
 };
 
 const htmlx = (strings: TemplateStringsArray,
-  ...args: Array<Array<HTMLElement | SVGSVGElement> | HTMLElement | SVGSVGElement>) => {
+  ...args: Array<Array<HTMLElement | SVGSVGElement | null> | HTMLElement | SVGSVGElement | null>) => {
   if (Array.isArray(args[0])) {
     // eslint-disable-next-line unicorn/prefer-type-error
     throw new Error('The first argument cannot be an array');
@@ -46,10 +47,14 @@ const htmlx = (strings: TemplateStringsArray,
     ?.map((tag) => parseHtmlTag(tag));
 
   if (!htmlTags) {
-    throw new Error(`htmlTags is null, ${strings.reduce((previous, current, index) => previous + (index - 1) + current)}`);
+    return null;
   }
 
   let currentParent = args[0];
+
+  if (!currentParent) {
+    return null;
+  }
 
   // I remembered slice this time! :D
   // The reason we slice here is that the first and last tags will be related to args[0] which is what we start off with above
@@ -68,21 +73,21 @@ const htmlx = (strings: TemplateStringsArray,
           throw new Error('An opening tag should not be an array');
         }
 
-        currentParent.append(htmlElement);
+        appendElements(currentParent, htmlElement);
         currentParent = htmlElement;
 
         break;
       case 'closing':
-        if (currentParent.parentElement) {
+        if (currentParent?.parentElement) {
           currentParent = currentParent.parentElement;
         }
 
         break;
       case 'selfClosing':
         if (Array.isArray(htmlElement)) {
-          currentParent.append(...htmlElement);
+          appendElements(currentParent, ...htmlElement);
         } else {
-          currentParent.append(htmlElement);
+          appendElements(currentParent, htmlElement);
         }
 
         break;

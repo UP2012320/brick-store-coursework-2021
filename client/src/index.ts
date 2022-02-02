@@ -1,18 +1,16 @@
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
-import {domToVirtualDom, mergeDomTrees, virtualDomToDom} from 'Scripts/diffing';
 import createBrowse from 'Scripts/pages/browse';
 import createMain from 'Scripts/pages/main';
-import createNotFound from 'Scripts/pages/notFound';
 import createProduct from 'Scripts/pages/product';
-import {createElement} from 'Scripts/uiUtils';
+import {appendElements, createElement} from 'Scripts/uiUtils';
 import {resetRefIndexes} from 'Scripts/useRef';
 import {resetStateIndexes} from 'Scripts/useState';
 import rootStyles from 'Styles/components/root.module.scss';
 import type {productProps} from 'Types/types';
 
-let currentRoot: HTMLElement;
+// let currentRoot: HTMLElement;
 
 const render = () => {
   console.debug('rendering');
@@ -23,15 +21,15 @@ const render = () => {
     return;
   }
 
-  /* while (root.firstChild) {
+  while (root.firstChild) {
     root.firstChild.remove();
-  }*/
+  }
 
   const internalRoot = createElement('div', {
     id: rootStyles.root,
   });
 
-  internalRoot.append(createNavbar());
+  appendElements(internalRoot, createNavbar());
 
   const [targetedRoute, qs] = createRouter([
     {
@@ -50,38 +48,34 @@ const render = () => {
 
   switch (targetedRoute) {
     case 'browse':
-      internalRoot.append(createBrowse());
+      appendElements(internalRoot, createBrowse());
       break;
     case 'product':
-      internalRoot.append(createProduct({qs} as productProps));
+      appendElements(internalRoot, createProduct({qs} as productProps));
       break;
     case 'main':
-      internalRoot.append(createMain());
+      appendElements(internalRoot, createMain());
       break;
     default:
-      internalRoot.append(createNotFound());
+      appendElements(internalRoot, createNavbar());
       break;
   }
 
-  internalRoot.append(createFooter());
+  appendElements(internalRoot, createFooter());
 
-  internalRoot.onclick = () => {
-    console.debug('do stuff');
-  };
-
-  console.debug(internalRoot);
-
-  const virtualDom = domToVirtualDom(internalRoot);
+  /* const virtualDom = domToVirtualDom(internalRoot);
   console.debug(virtualDom);
   const dom = virtualDomToDom(document, virtualDom);
-  console.debug(dom);
+  console.debug(dom);*/
 
-  if (currentRoot) {
+  /* if (currentRoot) {
     mergeDomTrees(internalRoot, currentRoot);
   } else {
     currentRoot = internalRoot;
     root.append(currentRoot);
-  }
+  }*/
+
+  root.append(internalRoot);
 };
 
 const onPopState = () => {

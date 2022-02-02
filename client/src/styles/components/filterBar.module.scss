@@ -16,7 +16,7 @@
 
 .filter-bar-options-row-container {
   @extend .filter-bar-row-container;
-  height: 10px;
+  height: 0;
   transition: height 1s ease-in-out;
 
   &.open {
