@@ -13,7 +13,6 @@ export function useState<T = undefined> (callerName: string, initialState?: unde
 export function useState<T> (callerName: string, initialState: T): [(T), ((newState: (T | ((previous: T) => T))) => void)];
 export function useState<T> (callerName: string, initialState: T): unknown {
   let callerState = stateStore[callerName];
-  let state = initialState;
   let callerStateIndex = 0;
 
   if (callerState) {
@@ -22,23 +21,23 @@ export function useState<T> (callerName: string, initialState: T): unknown {
 
     if (temporaryState === undefined) {
       callerState.states[callerStateIndex] = initialState;
-    } else if (temporaryState) {
-      state = temporaryState;
     }
   } else {
     stateStore[callerName] = {
       index: 0,
       states: {
-        '0': state,
+        '0': initialState,
       },
     };
+
+    callerState = stateStore[callerName];
   }
 
   const setState = (newState: T | ((previous: T) => T)) => {
     callerState = stateStore[callerName];
 
     if (newState instanceof Function) {
-      callerState.states[callerStateIndex] = newState(state);
+      callerState.states[callerStateIndex] = newState(callerState.states[callerStateIndex] as T);
     } else {
       callerState.states[callerStateIndex] = newState;
     }
@@ -46,7 +45,7 @@ export function useState<T> (callerName: string, initialState: T): unknown {
     forceReRender();
   };
 
-  return [state, setState];
+  return [callerState.states[callerStateIndex] as T, setState];
 }
 
 interface registerUseStateOverloads {

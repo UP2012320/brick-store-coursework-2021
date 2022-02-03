@@ -2,12 +2,10 @@ import createFilterBarOptions from 'Scripts/components/filterBarOptions';
 import {nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
-import {registerUseRef} from 'Scripts/useRef';
 import {registerUseState} from 'Scripts/useState';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 
 const useState = registerUseState(nameof(createFilterBar));
-const useRef = registerUseRef(nameof(createFilterBar));
 
 export default function createFilterBar () {
   const [fff, sfff] = useState(false);
