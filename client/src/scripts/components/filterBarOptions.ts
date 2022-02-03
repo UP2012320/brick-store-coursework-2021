@@ -12,7 +12,6 @@ export default function createFilterBarOptions (toggle: boolean) {
   }
 
   return htmlx`
-    ${toggle ? htmlx`<${rowContainer}>
-    </rowContainer>` : null}
+    <${rowContainer}/>
   `;
 }

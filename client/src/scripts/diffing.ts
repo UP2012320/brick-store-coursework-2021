@@ -1,238 +1,183 @@
-/*
-classlist
-textcontent
-id
-tag
- */
-
 interface NodeDifference {
-  action: 'add' | 'modify' | 'remove';
+  action: 'modify' | 'replace';
   target: 'classList' | 'id' | 'node' | 'nodeValue';
 }
 
-function compareDomNode (a?: HTMLElement | Node, b?: HTMLElement | Node) {
+function compareDomNode (oldNode: Node, newNode: Node) {
   const results: NodeDifference[] = [];
+  if (oldNode instanceof HTMLElement && newNode instanceof HTMLElement) {
+    if (oldNode.tagName !== newNode.tagName) {
+      results.push({
+        action: 'replace',
+        target: 'node',
+      });
 
-  if (b !== undefined && a === undefined) {
-    results.push({
-      action: 'remove',
-      target: 'node',
-    });
+      return results;
+    }
 
-    return results;
-  }
+    if (oldNode.classList.length !== newNode.classList.length) {
+      results.push({
+        action: 'modify',
+        target: 'classList',
+      });
+    } else if (oldNode.classList.length === newNode.classList.length) {
+      for (let index = 0; index < oldNode.classList.length; index++) {
+        const aClass = oldNode.classList[index];
+        const bClass = newNode.classList[index];
 
-  if (a !== undefined && b === undefined) {
-    results.push({
-      action: 'add',
-      target: 'node',
-    });
-
-    return results;
-  }
-
-  if (a && b) {
-    if (a instanceof HTMLElement && b instanceof HTMLElement) {
-      if (a.tagName !== b.tagName) {
-        results.push({
-          action: 'remove',
-          target: 'node',
-        });
-
-        return results;
-      }
-
-      if (a.classList.length !== b.classList.length) {
-        results.push({
-          action: 'modify',
-          target: 'classList',
-        });
-      } else if (a.classList.length === b.classList.length) {
-        for (let index = 0; index < a.classList.length; index++) {
-          const aClass = a.classList[index];
-          const bClass = b.classList[index];
-
-          if (aClass !== bClass) {
-            results.push({
-              action: 'modify',
-              target: 'classList',
-            });
-            break;
-          }
+        if (aClass !== bClass) {
+          results.push({
+            action: 'modify',
+            target: 'classList',
+          });
+          break;
         }
-      }
-
-      if (a.id !== b.id) {
-        results.push({
-          action: 'modify',
-          target: 'id',
-        });
       }
     }
 
-    if (a.nodeValue !== b.nodeValue) {
+    if (oldNode.id !== newNode.id) {
+      results.push({
+        action: 'modify',
+        target: 'id',
+      });
+    }
+
+    if (oldNode.nodeValue !== newNode.nodeValue) {
       results.push({
         action: 'modify',
         target: 'nodeValue',
       });
     }
+  } else if (oldNode instanceof Text && newNode instanceof Text) {
+    results.push({
+      action: 'modify',
+      target: 'nodeValue',
+    });
+  } else if (oldNode instanceof Text || newNode instanceof Text) {
+    results.push({
+      action: 'replace',
+      target: 'node',
+    });
   }
 
   return results;
 }
 
-interface Nodes {
-  children: Array<HTMLElement | Node>;
-  parent?: HTMLElement;
+interface DiffingNode {
+  childNodes: ChildNode[];
+  parent: HTMLElement;
 }
 
-interface VirtualDomElement {
-  attributes: Array<{name: string, value: string, }>;
-  children: VirtualDomElement[];
-  nodeValue: string;
-  tagName: string;
+interface NodesToExplore {
+  newTreeNode: DiffingNode;
+  oldTreeNode: DiffingNode;
 }
 
-export function domToVirtualDom (dom: HTMLElement | Node) {
-  let virtualDomElement: VirtualDomElement;
+/*
+ Sourced from: https://stackoverflow.com/a/52473108
+ When iterating over the properties of an object in TypeScript, some of them can
+ be readonly. When I'm iterating over all of them and then filtering them, TypeScript
+ doesn't know if the ones I'm filtering are going to be readonly or not if even one of the
+ properties could be. So, I need a type to assert that all the properties I'm accessing
+ are writable.
+ */
 
-  if (dom instanceof HTMLElement) {
-    virtualDomElement = {
-      attributes: [...dom.attributes].map((value) => ({name: value.name, value: value.value})),
-      children: [],
-      nodeValue: dom.nodeValue ?? '',
-      tagName: dom.tagName,
-    };
-  } else {
-    virtualDomElement = {
-      attributes: [],
-      children: [],
-      nodeValue: dom.nodeValue ?? '',
-      tagName: dom.nodeName,
-    };
-  }
+type IfEquals<X, Y, A, B> =
+    [0, 1, X] & [2] extends [0, 1, Y] & [0, infer W, unknown] & [2]
+      ? W extends 1 ? B : A
+      : B;
+type WritableKeysOf<T> = {
+  [P in keyof T]: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, P, never>
+}[keyof T];
 
-  for (const childNode of dom.childNodes) {
-    virtualDomElement.children.push(domToVirtualDom(childNode));
-  }
+function mergeDomElementChildren (newTreeChildren: DiffingNode, oldTreeChildren: DiffingNode) {
+  const nodesToExplore: NodesToExplore[] = [];
 
-  return virtualDomElement;
-}
+  const highestIndex = newTreeChildren.childNodes.length >= oldTreeChildren.childNodes.length ?
+    newTreeChildren.childNodes.length :
+    oldTreeChildren.childNodes.length;
 
-export function virtualDomToDom (documentNode: Document, virtualDom: VirtualDomElement) {
-  let domElement: HTMLElement | Text;
+  for (let index = 0; index < highestIndex; index++) {
+    const newTreeChild = newTreeChildren.childNodes[index] as HTMLElement | undefined;
+    const oldTreeChild = oldTreeChildren.childNodes[index] as HTMLElement | undefined;
 
-  if (virtualDom.tagName === '#text') {
-    domElement = documentNode.createTextNode(virtualDom.nodeValue);
-  } else {
-    domElement = documentNode.createElement(virtualDom.tagName);
-    domElement.nodeValue = virtualDom.nodeValue;
+    if (!newTreeChild && oldTreeChild) {
+      oldTreeChild.remove();
+    } else if (newTreeChild && !oldTreeChild) {
+      oldTreeChildren.parent.append(newTreeChild);
+    } else if (newTreeChild && oldTreeChild) {
+      const compareResults = compareDomNode(newTreeChild, oldTreeChild);
 
-    for (const {name, value} of virtualDom.attributes) {
-      domElement.setAttribute(name, value);
+      for (const compareResult of compareResults) {
+        switch (compareResult.action) {
+          case 'modify': {
+            if (compareResult.target === 'classList') {
+              oldTreeChild.classList.remove(...oldTreeChild.classList.values());
+              oldTreeChild.classList.add(...newTreeChild.classList.values());
+            } else if (compareResult.target === 'id') {
+              oldTreeChild.id = newTreeChild.id;
+            } else if (compareResult.target === 'nodeValue') {
+              oldTreeChild.nodeValue = newTreeChild.nodeValue;
+            }
+
+            // eslint-disable-next-line guard-for-in
+            for (const property in newTreeChild) {
+              if (property.startsWith('on')) {
+                const propertyAsKey = property as keyof WritableKeysOf<HTMLElement>;
+                if (newTreeChild[propertyAsKey]) {
+                  oldTreeChild[propertyAsKey] = newTreeChild[propertyAsKey];
+                }
+              }
+            }
+
+            nodesToExplore.push({
+              newTreeNode: {
+                childNodes: [...newTreeChild.childNodes],
+                parent: newTreeChild,
+              }, oldTreeNode: {
+                childNodes: [...oldTreeChild.childNodes],
+                parent: oldTreeChild,
+              },
+            });
+
+            break;
+          }
+          case 'replace': {
+            oldTreeChildren.parent.replaceChild(oldTreeChild, newTreeChild);
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+      }
+
+      nodesToExplore.push({
+        newTreeNode: {
+          childNodes: [...newTreeChild.childNodes],
+          parent: newTreeChild,
+        }, oldTreeNode: {
+          childNodes: [...oldTreeChild.childNodes],
+          parent: oldTreeChild,
+        },
+      });
     }
-
-    for (const child of virtualDom.children) {
-      domElement.append(virtualDomToDom(documentNode, child));
-    }
   }
 
-  return domElement;
+  for (const nodeToExplore of nodesToExplore) {
+    mergeDomElementChildren(nodeToExplore.newTreeNode, nodeToExplore.oldTreeNode);
+  }
 }
 
-// eslint-disable-next-line complexity
 export function mergeDomTrees (newTree: HTMLElement, oldTree: HTMLElement) {
-  const aNodes: Nodes[] = [{children: [...newTree.childNodes], parent: newTree}];
-  const bNodes: Nodes[] = [{children: [...oldTree.childNodes], parent: oldTree}];
+  const newTreeChildren = [...newTree.childNodes];
+  const oldTreeChildren = [...oldTree.childNodes];
 
-  while (aNodes.length > 0 || bNodes.length > 0) {
-    const aNode = [aNodes.shift()] ?? [{children: [], parent: undefined}];
-    const bNode = [bNodes.shift()] ?? [{children: [], parent: undefined}];
-
-    /* while (aNode.length > 0 || bNode.length > 0) {
-      const aNodeChild = aNode.pop();
-      const bNodeChild = bNode.pop();
-
-      if (aNodeChild) {
-        aNode.children.push({children: [...aNodeChild.childNodes], parent: aNodeChild as HTMLElement});
-      }
-
-      const compareResults = compareDomNode(aNodeChild, bNodeChild);
-
-      for (const result of compareResults) {
-        switch (result.action) {
-          case 'add':
-            if (aNodeChild && bNode.parent) {
-              bNode.parent.append(aNodeChild);
-            }
-
-            break;
-          case 'remove':
-            if (bNodeChild) {
-              bNode.parent?.removeChild(bNodeChild);
-            }
-
-            break;
-          case 'modify':
-            if (bNodeChild && aNodeChild) {
-              bNode.parent?.replaceChild(aNodeChild, bNodeChild);
-            }
-
-            break;
-          default:
-            console.debug('idk');
-            break;
-        }
-      }
-
-      if (compareResults.every((result) => result.action !== 'remove') && bNodeChild) {
-        bNodes.push({children: [...bNodeChild.childNodes], parent: bNodeChild as HTMLElement});
-      }
-    }*/
-  }
-
-  /* while (aNodes.length > 0 || bNodes.length > 0) {
-    const aNode = aNodes.pop() ?? {children: [], parent: undefined};
-    const bNode = bNodes.pop() ?? {children: [], parent: undefined};
-
-    while (aNode.children.length > 0 || bNode.children.length > 0) {
-      const aNodeChild = aNode.children.shift();
-      const bNodeChild = bNode.children.shift();
-
-      if (aNodeChild) {
-        aNode.children.push({children: [...aNodeChild.childNodes], parent: aNodeChild as HTMLElement});
-      }
-
-      const compareResults = compareDomNode(aNodeChild, bNodeChild);
-
-      for (const result of compareResults) {
-        switch (result.action) {
-          case 'add':
-            if (aNodeChild && bNode.parent) {
-              bNode.parent.append(aNodeChild);
-            }
-
-            break;
-          case 'remove':
-            if (bNodeChild) {
-              bNode.parent?.removeChild(bNodeChild);
-            }
-
-            break;
-          case 'modify':
-            if (bNodeChild && aNodeChild) {
-              bNode.parent?.replaceChild(aNodeChild, bNodeChild);
-            }
-
-            break;
-          default:
-            console.debug('idk');
-            break;
-        }
-      }
-
-      if (compareResults.every((result) => result.action !== 'remove') && bNodeChild) {
-        bNodes.push({children: [...bNodeChild.childNodes], parent: bNodeChild as HTMLElement});
-      }
-    }*/
+  mergeDomElementChildren({
+    childNodes: newTreeChildren,
+    parent: newTree,
+  }, {
+    childNodes: oldTreeChildren,
+    parent: oldTree,
+  });
 }

@@ -36,7 +36,8 @@ module.exports = {
         'array-element-newline': 0,
         'canonical/import-specifier-newline': 0,
         '@typescript-eslint/no-extra-parens': 0,
-        'object-property-newline': 0
+        'object-property-newline': 0,
+        '@typescript-eslint/padding-line-between-statements': 0
       },
     },
     {

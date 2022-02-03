@@ -1,6 +1,7 @@
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
+import {mergeDomTrees} from 'Scripts/diffing';
 import createBrowse from 'Scripts/pages/browse';
 import createMain from 'Scripts/pages/main';
 import createProduct from 'Scripts/pages/product';
@@ -10,7 +11,7 @@ import {resetStateIndexes} from 'Scripts/useState';
 import rootStyles from 'Styles/components/root.module.scss';
 import type {productProps} from 'Types/types';
 
-// let currentRoot: HTMLElement;
+let currentRoot: HTMLElement;
 
 const render = () => {
   console.debug('rendering');
@@ -19,10 +20,6 @@ const render = () => {
   if (!root) {
     console.error('Something has gone horribly wrong, where\'s #root!??');
     return;
-  }
-
-  while (root.firstChild) {
-    root.firstChild.remove();
   }
 
   const internalRoot = createElement('div', {
@@ -63,19 +60,12 @@ const render = () => {
 
   appendElements(internalRoot, createFooter());
 
-  /* const virtualDom = domToVirtualDom(internalRoot);
-  console.debug(virtualDom);
-  const dom = virtualDomToDom(document, virtualDom);
-  console.debug(dom);*/
-
-  /* if (currentRoot) {
+  if (currentRoot) {
     mergeDomTrees(internalRoot, currentRoot);
   } else {
     currentRoot = internalRoot;
     root.append(currentRoot);
-  }*/
-
-  root.append(internalRoot);
+  }
 };
 
 const onPopState = () => {
