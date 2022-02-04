@@ -1,66 +1,43 @@
 interface NodeDifference {
   action: 'modify' | 'replace';
-  target: 'classList' | 'id' | 'node' | 'nodeValue';
+  target: 'classList' | 'node';
 }
 
-function compareDomNode (oldNode: Node, newNode: Node) {
-  const results: NodeDifference[] = [];
+function compareDomNode (oldNode: Node, newNode: Node): NodeDifference | undefined {
   if (oldNode instanceof HTMLElement && newNode instanceof HTMLElement) {
     if (oldNode.tagName !== newNode.tagName) {
-      results.push({
+      return {
         action: 'replace',
         target: 'node',
-      });
-
-      return results;
+      };
     }
 
     if (oldNode.classList.length !== newNode.classList.length) {
-      results.push({
+      return {
         action: 'modify',
         target: 'classList',
-      });
+      };
     } else if (oldNode.classList.length === newNode.classList.length) {
       for (let index = 0; index < oldNode.classList.length; index++) {
         const aClass = oldNode.classList[index];
         const bClass = newNode.classList[index];
 
         if (aClass !== bClass) {
-          results.push({
+          return {
             action: 'modify',
             target: 'classList',
-          });
-          break;
+          };
         }
       }
     }
-
-    if (oldNode.id !== newNode.id) {
-      results.push({
-        action: 'modify',
-        target: 'id',
-      });
-    }
-
-    if (oldNode.nodeValue !== newNode.nodeValue) {
-      results.push({
-        action: 'modify',
-        target: 'nodeValue',
-      });
-    }
-  } else if (oldNode instanceof Text && newNode instanceof Text) {
-    results.push({
-      action: 'modify',
-      target: 'nodeValue',
-    });
   } else if (oldNode instanceof Text || newNode instanceof Text) {
-    results.push({
+    return {
       action: 'replace',
       target: 'node',
-    });
+    };
   }
 
-  return results;
+  return undefined;
 }
 
 interface DiffingNode {
@@ -73,22 +50,39 @@ interface NodesToExplore {
   oldTreeNode: DiffingNode;
 }
 
-/*
- Sourced from: https://stackoverflow.com/a/52473108
- When iterating over the properties of an object in TypeScript, some of them can
- be readonly. When I'm iterating over all of them and then filtering them, TypeScript
- doesn't know if the ones I'm filtering are going to be readonly or not if even one of the
- properties could be. So, I need a type to assert that all the properties I'm accessing
- are writable.
- */
+function processCompareResult (difference: NodeDifference,
+  newTreeChild: HTMLElement,
+  oldTreeChild: HTMLElement,
+  oldTreeChildren: DiffingNode) {
+  switch (difference.action) {
+    case 'modify': {
+      if (difference.target === 'classList') {
+        oldTreeChild.classList.remove(...oldTreeChild.classList.values());
+        oldTreeChild.classList.add(...newTreeChild.classList.values());
+      }
 
-type IfEquals<X, Y, A, B> =
-    [0, 1, X] & [2] extends [0, 1, Y] & [0, infer W, unknown] & [2]
-      ? W extends 1 ? B : A
-      : B;
-type WritableKeysOf<T> = {
-  [P in keyof T]: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, P, never>
-}[keyof T];
+      // This is a hack I'm not proud of
+      for (const key in newTreeChild) {
+        if (Object.getOwnPropertyDescriptor(newTreeChild, key)?.writable) {
+          if (newTreeChild[key as never]) {
+            oldTreeChild[key as never] = newTreeChild[key as never];
+          } else {
+            oldTreeChild[key as never] = undefined as never;
+          }
+        }
+      }
+
+      break;
+    }
+    case 'replace': {
+      oldTreeChildren.parent.replaceChild(newTreeChild, oldTreeChild);
+      break;
+    }
+    default: {
+      break;
+    }
+  }
+}
 
 function mergeDomElementChildren (newTreeChildren: DiffingNode, oldTreeChildren: DiffingNode) {
   const nodesToExplore: NodesToExplore[] = [];
@@ -106,61 +100,23 @@ function mergeDomElementChildren (newTreeChildren: DiffingNode, oldTreeChildren:
     } else if (newTreeChild && !oldTreeChild) {
       oldTreeChildren.parent.append(newTreeChild);
     } else if (newTreeChild && oldTreeChild) {
-      const compareResults = compareDomNode(newTreeChild, oldTreeChild);
+      const compareResult = compareDomNode(newTreeChild, oldTreeChild);
 
-      for (const compareResult of compareResults) {
-        switch (compareResult.action) {
-          case 'modify': {
-            if (compareResult.target === 'classList') {
-              oldTreeChild.classList.remove(...oldTreeChild.classList.values());
-              oldTreeChild.classList.add(...newTreeChild.classList.values());
-            } else if (compareResult.target === 'id') {
-              oldTreeChild.id = newTreeChild.id;
-            } else if (compareResult.target === 'nodeValue') {
-              oldTreeChild.nodeValue = newTreeChild.nodeValue;
-            }
-
-            // eslint-disable-next-line guard-for-in
-            for (const property in newTreeChild) {
-              if (property.startsWith('on')) {
-                const propertyAsKey = property as keyof WritableKeysOf<HTMLElement>;
-                if (newTreeChild[propertyAsKey]) {
-                  oldTreeChild[propertyAsKey] = newTreeChild[propertyAsKey];
-                }
-              }
-            }
-
-            nodesToExplore.push({
-              newTreeNode: {
-                childNodes: [...newTreeChild.childNodes],
-                parent: newTreeChild,
-              }, oldTreeNode: {
-                childNodes: [...oldTreeChild.childNodes],
-                parent: oldTreeChild,
-              },
-            });
-
-            break;
-          }
-          case 'replace': {
-            oldTreeChildren.parent.replaceChild(oldTreeChild, newTreeChild);
-            break;
-          }
-          default: {
-            break;
-          }
-        }
+      if (compareResult) {
+        processCompareResult(compareResult, newTreeChild, oldTreeChild, oldTreeChildren);
       }
 
-      nodesToExplore.push({
-        newTreeNode: {
-          childNodes: [...newTreeChild.childNodes],
-          parent: newTreeChild,
-        }, oldTreeNode: {
-          childNodes: [...oldTreeChild.childNodes],
-          parent: oldTreeChild,
-        },
-      });
+      if (!compareResult || compareResult.action === 'modify') {
+        nodesToExplore.push({
+          newTreeNode: {
+            childNodes: [...newTreeChild.childNodes],
+            parent: newTreeChild,
+          }, oldTreeNode: {
+            childNodes: [...oldTreeChild.childNodes],
+            parent: oldTreeChild,
+          },
+        });
+      }
     }
   }
 
