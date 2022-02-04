@@ -1,7 +1,7 @@
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
 import {DatabaseError} from 'pg';
 import type {SearchBody} from 'types/types';
-import {sendQuery} from '../utils/helpers';
+import {sendQuery} from 'utils/helpers';
 
 export default function api (
   fastify: FastifyInstance,
@@ -20,24 +20,18 @@ export default function api (
 
     const pg = await fastify.pg.connect();
 
-    const likeQuery = body.query ? `%${body.query}%` : undefined;
-
     const [searchQueryResult, error] = await sendQuery(
       pg,
       `SELECT *
-       FROM search_inventory($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+       FROM search_inventory($1, $2, $3, $4, $5, $6, $7, $8)`,
       [
-        likeQuery,
+        body.query,
         body.colour,
         body.type,
-        body.size,
         body.price?.min,
         body.price?.max,
         body.in_stock,
-        body.has_discount,
         50 * (body.page ?? 0),
-        body.sort,
-        body.sortDirection,
       ],
     );
 
@@ -69,19 +63,6 @@ export default function api (
     }
 
     await reply.send(brickTypes.rows);
-  });
-
-  fastify.get('/getBrickSizes', async (request, reply) => {
-    const pg = await fastify.pg.connect();
-
-    const [brickSizes] = await sendQuery(pg, 'SELECT * FROM brick_sizes');
-
-    if (!brickSizes) {
-      reply.internalServerError();
-      return;
-    }
-
-    await reply.send(brickSizes.rows);
   });
 
   fastify.get('/getBrickColours', async (request, reply) => {
