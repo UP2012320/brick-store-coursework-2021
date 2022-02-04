@@ -8,7 +8,7 @@ import filterBarStyles from 'Styles/components/filterBar.module.scss';
 const useState = registerUseState(nameof(createFilterBar));
 
 export default function createFilterBar () {
-  const [fff, sfff] = useState(false);
+  const [filterToggle, setFilterToggle] = useState(false);
 
   const container = createElementWithStyles(
     'section',
@@ -42,7 +42,7 @@ export default function createFilterBar () {
   );
 
   filterBy.addEventListener('click', () => {
-    sfff((previous) => !previous);
+    setFilterToggle((previous) => !previous);
   });
 
   const search = createElementWithStyles(
@@ -64,7 +64,7 @@ export default function createFilterBar () {
           <${search}/>
         </rightSectionContainer>
       </mainRow>
-      <${createFilterBarOptions(fff)}/>
+      <${createFilterBarOptions(filterToggle)}/>
     </container>
   `;
 }
