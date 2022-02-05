@@ -1,7 +1,7 @@
+import {sendQuery} from 'Utils/helpers.js';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
 import {DatabaseError} from 'pg';
 import type {SearchBody} from 'types/types';
-import {sendQuery} from 'utils/helpers';
 
 export default function api (
   fastify: FastifyInstance,
