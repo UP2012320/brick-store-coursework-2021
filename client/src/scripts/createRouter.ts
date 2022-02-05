@@ -1,8 +1,7 @@
-import * as QueryString from 'querystring';
 import {trimCharactersFromEnd} from 'Scripts/helpers';
 import type {RouterArgs} from 'Types/types';
 
-const createRouter = <T extends string> (args: Array<RouterArgs<T>>): [T | undefined, Record<string, string> | undefined, QueryString.ParsedUrlQuery | undefined] => {
+const createRouter = <T extends string> (args: Array<RouterArgs<T>>): [T | undefined, Record<string, string> | undefined, URLSearchParams | undefined] => {
   const path = trimCharactersFromEnd(window.location.pathname, '/');
 
   for (const routerArgument of args) {
@@ -23,7 +22,7 @@ const createRouter = <T extends string> (args: Array<RouterArgs<T>>): [T | undef
 
     // eslint-disable-next-line @typescript-eslint/no-extra-parens
     if ((result = routeRegex.exec(path))) {
-      return [routerArgument.name, result.groups, QueryString.parse(window.location.search)];
+      return [routerArgument.name, result.groups, new URLSearchParams(window.location.search)];
     }
   }
 
