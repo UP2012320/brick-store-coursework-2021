@@ -4,7 +4,7 @@ export interface RouterArgs<T extends string> {
 }
 
 export interface productProps {
-  qs?: {
+  restArgs?: {
     slug: string,
   };
 }

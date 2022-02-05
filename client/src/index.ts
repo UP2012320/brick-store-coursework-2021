@@ -28,7 +28,7 @@ const render = () => {
 
   appendElements(internalRoot, createNavbar());
 
-  const [targetedRoute, qs] = createRouter([
+  const [targetedRoute, restArgs, queryStrings] = createRouter([
     {
       name: 'browse',
       route: '/browse',
@@ -48,7 +48,7 @@ const render = () => {
       appendElements(internalRoot, createBrowse());
       break;
     case 'product':
-      appendElements(internalRoot, createProduct({qs} as productProps));
+      appendElements(internalRoot, createProduct({restArgs} as productProps));
       break;
     case 'main':
       appendElements(internalRoot, createMain());
