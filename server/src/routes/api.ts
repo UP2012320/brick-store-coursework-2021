@@ -23,7 +23,7 @@ export default function api (
     const [searchQueryResult, error] = await sendQuery(
       pg,
       `SELECT *
-       FROM search_inventory($1, $2, $3, $4, $5, $6, $7, $8)`,
+       FROM search_inventory($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
         body.query,
         body.colour,
@@ -31,7 +31,10 @@ export default function api (
         body.price?.min,
         body.price?.max,
         body.in_stock,
+        body.order?.column,
+        body.order?.direction,
         50 * (body.page ?? 0),
+        body.limit,
       ],
     );
 
