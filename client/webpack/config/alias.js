@@ -12,4 +12,5 @@ export const aliasItems = {
   Scripts: join(rootDir, '/src/scripts'),
   Assets: join(rootDir, '/src/assets'),
   Tests: join(rootDir, '/src/tests'),
+  Hooks: join(rootDir, '/src/hooks')
 };

@@ -13,9 +13,13 @@ export interface Ref<T> {
   current: T;
 }
 
-export interface CallerState {
+export interface CallerState<T> {
   index: number;
-  states: Record<number, unknown>;
+  states: Record<number, T>;
+}
+
+export interface UseEffectCallerState<T> extends CallerState<T> {
+  isFirstRender: boolean;
 }
 
 export type HtmlTagResultType = 'closing' | 'opening' | 'selfClosing' | 'unknown';

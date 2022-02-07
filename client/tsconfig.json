@@ -10,7 +10,8 @@
       "Types/*": ["types/*"],
       "Scripts/*": ["scripts/*"],
       "Assets/*": ["assets/*"],
-      "Tests/*": ["tests/*"]
+      "Tests/*": ["tests/*"],
+      "Hooks/*": ["hooks/*"],
     }
   },
   "include": ["src"]

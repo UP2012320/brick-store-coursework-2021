@@ -1,41 +1,19 @@
+import {nameof} from 'Scripts/helpers';
+import StateManager from 'Scripts/hooks/hookCallerStateManager';
 import {forceReRender} from 'Scripts/uiUtils';
-import type {CallerState} from 'Types/types';
 
-const stateStore: Record<string, CallerState> = {};
+const stateManager = new StateManager(nameof(useState));
 
 export const resetStateIndexes = () => {
-  for (const callerState of Object.values(stateStore)) {
-    callerState.index = 0;
-  }
+  stateManager.resetStateIndexes();
 };
 
 export function useState<T = undefined> (callerName: string, initialState?: undefined): [(T | undefined), ((newState: (T | ((previous: T | undefined) => T))) => void)];
 export function useState<T> (callerName: string, initialState: T): [(T), ((newState: (T | ((previous: T) => T))) => void)];
 export function useState<T> (callerName: string, initialState: T): unknown {
-  let callerState = stateStore[callerName];
-  let callerStateIndex = 0;
-
-  if (callerState) {
-    callerStateIndex = callerState.index++;
-    const temporaryState = callerState.states[callerStateIndex] as T | undefined;
-
-    if (temporaryState === undefined) {
-      callerState.states[callerStateIndex] = initialState;
-    }
-  } else {
-    stateStore[callerName] = {
-      index: 0,
-      states: {
-        '0': initialState,
-      },
-    };
-
-    callerState = stateStore[callerName];
-  }
+  const [callerState, callerStateIndex] = stateManager.useStateManager(initialState, {});
 
   const setState = (newState: T | ((previous: T) => T)) => {
-    callerState = stateStore[callerName];
-
     if (newState instanceof Function) {
       callerState.states[callerStateIndex] = newState(callerState.states[callerStateIndex] as T);
     } else {

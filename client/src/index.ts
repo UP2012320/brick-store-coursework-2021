@@ -2,12 +2,15 @@ import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
 import {mergeDomTrees} from 'Scripts/diffing';
+import {resetAsyncIndexes} from 'Scripts/hooks/useAsync';
+import {resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
+import {resetRefIndexes} from 'Scripts/hooks/useRef';
+import {resetStateIndexes} from 'Scripts/hooks/useState';
+import type {BrowseProps} from 'Scripts/pages/browse';
 import createBrowse from 'Scripts/pages/browse';
 import createMain from 'Scripts/pages/main';
 import createProduct from 'Scripts/pages/product';
 import {appendElements, createElement} from 'Scripts/uiUtils';
-import {resetRefIndexes} from 'Scripts/useRef';
-import {resetStateIndexes} from 'Scripts/useState';
 import rootStyles from 'Styles/components/root.module.scss';
 import type {productProps} from 'Types/types';
 
@@ -45,7 +48,7 @@ const render = () => {
 
   switch (targetedRoute) {
     case 'browse':
-      appendElements(internalRoot, createBrowse());
+      appendElements(internalRoot, createBrowse({queryStrings} as BrowseProps));
       break;
     case 'product':
       appendElements(internalRoot, createProduct({restArgs} as productProps));
@@ -71,6 +74,8 @@ const render = () => {
 const onPopState = () => {
   resetStateIndexes();
   resetRefIndexes();
+  resetUseEffectStateIndexes();
+  resetAsyncIndexes();
   render();
 };
 

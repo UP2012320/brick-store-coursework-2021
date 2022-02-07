@@ -1,8 +1,8 @@
 import createFilterBarOptions from 'Scripts/components/filterBarOptions';
 import {nameof} from 'Scripts/helpers';
+import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
-import {registerUseState} from 'Scripts/useState';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 
 const useState = registerUseState(nameof(createFilterBar));

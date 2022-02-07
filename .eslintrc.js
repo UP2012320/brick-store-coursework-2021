@@ -37,7 +37,10 @@ module.exports = {
         'canonical/import-specifier-newline': 0,
         '@typescript-eslint/no-extra-parens': 0,
         'object-property-newline': 0,
-        '@typescript-eslint/padding-line-between-statements': 0
+        '@typescript-eslint/padding-line-between-statements': 0,
+        'unicorn/no-abusive-eslint-disable': 0,
+        'eslint-comments/no-unlimited-disable': 0,
+        '@typescript-eslint/no-invalid-void-type': 0,
       },
     },
     {
