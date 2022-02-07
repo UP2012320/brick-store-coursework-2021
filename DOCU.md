@@ -59,7 +59,7 @@ readability.
 
 ### Where to look
 
-* `client/src/scripts/htmlX.ts`
+* [client/src/scripts/htmlX.ts](client/src/scripts/htmlX.ts)
 
 ## createRouter
 
