@@ -61,17 +61,6 @@ function processCompareResult (difference: NodeDifference,
         oldTreeChild.classList.add(...newTreeChild.classList.values());
       }
 
-      // This is a hack I'm not proud of
-      for (const key in newTreeChild) {
-        if (Object.getOwnPropertyDescriptor(newTreeChild, key)?.writable) {
-          if (newTreeChild[key as never]) {
-            oldTreeChild[key as never] = newTreeChild[key as never];
-          } else {
-            oldTreeChild[key as never] = undefined as never;
-          }
-        }
-      }
-
       break;
     }
     case 'replace': {
@@ -107,6 +96,17 @@ function mergeDomElementChildren (newTreeChildren: DiffingNode, oldTreeChildren:
       }
 
       if (!compareResult || compareResult.action === 'modify') {
+        // This is a hack I'm not proud of
+        for (const key in newTreeChild) {
+          if (Object.getOwnPropertyDescriptor(newTreeChild, key)?.writable) {
+            if (newTreeChild[key as never]) {
+              oldTreeChild[key as never] = newTreeChild[key as never];
+            } else {
+              oldTreeChild[key as never] = undefined as never;
+            }
+          }
+        }
+
         nodesToExplore.push({
           newTreeNode: {
             childNodes: [...newTreeChild.childNodes],
