@@ -1,6 +1,5 @@
 import {sendQuery} from 'Utils/helpers.js';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
-import {DatabaseError} from 'pg';
 import type {SearchBody} from 'types/types';
 
 export default function api (
@@ -14,6 +13,22 @@ export default function api (
     if (!body) {
       reply.badRequest('Invalid JSON body');
       return;
+    }
+
+    if (body.price?.min && body.price.min < 0) {
+      body.price.min = 0;
+    }
+
+    if (body.limit) {
+      if (body.limit < 0) {
+        body.limit = undefined;
+      } else if (body.limit > 100) {
+        body.limit = 100;
+      }
+    }
+
+    if (body.page && body.page < 0) {
+      body.page = 0;
     }
 
     console.debug(body);
@@ -30,7 +45,7 @@ export default function api (
         body.type,
         body.price?.min,
         body.price?.max,
-        body.in_stock,
+        body.in_stock ? 1 : 0,
         body.order?.column,
         body.order?.direction,
         50 * (body.page ?? 0),
@@ -39,16 +54,12 @@ export default function api (
     );
 
     if (error) {
-      if (error instanceof DatabaseError && error.code === '22023') {
-        reply.badRequest(error.message);
-        return;
-      }
-
       reply.internalServerError();
       return;
     }
 
     if (searchQueryResult) {
+      console.debug(searchQueryResult.rows.length);
       await reply.send(searchQueryResult.rows);
     }
 
