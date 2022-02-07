@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fastify from 'fastify';
+import fastifyCors from 'fastify-cors';
 import fastifyHelmet from 'fastify-helmet';
 import fastifyPostgres from 'fastify-postgres';
 import fastifySensible from 'fastify-sensible';
@@ -18,6 +19,7 @@ const app = fastify();
 
 (async () => {
   await app.register(fastifyHelmet, {contentSecurityPolicy: false});
+  await app.register(fastifyCors, {origin: config.dev ? 'http://localhost:8080' : false});
   await app.register(fastifyPostgres, {
     connectionString: PG_CONNECTION_STRING,
   });
