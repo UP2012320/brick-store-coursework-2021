@@ -34,7 +34,7 @@ const app = fastify();
     await reply.sendFile('index.html');
   });
 
-  await app.register(api, {prefix: '/api'});
+  await app.register(api, {prefix: '/api/v1'});
 
   try {
     await app.listen(PORT, ADDRESS);
