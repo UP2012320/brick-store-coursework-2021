@@ -5,6 +5,14 @@ importers:
   .:
     specifiers: {}
 
+  api-types:
+    specifiers:
+      '@types/node': ^16.11.22
+      typescript: ^4.5.5
+    devDependencies:
+      '@types/node': 16.11.22
+      typescript: 4.5.5
+
   client:
     specifiers:
       '@babel/core': ^7.17.0
@@ -20,6 +28,7 @@ importers:
       '@types/node': ^16.11.22
       '@typescript-eslint/eslint-plugin': ^5.10.2
       '@typescript-eslint/parser': ^5.10.2
+      api-types: workspace:^1.0.0
       autoprefixer: ^10.4.2
       bootstrap-icons: ^1.8.0
       browserslist: ^4.19.1
@@ -89,6 +98,7 @@ importers:
       '@types/node': 16.11.22
       '@typescript-eslint/eslint-plugin': 5.10.2_2595c2126aec4d4b6e944b931dabb4c2
       '@typescript-eslint/parser': 5.10.2_eslint@8.8.0+typescript@4.5.5
+      api-types: link:../api-types
       autoprefixer: 10.4.2_postcss@8.4.6
       bootstrap-icons: 1.8.0
       browserslist: 4.19.1
@@ -152,6 +162,7 @@ importers:
       '@types/pg': ^8.6.4
       '@typescript-eslint/eslint-plugin': ^5.10.2
       '@typescript-eslint/parser': ^5.10.2
+      api-types: workspace:^1.0.0
       eslint: ^8.8.0
       eslint-config-canonical: 32.48.7
       eslint-import-resolver-alias: ^1.1.2
@@ -172,6 +183,7 @@ importers:
       '@types/pg': 8.6.4
       '@typescript-eslint/eslint-plugin': 5.10.2_2595c2126aec4d4b6e944b931dabb4c2
       '@typescript-eslint/parser': 5.10.2_eslint@8.8.0+typescript@4.5.5
+      api-types: link:../api-types
       eslint: 8.8.0
       eslint-config-canonical: 32.48.7_083265a0962418a9a02a0c9b0723ac7d
       eslint-import-resolver-alias: 1.1.2_eslint-plugin-import@2.25.4

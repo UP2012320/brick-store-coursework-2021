@@ -7,6 +7,7 @@ import htmlx from 'Scripts/htmlX';
 import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';
+import type {SearchRequestArguments} from 'api-types';
 
 export interface BrowseProps {
   queryStrings?: Record<string, string>;
@@ -14,22 +15,23 @@ export interface BrowseProps {
 
 const useState = registerUseState(nameof(createBrowse));
 
-const fetchProducts = async () => {
+const searchForProducts = async (searchArguments: SearchRequestArguments) => {
+  let response: Response;
+
   try {
-    const response = await fetch('http://0.0.0.0:8085/api/search', {
-      body: JSON.stringify({query: 'torso'}),
+    response = await fetch('http://0.0.0.0:8085/api/v1/search', {
+      body: JSON.stringify(searchArguments),
       headers: {
         'Content-Type': 'application/json',
       },
       method: 'POST',
     });
-
-    return await response.json();
   } catch (error) {
-    console.debug(error);
+    console.error(error);
+    return undefined;
   }
 
-  return {};
+  return await response.json();
 };
 
 export default function createBrowse (props: BrowseProps) {
@@ -57,7 +59,7 @@ export default function createBrowse (props: BrowseProps) {
   }
 
   // Used https://usehooks.com/useAsync/ as somewhat of a reference
-  const [result, error, finished] = useAsync(nameof(createBrowse), fetchProducts, true);
+  const [result, error, finished] = useAsync(nameof(createBrowse), async () => await searchForProducts({query: 'torso'}), true);
 
   console.debug(result);
   console.debug(error);

@@ -1,13 +1,13 @@
 import {sendQuery} from 'Utils/helpers.js';
+import type {SearchRequestArguments} from 'api-types';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
-import type {SearchBody} from 'types/types';
 
 export default function api (
   fastify: FastifyInstance,
   options: FastifyServerOptions,
   done: (error?: Error) => void,
 ) {
-  fastify.post<{ Body: SearchBody, }>('/search', async (request, reply) => {
+  fastify.post<{ Body: SearchRequestArguments, }>('/search', async (request, reply) => {
     const body = request.body;
 
     if (!body) {
