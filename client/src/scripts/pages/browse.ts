@@ -1,5 +1,4 @@
 import createFilterBar from 'Scripts/components/filterBar';
-import createShopCard from 'Scripts/components/shopCard';
 import {nameof} from 'Scripts/helpers';
 import useAsync from 'Scripts/hooks/useAsync';
 import {registerUseState} from 'Scripts/hooks/useState';
@@ -19,6 +18,7 @@ const searchForProducts = async (searchArguments: SearchRequestArguments) => {
   let response: Response;
 
   try {
+    console.debug('fetching');
     response = await fetch('http://0.0.0.0:8085/api/v1/search', {
       body: JSON.stringify(searchArguments),
       headers: {
@@ -37,12 +37,13 @@ const searchForProducts = async (searchArguments: SearchRequestArguments) => {
 export default function createBrowse (props: BrowseProps) {
   const [page, setPage] = useState(0);
   const [cards, setCards] = useState(null);
+  const [searchArguments, setSearchArguments] = useState<SearchRequestArguments>({query: 'torso'});
 
   const browseContainer = createElement('section', {
     id: contentRootStyles.contentRoot,
   });
 
-  const filterBar = createFilterBar();
+  const filterBar = createFilterBar({setSearchArguments});
 
   const shoppingCardsContainer = createElementWithStyles(
     'div',
@@ -50,16 +51,24 @@ export default function createBrowse (props: BrowseProps) {
     browseStyles.shopCardsContainer,
   );
 
-  const shoppingCards = [];
+  const [result, error, finished] = useAsync(nameof(createBrowse),
+    async () => await searchForProducts(searchArguments));
 
-  for (let index = 0; index < 10; index++) {
-    const card = createShopCard();
+  let children;
 
-    shoppingCards.push(card);
+  if (!finished) {
+    children = createElement('p', {
+      textContent: 'Loading...',
+    });
+  } else if (result) {
+    children = createElement('p', {
+      textContent: `${result.length} results fetched`,
+    });
+  } else {
+    children = createElement('p', {
+      textContent: 'No results found',
+    });
   }
-
-  // Used https://usehooks.com/useAsync/ as somewhat of a reference
-  const [result, error, finished] = useAsync(nameof(createBrowse), async () => await searchForProducts({query: 'torso'}));
 
   console.debug(result);
   console.debug(error);
@@ -69,7 +78,7 @@ export default function createBrowse (props: BrowseProps) {
     <${browseContainer}>
       <${filterBar}/>
       <${shoppingCardsContainer}>
-        <${shoppingCards}/>
+        <${children}/>
       </shoppingCardsContainer>
     </browseContainer>
   `;

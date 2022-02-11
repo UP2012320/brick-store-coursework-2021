@@ -1,13 +1,19 @@
 import createFilterBarOptions from 'Scripts/components/filterBarOptions';
 import {nameof} from 'Scripts/helpers';
+import type {StateSetter} from 'Scripts/hooks/useState';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
+import type {SearchRequestArguments} from 'api-types';
 
 const useState = registerUseState(nameof(createFilterBar));
 
-export default function createFilterBar () {
+export interface CreateFilterBarProps {
+  setSearchArguments: StateSetter<SearchRequestArguments>;
+}
+
+export default function createFilterBar (props: CreateFilterBarProps) {
   const [filterToggle, setFilterToggle] = useState(false);
 
   const container = createElementWithStyles(
