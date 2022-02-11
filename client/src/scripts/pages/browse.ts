@@ -7,7 +7,7 @@ import htmlx from 'Scripts/htmlX';
 import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';
-import type {SearchRequestArguments} from 'api-types';
+import type {SearchQueryResponse, SearchRequestArguments} from 'api-types';
 
 export interface BrowseProps {
   queryStrings?: Record<string, string>;
@@ -31,7 +31,7 @@ const searchForProducts = async (searchArguments: SearchRequestArguments) => {
     return undefined;
   }
 
-  return await response.json();
+  return await response.json() as SearchQueryResponse[];
 };
 
 export default function createBrowse (props: BrowseProps) {
@@ -59,7 +59,7 @@ export default function createBrowse (props: BrowseProps) {
   }
 
   // Used https://usehooks.com/useAsync/ as somewhat of a reference
-  const [result, error, finished] = useAsync(nameof(createBrowse), async () => await searchForProducts({query: 'torso'}), true);
+  const [result, error, finished] = useAsync(nameof(createBrowse), async () => await searchForProducts({query: 'torso'}));
 
   console.debug(result);
   console.debug(error);

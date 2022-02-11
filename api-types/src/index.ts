@@ -14,3 +14,16 @@ export interface SearchRequestArguments {
   query: string;
   type?: number;
 }
+
+export interface SearchQueryResponse {
+  colour: string;
+  description: string;
+  discount?: number;
+  discount_price: number;
+  id: string;
+  name: string;
+  price: number;
+  slug: string;
+  stock: number;
+  type: string;
+}
