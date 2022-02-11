@@ -20,7 +20,8 @@ export function useEffect (callerName: string, callback: () => (() => void) | vo
     callback();
   } else if (state.length > 0 && !deepEqual(state, dependencies)) {
     callback();
-  } else {
+    callerState.states[callerStateIndex] = dependencies;
+  } else if (state.length !== 0) {
     callerState.states[callerStateIndex] = dependencies;
   }
 
