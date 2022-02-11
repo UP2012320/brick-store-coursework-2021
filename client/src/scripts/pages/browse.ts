@@ -1,6 +1,6 @@
 import createFilterBar from 'Scripts/components/filterBar';
 import {nameof} from 'Scripts/helpers';
-import useAsync from 'Scripts/hooks/useAsync';
+import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
@@ -37,6 +37,7 @@ const searchForProducts = async (searchArguments: SearchRequestArguments) => {
 export default function createBrowse (props: BrowseProps) {
   const [page, setPage] = useState(0);
   const [cards, setCards] = useState(null);
+  const [searchResults, setSearchResults] = useState<SearchQueryResponse[] | undefined>(undefined);
   const [searchArguments, setSearchArguments] = useState<SearchRequestArguments>({query: 'torso'});
 
   const browseContainer = createElement('section', {
@@ -51,28 +52,35 @@ export default function createBrowse (props: BrowseProps) {
     browseStyles.shopCardsContainer,
   );
 
-  const [result, error, finished] = useAsync(nameof(createBrowse),
-    async () => await searchForProducts(searchArguments));
+  const search = async () => {
+    const result = await searchForProducts(searchArguments);
+
+    setSearchResults(result);
+  };
+
+  useEffect(nameof(createBrowse), () => {
+    search();
+  }, []);
+
+  useEffect(nameof(createBrowse), () => {
+    search();
+  }, [searchArguments]);
 
   let children;
 
-  if (!finished) {
+  if (!searchResults) {
     children = createElement('p', {
       textContent: 'Loading...',
     });
-  } else if (result) {
+  } else if (searchResults && searchResults.length > 0) {
     children = createElement('p', {
-      textContent: `${result.length} results fetched`,
+      textContent: `${searchResults.length} results fetched`,
     });
   } else {
     children = createElement('p', {
       textContent: 'No results found',
     });
   }
-
-  console.debug(result);
-  console.debug(error);
-  console.debug(finished);
 
   return htmlx`
     <${browseContainer}>

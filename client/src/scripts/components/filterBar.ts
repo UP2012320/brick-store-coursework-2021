@@ -54,6 +54,14 @@ export default function createFilterBar (props: CreateFilterBarProps) {
   const search = createElementWithStyles(
     'input',
     {
+      onkeydown: ((event) => {
+        if (event.key === 'Enter') {
+          props.setSearchArguments((previous) => {
+            console.debug({...previous, query: search.value});
+            return ({...previous, query: search.value});
+          });
+        }
+      }),
       placeholder: 'Search',
     },
     filterBarStyles.filterBarSearchItem,
