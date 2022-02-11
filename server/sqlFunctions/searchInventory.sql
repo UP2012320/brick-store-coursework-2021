@@ -23,25 +23,17 @@ BEGIN
     _query = '%' || _query;
   END IF;
 
-  IF NOT _query SIMILAR TO '%$' THEN
+  IF _query NOT SIMILAR TO '%$' THEN
     _query = _query || '%';
   END IF;
 
-  IF _offset IS NULL THEN
-    _offset = 0;
-  END IF;
+  _offset = COALESCE(_offset, 0);
 
-  IF _limit IS NULL THEN
-    _limit = 20;
-  END IF;
+  _limit = COALESCE(_limit, 20);
 
-  IF _sort IS NULL THEN
-    _sort = 'item_name';
-  END IF;
+  _sort = COALESCE(_sort, 'item_name');
 
-  IF _sortDirection IS NULL THEN
-    _sortDirection = 0;
-  END IF;
+  _sortDirection = COALESCE(_sortDirection, 0);
 
   RETURN QUERY EXECUTE 'SELECT inventory_id AS "id", item_name AS "name", slug, description, price, stock, discount, ROUND(COALESCE(discount, 1) * price, 2) AS "discount_price", bc.colour_name AS "colour", bt.type_name FROM inventory ' ||
                        'JOIN brick_colours bc ON bc.colour_id = inventory.colour ' ||
@@ -57,3 +49,5 @@ BEGIN
     USING _query, _colour, _type, _minPrice, _maxPrice, _stock, _offset, _limit;
 END
 $$;
+
+ALTER FUNCTION search_inventory(text, integer, integer, numeric, numeric, numeric, text, integer, integer, integer) OWNER TO brick_store_user;
