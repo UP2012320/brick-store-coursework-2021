@@ -54,13 +54,14 @@ export default function api (
     );
 
     if (error) {
+      console.debug(error);
       reply.internalServerError();
       return;
     }
 
     if (searchQueryResult) {
-      console.debug(searchQueryResult.rows.length);
       await reply.send(searchQueryResult.rows);
+      return;
     }
 
     reply.internalServerError();
@@ -69,27 +70,39 @@ export default function api (
   fastify.get('/getBrickTypes', async (request, reply) => {
     const pg = await fastify.pg.connect();
 
-    const [brickTypes] = await sendQuery(pg, 'SELECT * FROM brick_types');
+    const [brickTypes, error] = await sendQuery(pg, 'SELECT type_id as "id", type_name as "type" FROM brick_types');
 
-    if (!brickTypes) {
+    if (error) {
+      console.debug(error);
       reply.internalServerError();
       return;
     }
 
-    await reply.send(brickTypes.rows);
+    if (brickTypes) {
+      await reply.send(brickTypes.rows);
+      return;
+    }
+
+    reply.internalServerError();
   });
 
   fastify.get('/getBrickColours', async (request, reply) => {
     const pg = await fastify.pg.connect();
 
-    const [brickColours] = await sendQuery(pg, 'SELECT * FROM brick_colours');
+    const [brickColours, error] = await sendQuery(pg, 'SELECT colour_id as "id", colour_name as "name" FROM brick_colours');
 
-    if (!brickColours) {
+    if (error) {
+      console.debug(error);
       reply.internalServerError();
       return;
     }
 
-    await reply.send(brickColours.rows);
+    if (brickColours) {
+      await reply.send(brickColours.rows);
+      return;
+    }
+
+    reply.internalServerError();
   });
 
   done();

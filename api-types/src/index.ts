@@ -27,3 +27,13 @@ export interface SearchQueryResponse {
   stock: number;
   type: string;
 }
+
+export interface GetBrickColoursResponse {
+  id: string;
+  name: string;
+}
+
+export interface GetBrickTypesResponse {
+  id: string;
+  type: string;
+}
