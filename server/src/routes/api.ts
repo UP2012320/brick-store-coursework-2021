@@ -53,6 +53,8 @@ export default function api (
       ],
     );
 
+    pg.release();
+
     if (error) {
       console.debug(error);
       reply.internalServerError();
@@ -72,6 +74,8 @@ export default function api (
 
     const [brickTypes, error] = await sendQuery(pg, 'SELECT type_id as "id", type_name as "type" FROM brick_types');
 
+    pg.release();
+
     if (error) {
       console.debug(error);
       reply.internalServerError();
@@ -90,6 +94,8 @@ export default function api (
     const pg = await fastify.pg.connect();
 
     const [brickColours, error] = await sendQuery(pg, 'SELECT colour_id as "id", colour_name as "name" FROM brick_colours');
+
+    pg.release();
 
     if (error) {
       console.debug(error);
