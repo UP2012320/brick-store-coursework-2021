@@ -2,7 +2,6 @@ import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
 import {mergeDomTrees} from 'Scripts/diffing';
-import {resetAsyncIndexes} from 'Scripts/hooks/useAsync';
 import {resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
 import {resetRefIndexes} from 'Scripts/hooks/useRef';
 import {resetStateIndexes} from 'Scripts/hooks/useState';
@@ -75,7 +74,6 @@ const onPopState = () => {
   resetStateIndexes();
   resetRefIndexes();
   resetUseEffectStateIndexes();
-  resetAsyncIndexes();
   render();
 };
 
