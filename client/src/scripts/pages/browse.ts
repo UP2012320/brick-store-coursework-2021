@@ -1,4 +1,5 @@
 import createFilterBar from 'Scripts/components/filterBar';
+import createShopCard from 'Scripts/components/shopCard';
 import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
@@ -38,7 +39,7 @@ export default function createBrowse (props: BrowseProps) {
   const [page, setPage] = useState(0);
   const [cards, setCards] = useState(null);
   const [searchResults, setSearchResults] = useState<SearchQueryResponse[] | undefined>(undefined);
-  const [searchArguments, setSearchArguments] = useState<SearchRequestArguments>({query: 'torso'});
+  const [searchArguments, setSearchArguments] = useState<SearchRequestArguments>({query: 'red'});
 
   const browseContainer = createElement('section', {
     id: contentRootStyles.contentRoot,
@@ -51,6 +52,8 @@ export default function createBrowse (props: BrowseProps) {
     undefined,
     browseStyles.shopCardsContainer,
   );
+
+  const shoppingCardsScrollContainer = createElementWithStyles('div', undefined, browseStyles.shopCardsScrollContainer);
 
   const search = async () => {
     const result = await searchForProducts(searchArguments);
@@ -73,9 +76,11 @@ export default function createBrowse (props: BrowseProps) {
       textContent: 'Loading...',
     });
   } else if (searchResults && searchResults.length > 0) {
-    children = createElement('p', {
-      textContent: `${searchResults.length} results fetched`,
-    });
+    children = [];
+
+    for (const result of searchResults) {
+      children.push(createShopCard({searchResultArgument: result}));
+    }
   } else {
     children = createElement('p', {
       textContent: 'No results found',
@@ -85,8 +90,10 @@ export default function createBrowse (props: BrowseProps) {
   return htmlx`
     <${browseContainer}>
       <${filterBar}/>
-      <${shoppingCardsContainer}>
-        <${children}/>
+      <${shoppingCardsScrollContainer}>
+        <${shoppingCardsContainer}>
+          <${children}/>
+        </shoppingCardsContainer>
       </shoppingCardsContainer>
     </browseContainer>
   `;

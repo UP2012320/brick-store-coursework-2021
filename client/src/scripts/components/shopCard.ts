@@ -2,8 +2,13 @@ import images from 'Assets/2412b.png';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import browseStyles from 'Styles/pages/browse.module.scss';
+import type {SearchQueryResponse} from 'api-types';
 
-export default function createShopCard () {
+export interface CreateShopCardProps {
+  searchResultArgument: SearchQueryResponse;
+}
+
+export default function createShopCard (props: CreateShopCardProps) {
   const cardContainer = createElementWithStyles(
     'div',
     undefined,
@@ -22,7 +27,7 @@ export default function createShopCard () {
   const title = createElementWithStyles(
     'p',
     {
-      textContent: 'Lego Brick #1',
+      textContent: props.searchResultArgument.name,
     },
     browseStyles.shopCardTitle,
   );
@@ -38,7 +43,7 @@ export default function createShopCard () {
   const id = createElementWithStyles(
     'p',
     {
-      textContent: '#E438O-RF2HE',
+      textContent: `#${props.searchResultArgument.id.toUpperCase()}`,
     },
     browseStyles.shopCardId,
   );
@@ -46,7 +51,7 @@ export default function createShopCard () {
   const stock = createElementWithStyles(
     'p',
     {
-      textContent: '4+ Stock',
+      textContent: `${props.searchResultArgument.stock} in Stock`,
     },
     browseStyles.shopCardStock,
   );
@@ -54,7 +59,7 @@ export default function createShopCard () {
   const price = createElementWithStyles(
     'p',
     {
-      textContent: '£0.10',
+      textContent: new Intl.NumberFormat('en-GB', {currency: 'GBP', style: 'currency'}).format(props.searchResultArgument.price),
     },
     browseStyles.shopCardPrice,
   );
@@ -67,18 +72,15 @@ export default function createShopCard () {
 
   actionsRow.style.gridArea = 'actionsRow';
 
-  const viewButton = createElementWithStyles(
-    'div',
-    {
-      textContent: 'View',
-    },
-    browseStyles.shopCardButton,
-  );
+  const viewLink = createElementWithStyles('a', {
+    href: `/product/${props.searchResultArgument.slug}`,
+    textContent: 'View',
+  }, browseStyles.shopCardButton);
 
   const addButton = createElementWithStyles(
     'div',
     {
-      textContent: 'Add',
+      textContent: 'Add to Cart',
     },
     browseStyles.shopCardButton,
   );
@@ -93,7 +95,7 @@ export default function createShopCard () {
       </idStockRow>
       <${price}/>
       <${actionsRow}>
-        <${viewButton}/>
+        <${viewLink}/>
         <${addButton}/>
       </actionsRow>
     </cardContainer>

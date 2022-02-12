@@ -16,12 +16,20 @@
 
 .filter-bar-options-row-container {
   @extend .filter-bar-row-container;
-  height: 0;
-  transition: height 1s ease-in-out;
+  flex-direction: row;
+  transition: width .5s ease-in-out;
+  overflow: hidden;
+  width: 0;
+  border-right: 1px solid $not-quite-black;
 
   &.open {
-    height: 100px;
+    width: 50px;
   }
+}
+
+.filter-bar-options-row-item {
+  flex: 1 0;
+  display: flex;
 }
 
 .filter-bar-section-container {
@@ -45,7 +53,7 @@
     cursor: pointer;
   }
 
-  @media only screen and (max-width: 640px) {
+  @media only screen and (max-width: 768px) {
     width: 100%;
   }
 }
@@ -75,29 +83,49 @@
   width: 200px;
 
   &:hover {
-    cursor: text;
+    cursor: pointer;
   }
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 768px) {
   .filter-bar-container {
-    flex-direction: column;
     margin-top: unset;
     margin-bottom: unset;
+
+    & .filter-bar-section-container:first-child {
+      order: 2;
+      flex-direction: column;
+
+      & .filter-bar-item-left {
+        border-right: unset;
+        height: 40px;
+      }
+
+      & .filter-bar-item-left:first-child {
+        border-bottom: 1px solid $not-quite-black;
+      }
+    }
   }
 
-  .filter-bar-section-container {
-    order: 2;
+  .filter-bar-options-row-container {
+    height: 0;
+    display: unset;
+    border-right-color: transparent;
+    width: unset;
+    transition: height .5s ease-in-out;
+
+    &.open {
+      height: 100px;
+      border-right-color: transparent;
+    }
+  }
+
+  .filter-bar-row-container {
+    flex-direction: column;
   }
 
   .filter-bar-section-container-right {
-    order: 1;
-    margin: unset;
     width: 100%;
-  }
-
-  .filter-bar-item-left:last-child {
-    border-right: none;
   }
 
   .filter-bar-search-item {
@@ -107,7 +135,7 @@
     border-top: unset;
     border-left: unset;
     border-radius: 0;
-    border-bottom: 1px solid $not-quite-black;
+    text-align: center;
 
     &:focus {
       border-radius: 0;
