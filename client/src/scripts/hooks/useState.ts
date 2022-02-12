@@ -1,8 +1,7 @@
-import {nameof} from 'Scripts/helpers';
 import StateManager from 'Scripts/hooks/hookCallerStateManager';
 import {forceReRender} from 'Scripts/uiUtils';
 
-const stateManager = new StateManager(nameof(useState));
+const stateManager = new StateManager();
 
 export const resetStateIndexes = () => {
   stateManager.resetStateIndexes();
@@ -13,7 +12,7 @@ export type StateSetter<T> = (newState: (T | ((previous: T) => T))) => void;
 export function useState<T = undefined> (callerName: string, initialState?: undefined): [(T | undefined), (StateSetter<T>)];
 export function useState<T> (callerName: string, initialState: T): [(T), (StateSetter<T>)];
 export function useState<T> (callerName: string, initialState: T): unknown {
-  const [callerState, callerStateIndex] = stateManager.useStateManager(initialState, {});
+  const [callerState, callerStateIndex] = stateManager.useStateManager(callerName, initialState, {});
 
   const setState = (newState: T | ((previous: T) => T)) => {
     if (newState instanceof Function) {

@@ -3,15 +3,12 @@ import type {CallerState} from 'Types/types';
 export default class StateManager<T, S extends CallerState<T>> {
   public stateStore: Record<string, S>;
 
-  private readonly callerName: string;
-
-  public constructor (callerName: string) {
+  public constructor () {
     this.stateStore = {};
-    this.callerName = callerName;
   }
 
-  public useStateManager (initialState: T, callerStateArgs: Partial<S>): [S, number] {
-    let callerState = this.stateStore[this.callerName];
+  public useStateManager (callerName: string, initialState: T, callerStateArgs: Partial<S>): [S, number] {
+    let callerState = this.stateStore[callerName];
     let callerStateIndex = 0;
 
     if (callerState) {
@@ -22,14 +19,14 @@ export default class StateManager<T, S extends CallerState<T>> {
         callerState.states[callerStateIndex] = initialState;
       }
     } else {
-      this.stateStore[this.callerName] = {
+      this.stateStore[callerName] = {
         ...callerStateArgs as S,
         index: 1,
         states: {
           '0': initialState,
         },
       };
-      callerState = this.stateStore[this.callerName];
+      callerState = this.stateStore[callerName];
     }
 
     return [callerState, callerStateIndex];

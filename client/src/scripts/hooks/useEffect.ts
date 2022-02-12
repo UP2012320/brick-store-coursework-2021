@@ -1,16 +1,15 @@
-import {nameof} from 'Scripts/helpers';
 import StateManager from 'Scripts/hooks/hookCallerStateManager';
 import type {UseEffectCallerState} from 'Types/types';
 import deepEqual from 'deep-equal';
 
-const stateManager = new StateManager<unknown[] | undefined, UseEffectCallerState<unknown[] | undefined>>(nameof(useEffect));
+const stateManager = new StateManager<unknown[] | undefined, UseEffectCallerState<unknown[] | undefined>>();
 
 export function resetUseEffectStateIndexes () {
   stateManager.resetStateIndexes();
 }
 
 export function useEffect (callerName: string, callback: () => (() => void) | void, dependencies?: unknown[]) {
-  const [callerState, callerStateIndex] = stateManager.useStateManager(dependencies, {isFirstRender: true});
+  const [callerState, callerStateIndex] = stateManager.useStateManager(callerName, dependencies, {isFirstRender: true});
 
   const state = callerState.states[callerStateIndex];
 
