@@ -12,6 +12,13 @@ function compareDomNode (oldNode: Node, newNode: Node): NodeDifference | undefin
       };
     }
 
+    if (oldNode.id !== newNode.id) {
+      return {
+        action: 'replace',
+        target: 'node',
+      };
+    }
+
     if (oldNode.classList.length !== newNode.classList.length) {
       return {
         action: 'modify',
