@@ -2,6 +2,9 @@
 // Please do not change this file!
 declare namespace BrowseModuleScssNamespace {
   export interface IBrowseModuleScss {
+    bottomActionsRow: string;
+    loadMoreBox: string;
+    returnToTopButton: string;
     shopCardButton: string;
     shopCardContainer: string;
     shopCardId: string;

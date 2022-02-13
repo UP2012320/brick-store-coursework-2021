@@ -15,31 +15,13 @@ export interface BrowseProps {
 
 const useState = registerUseState(nameof(createBrowse));
 
-const searchForProducts = async (searchArguments: SearchRequestArguments) => {
-  let response: Response;
-
-  try {
-    console.debug('fetching');
-    response = await fetch('http://0.0.0.0:8085/api/v1/search', {
-      body: JSON.stringify(searchArguments),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    });
-  } catch (error) {
-    console.error(error);
-    return undefined;
-  }
-
-  return await response.json() as SearchQueryResponse[];
-};
+const pageLimit = 20;
 
 export default function createBrowse (props: BrowseProps) {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [cards, setCards] = useState(null);
   const [searchResults, setSearchResults] = useState<SearchQueryResponse[] | undefined>(undefined);
-  const [searchArguments, setSearchArguments] = useState<SearchRequestArguments>({query: 'red'});
+  const [searchArguments, setSearchArguments] = useState<SearchRequestArguments>({query: ''});
 
   const browseContainer = createElement('section', {
     id: contentRootStyles.contentRoot,
@@ -56,7 +38,23 @@ export default function createBrowse (props: BrowseProps) {
   const shoppingCardsScrollContainer = createElementWithStyles('div', undefined, browseStyles.shopCardsScrollContainer);
 
   const search = async () => {
-    const result = await searchForProducts(searchArguments);
+    let response: Response;
+
+    try {
+      console.debug('fetching');
+      response = await fetch('http://0.0.0.0:8085/api/v1/search', {
+        body: JSON.stringify(searchArguments),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+
+    const result = await response.json() as SearchQueryResponse[];
 
     setSearchResults(result);
   };
@@ -78,7 +76,9 @@ export default function createBrowse (props: BrowseProps) {
   } else if (searchResults && searchResults.length > 0) {
     children = [];
 
-    for (const result of searchResults) {
+    const paginatedResults = searchResults.slice(0, page * pageLimit);
+
+    for (const result of paginatedResults) {
       children.push(createShopCard({searchResultArgument: result}));
     }
   } else {
@@ -87,6 +87,22 @@ export default function createBrowse (props: BrowseProps) {
     });
   }
 
+  const bottomActionRow = createElement('div', {id: browseStyles.bottomActionsRow});
+
+  const loadMoreButton = createElement('div', {
+    id: browseStyles.loadMoreBox,
+    onclick: () => {
+      setPage((previous) => previous + 1);
+    },
+    textContent: 'Load More',
+  });
+
+  const returnToTopButton = createElement('div', {
+    id: browseStyles.returnToTopButton,
+    onclick: () => scrollTo(0, 0),
+    textContent: 'U',
+  });
+
   return htmlx`
     <${browseContainer}>
       <${filterBar}/>
@@ -94,6 +110,10 @@ export default function createBrowse (props: BrowseProps) {
         <${shoppingCardsContainer}>
           <${children}/>
         </shoppingCardsContainer>
+        <${searchResults ? bottomActionRow : null}>
+          <${loadMoreButton}/>
+          <${returnToTopButton}/>
+        </bottomActionRow>
       </shoppingCardsContainer>
     </browseContainer>
   `;

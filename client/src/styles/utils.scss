@@ -29,6 +29,27 @@ $small-radius: 7px;
   font-weight: 400;
 }
 
+@mixin row {
+  display: flex;
+}
+
+@mixin row-centered {
+  @include row;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin column-centered {
+  @include column;
+  justify-content: center;
+  align-items: center;
+}
+
 $mobile-small: 360px;
 $mobile-large: 460px;
 $tablet: 768px;

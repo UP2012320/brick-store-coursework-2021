@@ -1,11 +1,10 @@
-@import "src/styles/utils";
+@import '../utils';
 @import 'src/styles/theme';
 
 .shop-cards-scroll-container {
+  position: relative;
   flex: 1 0 90%;
-  display: flex;
-  justify-content: center;
-  align-content: center;
+  @include column-centered;
   margin-top: $spacing-small;
   margin-bottom: $spacing-medium;
 }
@@ -138,8 +137,56 @@
   }
 }
 
-@media only screen and (max-width: 360px) {
-  .shop-card-container {
+#bottom-actions-row {
+  @include row-centered;
+  position: relative;
+  width: 100%;
+}
+
+#load-more-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-medium;
+  border: 2px solid $highlight-colour;
+  background-color: #FFF;
+  text-align: center;
+  transition: color .2s ease-in-out, background-color .2s ease-in-out;
+
+  &:hover {
+    background-color: $highlight-colour;
+    color: #FFF;
+    cursor: pointer;
+  }
+}
+
+#return-to-top-button {
+  @include row-centered;
+  position: fixed;
+  border: 1px solid $highlight-colour;
+  border-radius: 50px;
+  height: 45px;
+  width: 45px;
+  font-size: 21pt;
+  right: .75vw;
+  bottom: 35px;
+  transition: color .2s ease-in-out, background-color .2s ease-in-out;
+
+  &:hover {
+    background-color: $highlight-colour;
+    color: #FFF;
+    cursor: pointer;
+  }
+}
+
+@media only screen and (max-width: 968px) {
+  #return-to-top-button {
+    right: -1px;
+    height: 35px;
+    width: 35px;
+    font-size: 16pt;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
   }
 }
 
@@ -147,6 +194,7 @@
   .shop-cards-container {
     justify-content: center;
     grid-template-columns: repeat(1, 1fr);
+    padding: 0 8vw;
   }
 
   .shop-card-title {
