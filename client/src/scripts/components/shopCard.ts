@@ -56,13 +56,35 @@ export default function createShopCard (props: CreateShopCardProps) {
     browseStyles.shopCardStock,
   );
 
+  stock.style.color = props.searchResultArgument.stock > 0 ? 'green' : 'red';
+
+  const priceRow = createElementWithStyles('div', undefined, browseStyles.shopCardPriceRow);
+
   const price = createElementWithStyles(
     'p',
     {
-      textContent: new Intl.NumberFormat('en-GB', {currency: 'GBP', style: 'currency'}).format(props.searchResultArgument.price),
+      textContent: new Intl.NumberFormat('en-GB',
+        {currency: 'GBP', style: 'currency'}).format(props.searchResultArgument.price),
     },
     browseStyles.shopCardPrice,
   );
+
+  let discountedPrice;
+  let discountPercentage;
+
+  if (props.searchResultArgument.discount) {
+    price.style.textDecoration = 'line-through';
+
+    discountedPrice = createElementWithStyles('p', {
+      textContent: new Intl.NumberFormat('en-GB',
+        {currency: 'GBP', style: 'currency'}).format(props.searchResultArgument.discount_price),
+    }, browseStyles.shopCardDiscountedPrice);
+
+    discountPercentage = createElementWithStyles('p', {
+      textContent: '(-' + new Intl.NumberFormat('en-GB',
+        {currency: 'GBP', style: 'percent'}).format(props.searchResultArgument.discount) + ')',
+    }, browseStyles.shopCardDiscountPercentage);
+  }
 
   const actionsRow = createElementWithStyles(
     'div',
@@ -93,7 +115,11 @@ export default function createShopCard (props: CreateShopCardProps) {
         <${id}/>
         <${stock}/>
       </idStockRow>
-      <${price}/>
+      <${priceRow}>
+        <${price}/>
+        <${discountedPrice}/>
+        <${discountPercentage}/>
+      </priceRow>
       <${actionsRow}>
         <${viewLink}/>
         <${addButton}/>

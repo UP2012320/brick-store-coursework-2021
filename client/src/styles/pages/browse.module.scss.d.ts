@@ -7,9 +7,12 @@ declare namespace BrowseModuleScssNamespace {
     returnToTopButton: string;
     shopCardButton: string;
     shopCardContainer: string;
+    shopCardDiscountPercentage: string;
+    shopCardDiscountedPrice: string;
     shopCardId: string;
     shopCardImg: string;
     shopCardPrice: string;
+    shopCardPriceRow: string;
     shopCardRowActions: string;
     shopCardRowId: string;
     shopCardStock: string;

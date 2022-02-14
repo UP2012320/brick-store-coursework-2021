@@ -1,6 +1,6 @@
-
 @import '../utils';
 @import 'src/styles/theme';
+@import '~bootstrap-icons/font/bootstrap-icons';
 
 .filter-bar-container {
   display: flex;
@@ -71,20 +71,53 @@
 
 .filter-bar-search-item {
   @extend .filter-bar-item-right;
-  background-color: $not-quite-white;
-  padding: $spacing-medium;
-  margin-top: $spacing-small;
-  margin-bottom: $spacing-small;
-  margin-right: $spacing-small;
-  height: unset;
-  border: 1px solid $not-quite-black;
-  border-radius: 3px;
+  flex: 1 0 70%;
   font-size: 16pt;
-  width: 200px;
+  padding: $spacing-medium;
+  height: 100%;
+  margin-left: unset;
+  border-bottom-left-radius: $medium-radius;
+  border-top-left-radius: $medium-radius;
+  border-left: unset;
+  border-bottom: unset;
+  border-top: unset;
+  border-right: 1px solid $not-quite-black;
+
+  &:hover {
+    cursor: text;
+  }
+}
+
+#filter-bar-search-button {
+  @include row-centered;
+  flex: 1 0;
+  height: 100%;
+  border-bottom-right-radius: $spacing-medium;
+  border-top-right-radius: $spacing-medium;
 
   &:hover {
     cursor: pointer;
+    color: #FFF;
+    background-color: $highlight-colour;
   }
+}
+
+#filter-bar-search-row {
+  @include row-centered;
+  flex: 1 0;
+  background-color: $not-quite-white;
+  border: 1px solid $not-quite-black;
+  border-radius: $medium-radius;
+  margin-top: $spacing-small;
+  margin-bottom: $spacing-small;
+  margin-right: $spacing-small;
+  width: 200px;
+}
+
+.bi-search {
+  @include row-centered;
+  height: 100%;
+  width: 100%;
 }
 
 @media only screen and (max-width: 768px) {
@@ -128,14 +161,18 @@
     width: 100%;
   }
 
+  #filter-bar-search-row {
+    margin: 0;
+    border: unset;
+    border-radius: 0;
+    border-bottom: 1px solid $not-quite-black;
+  }
+
   .filter-bar-search-item {
-    width: 100%;
     margin: unset;
-    border-right: unset;
-    border-top: unset;
-    border-left: unset;
     border-radius: 0;
     text-align: center;
+    flex: 1 0 60%;
 
     &:focus {
       border-radius: 0;

@@ -3,7 +3,7 @@ import {nameof} from 'Scripts/helpers';
 import type {StateSetter} from 'Scripts/hooks/useState';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import type {SearchRequestArguments} from 'api-types';
 
@@ -25,7 +25,7 @@ export default function createFilterBar (props: CreateFilterBarProps) {
 
   const mainRow = createElementWithStyles('div', undefined, filterBarStyles.filterBarRowContainer);
 
-  const leftSectionContainer = createElementWithStyles(
+  const LeftSectionContainer = createElementWithStyles(
     'section',
     undefined,
     filterBarStyles.filterBarSectionContainer,
@@ -58,6 +58,8 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     filterBarStyles.filterBarItemLeft,
   );
 
+  const searchRow = createElement('div', {id: filterBarStyles.filterBarSearchRow});
+
   const search = createElementWithStyles(
     'input',
     {
@@ -74,17 +76,25 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     filterBarStyles.filterBarSearchItem,
   );
 
+  const searchButton = createElement('div', {id: filterBarStyles.filterBarSearchButton});
+  const searchButtonIcon = createElementWithStyles('i', undefined, filterBarStyles.biSearch);
+
   return htmlx`
     <${container}>
       <${mainRow}>
-        <${leftSectionContainer}>
+        <${LeftSectionContainer}>
           <${sortBy}/>
           <${createFilterBarFilterOptions(sortToggle)}/>
           <${filterBy}/>
           <${createFilterBarFilterOptions(filterToggle)}/>
         </leftSectionContainer>
         <${rightSectionContainer}>
-          <${search}/>
+          <${searchRow}>
+            <${search}/>
+            <${searchButton}>
+              <${searchButtonIcon}/>
+            </searchButton>
+          </searchRow>
         </rightSectionContainer>
       </mainRow>
     </container>

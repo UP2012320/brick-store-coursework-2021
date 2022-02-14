@@ -27,7 +27,7 @@
                        'img img'
                        'title title'
                        'idRow idRow'
-                       '. price'
+                       '. priceRow'
                        'actionsRow actionsRow';
 
   grid-row-gap: $spacing-medium;
@@ -94,18 +94,39 @@
   align-items: center;
   margin-left: auto;
   text-align: right;
-  color: $valid-green;
   font-weight: 600;
+}
+
+.shop-card-price-row {
+  @include row-centered;
+  grid-area: priceRow;
 }
 
 .shop-card-price {
   @include font-medium;
   display: flex;
-  grid-area: price;
   color: $grey;
   font-weight: 600;
   align-items: center;
   margin-left: auto;
+}
+
+.shop-card-discounted-price {
+  @include font-medium;
+  display: flex;
+  color: $grey;
+  font-weight: 800;
+  align-items: center;
+  margin-left: $spacing-medium;
+}
+
+.shop-card-discount-percentage {
+  @include font-medium;
+  display: flex;
+  color: $grey;
+  font-weight: 800;
+  align-items: center;
+  margin-left: $spacing-small;
 }
 
 .shop-card-button {
