@@ -28,7 +28,7 @@ const parseHtmlTag = (tag: string): HtmlTagResult => {
 };
 
 const htmlx = (strings: TemplateStringsArray,
-  ...args: Array<Array<HTMLElement | SVGSVGElement | null> | HTMLElement | SVGSVGElement | null>) => {
+  ...args: Array<Array<HTMLElement | SVGSVGElement | null | undefined> | HTMLElement | SVGSVGElement | null | undefined>) => {
   if (Array.isArray(args[0])) {
     // eslint-disable-next-line unicorn/prefer-type-error
     throw new Error('The first argument cannot be an array');
