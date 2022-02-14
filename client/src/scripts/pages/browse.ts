@@ -99,7 +99,11 @@ export default function createBrowse (props: BrowseProps) {
 
   const returnToTopButton = createElement('div', {
     id: browseStyles.returnToTopButton,
-    onclick: () => scrollTo(0, 0),
+    onclick: () => scrollTo({
+      behavior: 'smooth',
+      left: 0,
+      top: 0,
+    }),
     textContent: 'U',
   });
 
