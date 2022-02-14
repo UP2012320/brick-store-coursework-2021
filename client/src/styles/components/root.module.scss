@@ -1,8 +1,6 @@
 @use 'src/styles/reset';
 
 #root {
-  width: 100vw;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: Lato, sans-serif;
