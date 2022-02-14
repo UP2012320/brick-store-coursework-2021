@@ -27,7 +27,7 @@ BEGIN
     _query = _query || '%';
   END IF;
 
-  RETURN QUERY EXECUTE 'SELECT inventory_id AS "id", item_name AS "name", slug, description, price, stock, discount, ROUND(COALESCE(discount, 1) * price, 2) AS "discount_price", bc.colour_name AS "colour", bt.type_name FROM inventory ' ||
+  RETURN QUERY EXECUTE 'SELECT inventory_id AS "id", item_name AS "name", slug, description, price, stock, discount, ROUND((1 - COALESCE(discount, 0)) * price, 2) AS "discount_price", bc.colour_name AS "colour", bt.type_name FROM inventory ' ||
                        'JOIN brick_colours bc ON bc.colour_id = inventory.colour ' ||
                        'JOIN brick_types bt ON bt.type_id = inventory.type ' ||
                        'WHERE ($1 IS NULL OR item_name ILIKE ' || QUOTE_LITERAL(_query) || ')'
