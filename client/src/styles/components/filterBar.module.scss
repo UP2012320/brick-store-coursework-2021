@@ -23,7 +23,8 @@
   border-right: 1px solid $not-quite-black;
 
   &.open {
-    width: 50px;
+    width: max-content;
+    overflow: visible;
   }
 }
 
@@ -94,6 +95,7 @@
   height: 100%;
   border-bottom-right-radius: $spacing-medium;
   border-top-right-radius: $spacing-medium;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
 
   &:hover {
     cursor: pointer;

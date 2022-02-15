@@ -1,3 +1,4 @@
+import createDropDown from 'Scripts/components/dropdown';
 import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
@@ -45,17 +46,25 @@ export default function createFilterBarFilterOptions (toggle: boolean) {
 
   const rowContainer = createElementWithStyles('div', undefined, filterBarStyles.filterBarOptionsRowContainer);
 
-  const rowItem = createElementWithStyles('div', {textContent: 'test'}, filterBarStyles.filterBarOptionsRowItem);
+  const rowItem = createElementWithStyles('div', undefined, filterBarStyles.filterBarOptionsRowItem);
+
+  const dropDown = createDropDown({
+    onselect: (valueSelected) => {
+      console.debug(valueSelected);
+    }, options: {test: 'name'},
+  });
 
   if (toggle) {
     rowContainer.classList.add(filterBarStyles.open);
   } else {
-    rowContainer.classList.remove(filterBarStyles.open);
+    rowContainer.classList.add(filterBarStyles.open);
   }
 
   return htmlx`
     <${rowContainer}>
-      <${rowItem}/>
+      <${rowItem}>
+        <${dropDown}/>
+      </rowItem>
     </rowContainer>
   `;
 }

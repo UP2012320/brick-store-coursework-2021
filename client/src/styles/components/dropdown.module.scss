@@ -1,0 +1,87 @@
+@import '../utils';
+@import 'src/styles/theme';
+@import '~bootstrap-icons/font/bootstrap-icons';
+
+.dropdown-container {
+  @include column-centered;
+  position: relative;
+  border: 1px solid $not-quite-black;
+  background-color: $not-quite-white;
+  margin: $spacing-medium;
+  overflow: visible;
+  border-radius: $small-radius $small-radius 0 0;
+}
+
+.dropdown-width-container {
+  @include column-centered;
+}
+
+.dropdown-selected-row {
+  @include row-centered;
+  width: 100%;
+  border-top-left-radius: $spacing-small;
+  border-top-right-radius: $spacing-small;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $not-really-white;
+  }
+}
+
+.dropdown-selected-option {
+  @include row-centered;
+  flex: 1 0 60%;
+  padding: $spacing-medium;
+  user-select: none;
+}
+
+.bi-caret-down-fill {
+  @include row-centered;
+  flex: 1 0;
+  height: 100%;
+  width: 100%;
+  border-top-right-radius: $small-radius;
+  transition: transform .5s cubic-bezier(.82,0,.35,1);
+  margin-right: $spacing-xsmall;
+
+  &.dropdown-open {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdown-options-container {
+  @include column-centered;
+  position: absolute;
+  top: 40px;
+  border: 1px solid $not-quite-black;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform .5s cubic-bezier(.82,0,.35,1);
+  z-index: 2;
+  background-color: $not-quite-white;
+
+  & div:not(:last-child) {
+    border-bottom: 1px solid $not-quite-black;
+  }
+
+  &.dropdown-open {
+    transform: scaleY(1);
+  }
+}
+
+.dropdown-option-container {
+  @include row-centered;
+  padding: $spacing-xsmall;
+  width: 100%;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $highlight-colour;
+    color: #FFF;
+  }
+}
+
+.dropdown-option {
+  @include row-centered;
+}
