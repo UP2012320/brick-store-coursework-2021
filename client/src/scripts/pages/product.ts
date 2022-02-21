@@ -3,10 +3,8 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElement} from 'Scripts/uiUtils';
-import type {ProductProps} from 'Types/types';
+import type {FetchStatus, ProductProps} from 'Types/types';
 import type {SearchQueryResponse} from 'api-types';
-
-type FetchStatus = 'finished' | 'pending';
 
 const useState = registerUseState(nameof(createProduct));
 

@@ -28,3 +28,5 @@ export interface HtmlTagResult {
   literalArgumentIndex: number;
   tagType: HtmlTagResultType;
 }
+
+export type FetchStatus = 'finished' | 'pending';
