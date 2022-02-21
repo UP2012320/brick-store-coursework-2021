@@ -104,8 +104,9 @@ export default function createBrowse (props: BrowseProps) {
       left: 0,
       top: 0,
     }),
-    textContent: 'U',
   });
+
+  const returnToTopIcon = createElementWithStyles('i', undefined, browseStyles.biChevronUp);
 
   return htmlx`
     <${browseContainer}>
@@ -116,7 +117,9 @@ export default function createBrowse (props: BrowseProps) {
         </shoppingCardsContainer>
         <${searchResults ? bottomActionRow : null}>
           <${loadMoreButton}/>
-          <${returnToTopButton}/>
+          <${returnToTopButton}>
+            <${returnToTopIcon}/>
+          </returnToTopButton>
         </bottomActionRow>
       </shoppingCardsContainer>
     </browseContainer>

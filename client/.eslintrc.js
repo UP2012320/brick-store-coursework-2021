@@ -14,5 +14,5 @@ module.exports = {
       },
     }
   ],
-  ignorePatterns: ['*.scss.d.ts'],
+  ignorePatterns: ['*.scss.d.ts', '*.d.ts'],
 };

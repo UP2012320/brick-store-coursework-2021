@@ -2,6 +2,7 @@ import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
 import {mergeDomTrees} from 'Scripts/diffing';
+import {fireAfterRenderFunctions, resetUseAfterRenderStateIndexes} from 'Scripts/hooks/useAfterRender';
 import {resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
 import {resetRefIndexes} from 'Scripts/hooks/useRef';
 import {resetStateIndexes} from 'Scripts/hooks/useState';
@@ -68,12 +69,15 @@ const render = () => {
     currentRoot = internalRoot;
     root.append(currentRoot);
   }
+
+  fireAfterRenderFunctions();
 };
 
 const onPopState = () => {
   resetStateIndexes();
   resetRefIndexes();
   resetUseEffectStateIndexes();
+  resetUseAfterRenderStateIndexes();
   render();
 };
 

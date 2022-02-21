@@ -1,5 +1,6 @@
 @import '../utils';
 @import 'src/styles/theme';
+@import 'bootstrap-icons/font/bootstrap-icons';
 
 .shop-cards-scroll-container {
   position: relative;
@@ -198,6 +199,12 @@
     color: #FFF;
     cursor: pointer;
   }
+}
+
+.bi-chevron-up {
+  @include row-centered;
+  height: 100%;
+  width: 100%;
 }
 
 @media only screen and (max-width: 968px) {

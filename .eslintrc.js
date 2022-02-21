@@ -41,7 +41,7 @@ module.exports = {
         'unicorn/no-abusive-eslint-disable': 0,
         'eslint-comments/no-unlimited-disable': 0,
         '@typescript-eslint/no-invalid-void-type': 0,
-        '@typescript-eslint/no-floating-promises': 0
+        '@typescript-eslint/no-floating-promises': 0,
       },
     },
     {
