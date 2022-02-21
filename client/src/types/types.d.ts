@@ -3,7 +3,7 @@ export interface RouterArgs<T extends string> {
   route: string;
 }
 
-export interface productProps {
+export interface ProductProps {
   restArgs?: {
     slug: string,
   };

@@ -12,7 +12,7 @@ import createMain from 'Scripts/pages/main';
 import createProduct from 'Scripts/pages/product';
 import {appendElements, createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
-import type {productProps} from 'Types/types';
+import type {ProductProps} from 'Types/types';
 
 let currentRoot: HTMLElement;
 
@@ -51,7 +51,7 @@ const render = () => {
       appendElements(internalRoot, createBrowse({queryStrings} as BrowseProps));
       break;
     case 'product':
-      appendElements(internalRoot, createProduct({restArgs} as productProps));
+      appendElements(internalRoot, createProduct({restArgs} as ProductProps));
       break;
     case 'main':
       appendElements(internalRoot, createMain());

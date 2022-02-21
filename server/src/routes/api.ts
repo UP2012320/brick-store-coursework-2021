@@ -1,7 +1,6 @@
 import {sendQuery} from 'Utils/helpers.js';
 import type {SearchRequestArguments} from 'api-types';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
-import {debug} from 'util';
 
 export default function api (
   fastify: FastifyInstance,
@@ -66,7 +65,7 @@ export default function api (
     reply.internalServerError();
   });
 
-  fastify.get<{ Querystring: { slug: string } }>('/getProduct', async (request, reply) => {
+  fastify.get<{ Querystring: { slug: string, }, }>('/getProduct', async (request, reply) => {
     const pg = await fastify.pg.connect();
 
     const [productDetails, error] = await sendQuery(pg,
@@ -76,7 +75,7 @@ export default function api (
     pg.release();
 
     if (error) {
-      console.debug(debug);
+      console.debug(error);
       reply.internalServerError();
       return;
     }
