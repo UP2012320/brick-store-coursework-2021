@@ -1,6 +1,7 @@
 import {sendQuery} from 'Utils/helpers.js';
 import type {SearchRequestArguments} from 'api-types';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
+import {debug} from 'util';
 
 export default function api (
   fastify: FastifyInstance,
@@ -65,10 +66,34 @@ export default function api (
     reply.internalServerError();
   });
 
+  fastify.get<{ Querystring: { slug: string } }>('/getProduct', async (request, reply) => {
+    const pg = await fastify.pg.connect();
+
+    const [productDetails, error] = await sendQuery(pg,
+      'SELECT * FROM search_inventory(NULL, $1)',
+      [request.query.slug]);
+
+    pg.release();
+
+    if (error) {
+      console.debug(debug);
+      reply.internalServerError();
+      return;
+    }
+
+    if (productDetails?.rows) {
+      await reply.send(productDetails.rows);
+      return;
+    }
+
+    reply.internalServerError();
+  });
+
   fastify.get('/getBrickColours', async (request, reply) => {
     const pg = await fastify.pg.connect();
 
-    const [brickColours, error] = await sendQuery(pg, 'SELECT colour_id as "id", colour_name as "name" FROM brick_colours');
+    const [brickColours, error] = await sendQuery(pg,
+      'SELECT colour_id as "id", colour_name as "name" FROM brick_colours');
 
     pg.release();
 
