@@ -1,14 +1,13 @@
 /**
  * Created by: Andrey Polyakov (andrey@polyakov.im)
  */
-import TerserJSPlugin from 'terser-webpack-plugin';
-
 import * as plugins from './plugins';
+import {ESBuildMinifyPlugin} from 'esbuild-loader';
 
 export default {
     optimization: {
-        minimize: true,
-        minimizer: [new TerserJSPlugin({})],
+      minimize: true,
+      minimizer: [new ESBuildMinifyPlugin()],
     },
     plugins: [plugins.cleanWebpackPlugin, plugins.miniCssExtractPlugin],
     performance: {

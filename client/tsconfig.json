@@ -2,6 +2,9 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
+    "isolatedModules": true,
+    "useDefineForClassFields": true,
     "allowJs": true,
     "rootDir": "./src",
     "baseUrl": "./src",
@@ -11,7 +14,7 @@
       "Scripts/*": ["scripts/*"],
       "Assets/*": ["assets/*"],
       "Tests/*": ["tests/*"],
-      "Hooks/*": ["hooks/*"],
+      "Hooks/*": ["hooks/*"]
     }
   },
   "include": ["src"]

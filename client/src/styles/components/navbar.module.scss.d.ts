@@ -1669,8 +1669,8 @@ declare namespace NavbarModuleScssNamespace {
     biWordpress: string;
     biWrench: string;
     biWrenchAdjustable: string;
+    biWrenchAdjustableCircle: string;
     biWrenchAdjustableCircleFill: string;
-    biWrenchAdjustableCricle: string;
     biX: string;
     biXCircle: string;
     biXCircleFill: string;

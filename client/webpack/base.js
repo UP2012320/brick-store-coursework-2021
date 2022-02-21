@@ -10,12 +10,9 @@ import * as plugins from './plugins';
 import * as rules from './rules';
 import {isDevServer, isProd} from './utils/env';
 import {arrayFilterEmpty} from './utils/helpers';
+import webpack from 'webpack';
 
-const publicPath = isDevServer
-  ? devServerUrl
-  : process.env.IS_VERCEL
-  ? './'
-  : './public/';
+const publicPath = isDevServer ? devServerUrl : process.env.IS_VERCEL ? './' : './public/';
 
 export default {
   context: __dirname,
@@ -28,26 +25,11 @@ export default {
     filename: isDevServer ? '[name].[fullhash].js' : '[name].[contenthash].js',
   },
   module: {
-    rules: arrayFilterEmpty([
-      rules.javascriptRule,
-      rules.htmlRule,
-      rules.imagesRule,
-      rules.fontsRule,
-      rules.cssRule,
-      ...rules.sassRules,
-      ...rules.svgRules,
-    ]),
+    rules: arrayFilterEmpty([rules.javascriptRule, rules.htmlRule, rules.imagesRule, rules.fontsRule, rules.cssRule, ...rules.sassRules, ...rules.svgRules,]),
   },
-  plugins: arrayFilterEmpty([
-    plugins.htmlWebpackPlugin,
-    plugins.providePlugin,
-    plugins.definePlugin,
-    plugins.forkTsCheckerWebpackPlugin,
-    plugins.esLintPlugin,
-  ]),
+  plugins: arrayFilterEmpty([new webpack.debug.ProfilingPlugin(), plugins.htmlWebpackPlugin, plugins.providePlugin, plugins.definePlugin,]),
   resolve: {
-    alias: aliasItems,
-    extensions: ['.tsx', '.ts', '.js', '.jsx'],
+    alias: aliasItems, extensions: ['.tsx', '.ts', '.js', '.jsx'],
   },
   optimization,
   externals: externalItems,

@@ -1669,8 +1669,8 @@ declare namespace DropdownModuleScssNamespace {
     biWordpress: string;
     biWrench: string;
     biWrenchAdjustable: string;
+    biWrenchAdjustableCircle: string;
     biWrenchAdjustableCircleFill: string;
-    biWrenchAdjustableCricle: string;
     biX: string;
     biXCircle: string;
     biXCircleFill: string;
@@ -1688,12 +1688,15 @@ declare namespace DropdownModuleScssNamespace {
     biZoomOut: string;
     dropdownContainer: string;
     dropdownOpen: string;
-    dropdownOption: string;
+    dropdownOptionCheckbox: string;
     dropdownOptionContainer: string;
+    dropdownOptionText: string;
     dropdownOptionsContainer: string;
+    dropdownSearchOptionContainer: string;
     dropdownSelectedOption: string;
     dropdownSelectedRow: string;
     dropdownWidthContainer: string;
+    ticked: string;
   }
 }
 
