@@ -178,7 +178,7 @@ importers:
       '@typescript-eslint/parser': ^5.12.1
       api-types: workspace:^1.0.0
       eslint: ^8.9.0
-      eslint-config-canonical: 32.48.7
+      eslint-config-canonical: ^32.48.7
       eslint-import-resolver-alias: ^1.1.2
       eslint-plugin-import: ^2.25.4
       fastify: ^3.27.2
@@ -199,7 +199,7 @@ importers:
       '@typescript-eslint/parser': 5.12.1_eslint@8.9.0+typescript@4.5.5
       api-types: link:../api-types
       eslint: 8.9.0
-      eslint-config-canonical: 32.48.7_1df0e8be62810e23d509117fd212cca4
+      eslint-config-canonical: 32.49.1_1db6b4575e32c5168c03b458e52b0317
       eslint-import-resolver-alias: 1.1.2_eslint-plugin-import@2.25.4
       eslint-plugin-import: 2.25.4_eslint@8.9.0
       fastify: 3.27.2
@@ -5233,14 +5233,15 @@ packages:
       lodash.zip: 4.2.0
     dev: true
 
-  /eslint-config-canonical/32.48.7_1df0e8be62810e23d509117fd212cca4:
-    resolution: {integrity: sha512-R7icsIqn6z+8iIjUCIorycCHvLjxrYjk3xf2iFcoMr8PSvTbpOeVx/y5uz0pIoeknldT5UMpEtD5mtNXAR9PKw==}
+  /eslint-config-canonical/32.49.1_1db6b4575e32c5168c03b458e52b0317:
+    resolution: {integrity: sha512-Vmj1ZaHDIyS0th2+6B3SoGcxNtx4eJehNP9apz3RKMmiHzvL2RXB/7/yx65u90buHHPSAFqJQQX9bjWKPaPhNw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       eslint: ^8.4.1
     dependencies:
       '@babel/eslint-parser': 7.17.0_@babel+core@7.17.5+eslint@8.9.0
       '@babel/eslint-plugin': 7.16.5_0f7d57242c70b8e89c1f8fee5b7f60ba
+      '@graphql-eslint/eslint-plugin': 3.8.0_ad16171857a0edcfc445c7bfcf336eb6
       '@next/eslint-plugin-next': 12.1.0
       '@rushstack/eslint-patch': 1.1.0
       '@typescript-eslint/eslint-plugin': 5.12.1_aa3af6382115a42a71cc388b7b2c30b3
@@ -5271,9 +5272,14 @@ packages:
       - '@babel/core'
       - '@babel/plugin-syntax-flow'
       - '@babel/plugin-transform-react-jsx'
+      - '@types/node'
+      - bufferutil
+      - encoding
+      - graphql
       - jest
       - supports-color
       - typescript
+      - utf-8-validate
     dev: true
 
   /eslint-config-canonical/32.49.1_86ef3d9dd6595cd0e806ad4a05e1ed6c:
