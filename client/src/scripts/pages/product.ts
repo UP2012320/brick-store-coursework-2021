@@ -2,7 +2,8 @@ import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElement} from 'Scripts/uiUtils';
+import {createElementWithStyles} from 'Scripts/uiUtils';
+import productStyles from 'Styles/pages/product.module.scss';
 import type {FetchStatus, ProductProps} from 'Types/types';
 import type {SearchQueryResponse} from 'api-types';
 
@@ -13,7 +14,7 @@ export default function createProduct (props: ProductProps) {
   const [productDetails, setProductDetails] = useState<SearchQueryResponse | undefined>();
 
   const fetchProduct = async () => {
-    const url = new URL('/getProduct', 'http://0.0.0.0:8085/api/v1/');
+    const url = new URL('/api/v1/getProduct', 'http://0.0.0.0:8085/');
 
     if (props.restArgs?.slug) {
       url.searchParams.set('slug', props.restArgs?.slug);
@@ -47,9 +48,12 @@ export default function createProduct (props: ProductProps) {
     fetchProduct();
   }, []);
 
-  const l = createElement('div', {
-    textContent: props.restArgs?.slug,
-  });
+  const ProductContainer = createElementWithStyles('div', undefined, productStyles.productContainer);
 
-  return htmlx`<${l}/>`;
+  console.debug(productDetails);
+
+  return htmlx`
+  <${ProductContainer}>
+  </l>
+`;
 }

@@ -1,0 +1,8 @@
+@import '../utils';
+@import "src/styles/theme";
+
+.product-container {
+  @include column-centered;
+  flex: 1 0 90%;
+}
+
