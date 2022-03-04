@@ -3,9 +3,9 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
-import productStyles from 'Styles/pages/product.module.scss';
 import type {FetchStatus, ProductProps} from 'Types/types';
 import type {SearchQueryResponse} from 'api-types';
+import productStyles from './product.module.scss';
 
 const useState = registerUseState(nameof(createProduct));
 
@@ -48,12 +48,16 @@ export default function createProduct (props: ProductProps) {
     fetchProduct();
   }, []);
 
+  const ProductScrollContainer = createElementWithStyles('div', undefined, productStyles.productContainer);
   const ProductContainer = createElementWithStyles('div', undefined, productStyles.productContainer);
 
   console.debug(productDetails);
 
   return htmlx`
-  <${ProductContainer}>
-  </ProductContainer>
+  <${ProductScrollContainer}>
+    <${ProductContainer}>
+
+    </ProductContainer>
+  </ProductScrollContainer>
 `;
 }

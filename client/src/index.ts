@@ -1,5 +1,6 @@
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
+import createProduct from 'Scripts/components/product/product';
 import createRouter from 'Scripts/createRouter';
 import {fireAfterRenderFunctions, resetUseAfterRenderStateIndexes} from 'Scripts/hooks/useAfterRender';
 import {fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
@@ -8,7 +9,6 @@ import {resetStateIndexes} from 'Scripts/hooks/useState';
 import type {BrowseProps} from 'Scripts/pages/browse';
 import createBrowse from 'Scripts/pages/browse';
 import createMain from 'Scripts/pages/main';
-import createProduct from 'Scripts/pages/product';
 import {appendElements, createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
 import type {ProductProps} from 'Types/types';
@@ -45,6 +45,8 @@ const render = () => {
       route: '/',
     },
   ]);
+
+  console.debug(targetedRoute);
 
   switch (targetedRoute) {
     case 'browse':

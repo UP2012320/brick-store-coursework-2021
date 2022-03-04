@@ -3,7 +3,6 @@
 @import 'bootstrap-icons/font/bootstrap-icons';
 
 .shop-cards-scroll-container {
-  position: relative;
   flex: 1 0 90%;
   @include column-centered;
   margin-top: $spacing-small;

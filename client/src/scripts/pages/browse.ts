@@ -43,6 +43,8 @@ export default function createBrowse (props: BrowseProps) {
     url.searchParams.set('query', searchArguments.query);
     url.searchParams.set('offset', nextId.current.toString());
 
+    console.debug(searchArguments.query);
+
     let response: Response;
 
     try {

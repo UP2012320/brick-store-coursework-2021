@@ -3,6 +3,7 @@
 declare namespace ProductModuleScssNamespace {
   export interface IProductModuleScss {
     productContainer: string;
+    productScrollContainer: string;
   }
 }
 

@@ -1,0 +1,23 @@
+@import 'src/styles/utils';
+@import "src/styles/theme";
+
+.product-scroll-container {
+  flex: 1 0 90%;
+  @include column-centered;
+  margin-top: $spacing-small;
+  margin-bottom: $spacing-medium;
+}
+
+.product-container {
+  display: grid;
+  grid-template-areas:
+    'img img desc desc'
+    'img img desc desc'
+    '. . buy buy';
+  grid-gap: $spacing-xlarge;
+  padding: 0 4vw;
+  justify-items: center;
+  border-radius: 10px;
+  max-width: 1400px;
+}
+
