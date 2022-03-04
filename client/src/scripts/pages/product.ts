@@ -54,6 +54,6 @@ export default function createProduct (props: ProductProps) {
 
   return htmlx`
   <${ProductContainer}>
-  </l>
+  </ProductContainer>
 `;
 }

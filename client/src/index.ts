@@ -1,9 +1,8 @@
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
-import {mergeDomTrees} from 'Scripts/diffing';
 import {fireAfterRenderFunctions, resetUseAfterRenderStateIndexes} from 'Scripts/hooks/useAfterRender';
-import {resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
+import {fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
 import {resetRefIndexes} from 'Scripts/hooks/useRef';
 import {resetStateIndexes} from 'Scripts/hooks/useState';
 import type {BrowseProps} from 'Scripts/pages/browse';
@@ -13,6 +12,7 @@ import createProduct from 'Scripts/pages/product';
 import {appendElements, createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
 import type {ProductProps} from 'Types/types';
+import morphdom from 'morphdom';
 
 let currentRoot: HTMLElement;
 
@@ -64,13 +64,15 @@ const render = () => {
   appendElements(internalRoot, createFooter());
 
   if (currentRoot) {
-    mergeDomTrees(internalRoot, currentRoot);
+    morphdom(currentRoot, internalRoot);
+    // mergeDomTrees(internalRoot, currentRoot);
   } else {
     currentRoot = internalRoot;
     root.append(currentRoot);
   }
 
   fireAfterRenderFunctions();
+  fireUseEffectQueue();
 };
 
 const onPopState = () => {

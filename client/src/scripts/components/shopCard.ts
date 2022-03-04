@@ -2,10 +2,10 @@ import images from 'Assets/2412b.png';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import browseStyles from 'Styles/pages/browse.module.scss';
-import type {SearchQueryResponse} from 'api-types';
+import type {SearchQueryResult} from 'api-types';
 
 export interface CreateShopCardProps {
-  searchResultArgument: SearchQueryResponse;
+  searchResultArgument: SearchQueryResult;
 }
 
 export default function createShopCard (props: CreateShopCardProps) {
@@ -43,7 +43,7 @@ export default function createShopCard (props: CreateShopCardProps) {
   const id = createElementWithStyles(
     'p',
     {
-      textContent: `#${props.searchResultArgument.id.toUpperCase()}`,
+      textContent: `#${props.searchResultArgument.inventory_id.toUpperCase()}`,
     },
     browseStyles.shopCardId,
   );
