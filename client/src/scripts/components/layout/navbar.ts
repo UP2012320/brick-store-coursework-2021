@@ -1,4 +1,5 @@
 import logo from 'Assets/drawing512.png';
+import {auth0} from 'Scripts/auth0';
 import createNavbarMainContainerItem from 'Scripts/components/layout/navbarMainContainerItem';
 import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
@@ -11,6 +12,7 @@ import type {SearchQueryResult} from 'api-types';
 
 export default function createNavbar () {
   const [cartSize, setCartSize] = useState(nameof(createCart), 0);
+  const [isLoggedIn, setIsLoggedIn] = useState(nameof(createCart), false);
 
   const navbar = createElement('nav');
 
@@ -50,8 +52,13 @@ export default function createNavbar () {
 
   window.addEventListener('storage', updateCartSize);
 
+  const checkIfLoggedIn = async () => {
+    setIsLoggedIn(await auth0.isAuthenticated());
+  };
+
   useEffect(nameof(createCart), () => {
     updateCartSize();
+    checkIfLoggedIn();
   }, []);
 
   const shoppingCart = createElementWithStyles('i', undefined, styles.biCart2);

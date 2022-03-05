@@ -1,3 +1,4 @@
+import {fetchAuth0Config} from 'Scripts/auth0';
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createProduct from 'Scripts/components/product/product';
@@ -51,8 +52,6 @@ const render = () => {
     },
   ]);
 
-  console.debug(targetedRoute);
-
   switch (targetedRoute) {
     case 'browse':
       appendElements(internalRoot, createBrowse({queryStrings} as BrowseProps));
@@ -93,10 +92,14 @@ const onPopState = () => {
   render();
 };
 
-const main = () => {
+const main = async () => {
+  await fetchAuth0Config();
+
   render();
 
   window.addEventListener('popstate', onPopState);
 };
 
-main();
+(async () => {
+  await main();
+})();

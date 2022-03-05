@@ -1,5 +1,6 @@
 import {sendQuery} from 'Utils/helpers.js';
 import type {SearchQueryResponse, SearchRequestArguments} from 'api-types';
+import config from 'config';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
 
 export default function api (
@@ -122,6 +123,10 @@ export default function api (
     }
 
     reply.internalServerError();
+  });
+
+  fastify.get('/getAuth0Config', async (request, response) => {
+    response.send({clientId: config.clientId, domain: config.domain});
   });
 
   done();
