@@ -1,5 +1,6 @@
 import StateManager from 'Scripts/hooks/hookCallerStateManager';
 import {forceReRender} from 'Scripts/uiUtils';
+import deepEqual from 'deep-equal';
 
 const stateManager = new StateManager();
 
@@ -15,11 +16,19 @@ export function useState<T> (callerName: string, initialState: T): unknown {
   const [callerState, callerStateIndex] = stateManager.useStateManager(callerName, initialState, {});
 
   const setState = (newState: T | ((previous: T) => T)) => {
+    let newStateValue;
+
     if (newState instanceof Function) {
-      callerState.states[callerStateIndex] = newState(callerState.states[callerStateIndex] as T);
+      newStateValue = newState(callerState.states[callerStateIndex] as T);
     } else {
-      callerState.states[callerStateIndex] = newState;
+      newStateValue = newState;
     }
+
+    if (deepEqual(newStateValue, callerState.states[callerStateIndex])) {
+      return;
+    }
+
+    callerState.states[callerStateIndex] = newStateValue;
 
     forceReRender();
   };

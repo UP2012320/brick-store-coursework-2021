@@ -4,6 +4,16 @@ import deepEqual from 'deep-equal';
 
 const stateManager = new StateManager<unknown[] | undefined, UseEffectCallerState<unknown[] | undefined>>();
 
+const useEffectQueue: Array<() => (() => void) | void> = [];
+
+export function fireUseEffectQueue () {
+  let callback;
+
+  while ((callback = useEffectQueue.shift())) {
+    callback();
+  }
+}
+
 export function resetUseEffectStateIndexes () {
   stateManager.resetStateIndexes();
 }
@@ -13,13 +23,13 @@ export function useEffect (callerName: string, callback: () => (() => void) | vo
 
   const state = callerState.states[callerStateIndex];
 
-  if (!state) {
-    callback();
+  if (state === undefined || state === null) {
+    useEffectQueue.push(callback);
   } else if (state.length === 0 && callerState.isFirstRender) {
-    callback();
+    useEffectQueue.push(callback);
   } else if (state.length > 0 && !deepEqual(state, dependencies)) {
-    callback();
     callerState.states[callerStateIndex] = dependencies;
+    useEffectQueue.push(callback);
   } else if (state.length !== 0) {
     callerState.states[callerStateIndex] = dependencies;
   }

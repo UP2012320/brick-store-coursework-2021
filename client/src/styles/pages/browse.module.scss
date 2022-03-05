@@ -3,7 +3,6 @@
 @import 'bootstrap-icons/font/bootstrap-icons';
 
 .shop-cards-scroll-container {
-  position: relative;
   flex: 1 0 90%;
   @include column-centered;
   margin-top: $spacing-small;
@@ -39,7 +38,6 @@
   transition: background-color .5s ease-out;
 
   &:hover {
-    cursor: pointer;
     background-color: $not-quite-white;
   }
 }
@@ -66,6 +64,10 @@
   width: 150px;
   height: 150px;
   border-radius: $small-radius;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .shop-card-title {
@@ -79,6 +81,10 @@
   -webkit-line-clamp: 3;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .shop-card-id {

@@ -1,5 +1,5 @@
 import {sendQuery} from 'Utils/helpers.js';
-import type {SearchRequestArguments} from 'api-types';
+import type {SearchQueryResponse, SearchRequestArguments} from 'api-types';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
 
 export default function api (
@@ -7,37 +7,63 @@ export default function api (
   options: FastifyServerOptions,
   done: (error?: Error) => void,
 ) {
-  fastify.post<{ Body: SearchRequestArguments, }>('/search', async (request, reply) => {
-    const body = request.body;
+  fastify.get<{ Querystring: SearchRequestArguments, }>('/search', async (request, reply) => {
+    const body = request.query;
 
     if (!body) {
       reply.badRequest('Invalid JSON body');
       return;
     }
 
-    console.debug(body);
-
-    const pg = await fastify.pg.connect();
-
-    const [searchQueryResult, error] = await sendQuery(
-      pg,
+    const [searchQueryResult, searchQueryError] = await sendQuery(
+      fastify.pg.pool,
       `SELECT *
-       FROM search_inventory($1)`,
+       FROM search_inventory($1, NULL, $2)`,
       [
         body.query,
+        body.offset ?? 0,
       ],
     );
 
-    pg.release();
-
-    if (error) {
-      console.debug(error);
+    if (searchQueryError) {
+      console.debug(searchQueryError);
       reply.internalServerError();
       return;
     }
 
     if (searchQueryResult) {
-      await reply.send(searchQueryResult.rows);
+      let finalResult: SearchQueryResponse;
+
+      if (searchQueryResult.rowCount > 0) {
+        const [nextIdResult, nextIdError] = await sendQuery(
+          fastify.pg.pool,
+          'SELECT id FROM inventory WHERE inventory_id = $1',
+          [searchQueryResult.rows.slice(-1)[0].inventory_id],
+        );
+
+        if (nextIdError) {
+          console.debug(nextIdError);
+          reply.internalServerError();
+          return;
+        }
+
+        if (nextIdResult) {
+          finalResult = {
+            nextId: nextIdResult.rows[0].id,
+            results: searchQueryResult.rows,
+          };
+        } else {
+          reply.internalServerError();
+          return;
+        }
+      } else {
+        finalResult = {
+          nextId: 0,
+          results: searchQueryResult.rows,
+        };
+      }
+
+      await reply.send(finalResult);
       return;
     }
 
@@ -45,11 +71,7 @@ export default function api (
   });
 
   fastify.get('/getBrickTypes', async (request, reply) => {
-    const pg = await fastify.pg.connect();
-
-    const [brickTypes, error] = await sendQuery(pg, 'SELECT type_id as "id", type_name as "type" FROM brick_types');
-
-    pg.release();
+    const [brickTypes, error] = await sendQuery(fastify.pg.pool, 'SELECT type_id as "id", type_name as "type" FROM brick_types');
 
     if (error) {
       console.debug(error);
@@ -66,13 +88,9 @@ export default function api (
   });
 
   fastify.get<{ Querystring: { slug: string, }, }>('/getProduct', async (request, reply) => {
-    const pg = await fastify.pg.connect();
-
-    const [productDetails, error] = await sendQuery(pg,
+    const [productDetails, error] = await sendQuery(fastify.pg.pool,
       'SELECT * FROM search_inventory(NULL, $1)',
       [request.query.slug]);
-
-    pg.release();
 
     if (error) {
       console.debug(error);
@@ -89,12 +107,8 @@ export default function api (
   });
 
   fastify.get('/getBrickColours', async (request, reply) => {
-    const pg = await fastify.pg.connect();
-
-    const [brickColours, error] = await sendQuery(pg,
+    const [brickColours, error] = await sendQuery(fastify.pg.pool,
       'SELECT colour_id as "id", colour_name as "name" FROM brick_colours');
-
-    pg.release();
 
     if (error) {
       console.debug(error);

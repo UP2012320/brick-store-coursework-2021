@@ -1,10 +1,17 @@
 import logo from 'Assets/drawing512.png';
 import createNavbarMainContainerItem from 'Scripts/components/layout/navbarMainContainerItem';
+import {nameof} from 'Scripts/helpers';
+import {useEffect} from 'Scripts/hooks/useEffect';
+import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
+import createCart from 'Scripts/pages/cart';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
+import type {SearchQueryResult} from 'api-types';
 
 export default function createNavbar () {
+  const [cartSize, setCartSize] = useState(nameof(createCart), 0);
+
   const navbar = createElement('nav');
 
   const leftSideContainer = createElementWithStyles(
@@ -25,12 +32,34 @@ export default function createNavbar () {
     styles.navRightSideContainer,
   );
 
-  // const shoppingCartContainer = createElementWithStyles('div', undefined, styles.cartContainer);
+  const updateCartSize = () => {
+    const cartStorageString = window.localStorage.getItem('cart');
+
+    if (cartStorageString) {
+      const cartStorage = JSON.parse(cartStorageString) as SearchQueryResult[];
+
+      if (cartStorage.length > 99) {
+        setCartSize(99);
+      } else {
+        setCartSize(cartStorage.length);
+      }
+    } else {
+      setCartSize(0);
+    }
+  };
+
+  window.addEventListener('storage', updateCartSize);
+
+  useEffect(nameof(createCart), () => {
+    updateCartSize();
+  }, []);
 
   const shoppingCart = createElementWithStyles('i', undefined, styles.biCart2);
 
+  registerLinkClickHandler(shoppingCart, '/cart');
+
   const shoppingCartAmount = createElement('span', {
-    textContent: '4',
+    textContent: cartSize === 0 ? '' : cartSize.toString(),
   });
 
   const navbarBrowseItem = createNavbarMainContainerItem({title: 'Browse'});
@@ -51,9 +80,9 @@ export default function createNavbar () {
         <${navbarBrowseItem}/>
       </mainElement>
       <${rightSideContainer}>
-          <${shoppingCart}>
-            <${shoppingCartAmount}/>
-          </shoppingCart>
+        <${shoppingCart}>
+          <${shoppingCartAmount}/>
+        </shoppingCart>
       </rightSideElement>
     </navbar>
   `;

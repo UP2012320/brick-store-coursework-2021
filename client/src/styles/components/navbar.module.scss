@@ -38,20 +38,16 @@ nav {
   }
 
   .bi-cart2 {
-    $scale: 2.75;
-    $base: 16px;
-
     position: relative;
-    transform: scale($scale);
+    font-size: 3rem;
     margin-right: $spacing-xlarge;
 
     span {
-      height: $base;
-      width: $base;
-      position: absolute;
       @include font-medium;
-      font-size: 6pt;
-      right: 0;
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -48%);
       text-align: center;
       font-style: normal;
       user-select: none;
