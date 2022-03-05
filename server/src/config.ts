@@ -1,8 +1,8 @@
 const config = {
   address: '0.0.0.0',
-  clientId: 'kTEHcebeVRzSiuvCJeQWZ7p75KFE9LcK',
+  clientId: 'kq0D1YmYDfSH0UEai0TbxqHp8UkRptCR',
   dev: true,
-  domain: 'dev-tfiltr.eu.auth0.com',
+  domain: 'bricks-store.eu.auth0.com',
   pgAddress: '82.47.197.75',
   pgPass: 'y*_dwYx7CkTbaQQ!',
   pgPort: 5_432,

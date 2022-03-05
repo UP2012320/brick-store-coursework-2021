@@ -78,6 +78,38 @@ export default function createNavbar () {
 
   registerLinkClickHandler(leftSideContainerLogo, '/');
 
+  const login = async () => {
+    await auth0.loginWithRedirect({
+      redirect_uri: window.location.origin,
+    });
+  };
+
+  const logout = async () => {
+    await auth0.logout({
+      returnTo: window.location.origin,
+    });
+  };
+
+  let loginElement;
+
+  if (isLoggedIn) {
+    loginElement = createElement('p', {textContent: 'logged in'});
+    console.debug('assigning logging out');
+    loginElement.onclick = async (e) => {
+      e.preventDefault();
+      console.debug('logging out');
+      await logout();
+    };
+  } else {
+    loginElement = createElement('p', {textContent: 'login here'});
+    console.debug('assigning logging in');
+    loginElement.onclick = async (e) => {
+      e.preventDefault();
+      console.debug('logging in');
+      await login();
+    };
+  }
+
   return htmlx`
     <${navbar}>
       <${leftSideContainer}>
@@ -87,6 +119,7 @@ export default function createNavbar () {
         <${navbarBrowseItem}/>
       </mainElement>
       <${rightSideContainer}>
+        <${loginElement}/>
         <${shoppingCart}>
           <${shoppingCartAmount}/>
         </shoppingCart>
