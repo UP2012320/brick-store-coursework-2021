@@ -35,7 +35,7 @@ export default function createNavbar () {
   );
 
   const updateCartSize = () => {
-    const cartStorageString = window.localStorage.getItem('cart');
+    const cartStorageString = window.sessionStorage.getItem('cart');
 
     if (cartStorageString) {
       const cartStorage = JSON.parse(cartStorageString) as SearchQueryResult[];
@@ -56,8 +56,9 @@ export default function createNavbar () {
     setIsLoggedIn(await auth0.isAuthenticated());
   };
 
+  updateCartSize();
+
   useEffect(nameof(createCart), () => {
-    updateCartSize();
     checkIfLoggedIn();
   }, []);
 
@@ -94,18 +95,12 @@ export default function createNavbar () {
 
   if (isLoggedIn) {
     loginElement = createElement('p', {textContent: 'logged in'});
-    console.debug('assigning logging out');
-    loginElement.onclick = async (e) => {
-      e.preventDefault();
-      console.debug('logging out');
+    loginElement.onclick = async () => {
       await logout();
     };
   } else {
     loginElement = createElement('p', {textContent: 'login here'});
-    console.debug('assigning logging in');
-    loginElement.onclick = async (e) => {
-      e.preventDefault();
-      console.debug('logging in');
+    loginElement.onclick = async () => {
       await login();
     };
   }

@@ -12,7 +12,7 @@ import type {BrowseProps} from 'Scripts/pages/browse';
 import createBrowse from 'Scripts/pages/browse';
 import createCart from 'Scripts/pages/cart';
 import createMain from 'Scripts/pages/main';
-import {appendElements, createElement, forceReRender} from 'Scripts/uiUtils';
+import {appendElements, createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
 import type {ProductProps} from 'Types/types';
 import morphdom from 'morphdom';
@@ -26,8 +26,6 @@ const render = async () => {
     await auth0.handleRedirectCallback();
 
     history.pushState({}, document.title, '/');
-
-    forceReRender();
   }
 
   const root = document.querySelector('#root');
@@ -61,6 +59,10 @@ const render = async () => {
       route: '/',
     },
   ]);
+
+  if (await auth0.isAuthenticated()) {
+    console.debug(await auth0.getUser());
+  }
 
   switch (targetedRoute) {
     case 'browse':
@@ -100,7 +102,6 @@ const onPopState = async () => {
   resetUseEffectStateIndexes();
   resetUseAfterRenderStateIndexes();
   await render();
-  console.debug(await auth0.isAuthenticated());
 };
 
 const main = async () => {
@@ -108,8 +109,7 @@ const main = async () => {
 
   await render();
 
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  window.addEventListener('popstate', onPopState);
+  window.onpopstate = async () => await onPopState();
 };
 
 (async () => {
