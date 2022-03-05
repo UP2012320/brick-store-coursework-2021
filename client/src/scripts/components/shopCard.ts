@@ -1,6 +1,7 @@
 import images from 'Assets/2412b.png';
+import {addToCart, formatPercent, formatPrice} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import browseStyles from 'Styles/pages/browse.module.scss';
 import type {SearchQueryResult} from 'api-types';
 
@@ -24,6 +25,8 @@ export default function createShopCard (props: CreateShopCardProps) {
     browseStyles.shopCardImg,
   );
 
+  registerLinkClickHandler(image, `/product/${props.searchResultArgument.slug}`);
+
   const title = createElementWithStyles(
     'p',
     {
@@ -31,6 +34,8 @@ export default function createShopCard (props: CreateShopCardProps) {
     },
     browseStyles.shopCardTitle,
   );
+
+  registerLinkClickHandler(title, `/product/${props.searchResultArgument.slug}`);
 
   const idStockRow = createElementWithStyles(
     'div',
@@ -63,8 +68,7 @@ export default function createShopCard (props: CreateShopCardProps) {
   const price = createElementWithStyles(
     'p',
     {
-      textContent: new Intl.NumberFormat('en-GB',
-        {currency: 'GBP', style: 'currency'}).format(props.searchResultArgument.price),
+      textContent: formatPrice(props.searchResultArgument.price),
     },
     browseStyles.shopCardPrice,
   );
@@ -76,13 +80,11 @@ export default function createShopCard (props: CreateShopCardProps) {
     price.style.textDecoration = 'line-through';
 
     discountedPrice = createElementWithStyles('p', {
-      textContent: new Intl.NumberFormat('en-GB',
-        {currency: 'GBP', style: 'currency'}).format(props.searchResultArgument.discount_price),
+      textContent: formatPrice(props.searchResultArgument.discount_price),
     }, browseStyles.shopCardDiscountedPrice);
 
     discountPercentage = createElementWithStyles('p', {
-      textContent: '(-' + new Intl.NumberFormat('en-GB',
-        {currency: 'GBP', style: 'percent'}).format(props.searchResultArgument.discount) + ')',
+      textContent: '(-' + formatPercent(props.searchResultArgument.discount) + ')',
     }, browseStyles.shopCardDiscountPercentage);
   }
 
@@ -95,13 +97,17 @@ export default function createShopCard (props: CreateShopCardProps) {
   actionsRow.style.gridArea = 'actionsRow';
 
   const viewLink = createElementWithStyles('a', {
-    href: `/product/${props.searchResultArgument.slug}`,
     textContent: 'View',
   }, browseStyles.shopCardButton);
+
+  registerLinkClickHandler(viewLink, `/product/${props.searchResultArgument.slug}`);
 
   const addButton = createElementWithStyles(
     'div',
     {
+      onclick: async () => {
+        await addToCart(props.searchResultArgument);
+      },
       textContent: 'Add to Cart',
     },
     browseStyles.shopCardButton,
