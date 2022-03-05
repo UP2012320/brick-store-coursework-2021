@@ -26,4 +26,7 @@ export const addToCart = async (product: SearchQueryResult) => {
 
     window.localStorage.setItem('cart', cartStorage);
   }
+
+  // The storage event only fires in other windows, so we have to fire it manually
+  window.dispatchEvent(new Event('storage'));
 };

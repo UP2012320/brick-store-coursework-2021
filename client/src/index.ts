@@ -8,6 +8,7 @@ import {resetRefIndexes} from 'Scripts/hooks/useRef';
 import {resetStateIndexes} from 'Scripts/hooks/useState';
 import type {BrowseProps} from 'Scripts/pages/browse';
 import createBrowse from 'Scripts/pages/browse';
+import createCart from 'Scripts/pages/cart';
 import createMain from 'Scripts/pages/main';
 import {appendElements, createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
@@ -41,6 +42,10 @@ const render = () => {
       route: '/product/:slug',
     },
     {
+      name: 'cart',
+      route: '/cart',
+    },
+    {
       name: 'main',
       route: '/',
     },
@@ -54,6 +59,9 @@ const render = () => {
       break;
     case 'product':
       appendElements(internalRoot, createProduct({restArgs} as ProductProps));
+      break;
+    case 'cart':
+      appendElements(internalRoot, createCart());
       break;
     case 'main':
       appendElements(internalRoot, createMain());
