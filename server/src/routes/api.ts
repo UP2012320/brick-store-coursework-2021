@@ -129,5 +129,70 @@ export default function api (
     response.send({clientId: config.clientId, domain: config.domain});
   });
 
+  fastify.get<{ Querystring: { userId: string, }, }>('/getCart', async (request, response) => {
+    const {userId} = request.query;
+
+    if (!userId) {
+      response.badRequest();
+      return;
+    }
+
+    const [result, error] = await sendQuery(fastify.pg.pool,
+      `SELECT c.inventory_id, c.quantity, i.slug FROM cart c
+    JOIN inventory i on i.inventory_id = c.inventory_id
+    WHERE user_id = $1`,
+      [userId]);
+
+    if (error) {
+      console.error(error);
+      response.internalServerError();
+      return;
+    }
+
+    response.send(result?.rows ?? []);
+  });
+
+  fastify.post<{ Body: { inventoryId: string, quantity: number, userId: string, }, }>('/addToCart', async (request, response) => {
+    const {inventoryId, quantity, userId} = request.body;
+
+    if (!inventoryId || !quantity || !userId) {
+      response.badRequest();
+      return;
+    }
+
+    const [result, error] = await sendQuery(fastify.pg.pool,
+      'CALL update_cart_item($1, $2, $3);',
+      [userId, inventoryId, quantity]);
+
+    if (error) {
+      console.error(error);
+      response.internalServerError();
+      return;
+    }
+
+    response.status(200).send();
+  });
+
+  fastify.delete<{ Querystring: { inventoryId: string, userId: string, }, }>('/deleteFromCart', async (request, response) => {
+    const {inventoryId, userId} = request.query;
+
+    if (!inventoryId || !userId) {
+      response.badRequest();
+      return;
+    }
+
+    const [result, error] = await sendQuery(fastify.pg.pool,
+      'DELETE FROM cart WHERE user_id = $1 AND inventory_id = $2',
+      [userId, inventoryId]);
+
+    if (error) {
+      console.error(error);
+      response.internalServerError();
+      return;
+    }
+
+    response.status(200).send();
+  });
+
   done();
 }
