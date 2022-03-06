@@ -1,4 +1,4 @@
-import {auth0, fetchAuth0Config} from 'Scripts/auth0';
+import {fetchAuth0Config} from 'Scripts/auth0';
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createProduct from 'Scripts/components/product/product';
@@ -21,12 +21,6 @@ let currentRoot: HTMLElement;
 
 const render = async () => {
   console.debug('rendering');
-
-  if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-    await auth0.handleRedirectCallback();
-
-    history.pushState({}, document.title, '/');
-  }
 
   const root = document.querySelector('#root');
 
@@ -59,10 +53,6 @@ const render = async () => {
       route: '/',
     },
   ]);
-
-  if (await auth0.isAuthenticated()) {
-    console.debug(await auth0.getUser());
-  }
 
   switch (targetedRoute) {
     case 'browse':

@@ -56,9 +56,8 @@ export default function createNavbar () {
     setIsLoggedIn(await auth0.isAuthenticated());
   };
 
-  updateCartSize();
-
   useEffect(nameof(createCart), () => {
+    updateCartSize();
     checkIfLoggedIn();
   }, []);
 
