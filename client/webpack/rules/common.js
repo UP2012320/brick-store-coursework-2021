@@ -8,6 +8,8 @@ export const javascriptRule = {
   loader: 'esbuild-loader',
   options: {
     loader: 'ts',
+    target: 'es6',
+    tsconfigRaw: require('../../tsconfig.json')
   },
 };
 
