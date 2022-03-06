@@ -80,15 +80,22 @@ export default function createNavbar () {
   registerLinkClickHandler(leftSideContainerLogo, '/');
 
   const login = async () => {
-    await auth0.loginWithRedirect({
-      redirect_uri: window.location.origin,
-    });
+    try {
+      await auth0.loginWithPopup();
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+
+    setIsLoggedIn(true);
   };
 
   const logout = async () => {
     await auth0.logout({
       returnTo: window.location.origin,
     });
+
+    setIsLoggedIn(false);
   };
 
   let loginElement;

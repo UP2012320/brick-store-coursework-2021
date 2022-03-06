@@ -23,6 +23,7 @@ export const fetchAuth0Config = async () => {
 
   // eslint-disable-next-line require-atomic-updates
   auth0 = await createAuth0Client({
+    cacheLocation: 'localstorage',
     client_id: config.clientId,
     domain: config.domain,
   });
