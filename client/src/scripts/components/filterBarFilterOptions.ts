@@ -1,5 +1,5 @@
 import createDropDown from 'Scripts/components/dropdown';
-import {nameof} from 'Scripts/helpers';
+import {nameof, serverBaseUrl} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
@@ -17,7 +17,7 @@ export default function createFilterBarFilterOptions (toggle: boolean) {
     let response;
 
     try {
-      response = await fetch('http://0.0.0.0:8085/api/v1/getBrickColours');
+      response = await fetch(new URL('/api/v1/getBrickColours', serverBaseUrl).href);
     } catch (error) {
       console.error(error);
       return;
@@ -30,7 +30,7 @@ export default function createFilterBarFilterOptions (toggle: boolean) {
     let response;
 
     try {
-      response = await fetch('http://0.0.0.0:8085/api/v1/getBrickTypes');
+      response = await fetch(new URL('/api/v1/getBrickTypes', serverBaseUrl).href);
     } catch (error) {
       console.error(error);
       return;

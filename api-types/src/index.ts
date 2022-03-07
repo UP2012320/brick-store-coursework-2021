@@ -30,3 +30,8 @@ export interface GetBrickTypesResponse {
   id: string;
   type: string;
 }
+
+export interface CartItem {
+  product: SearchQueryResult;
+  quantity: number;
+}

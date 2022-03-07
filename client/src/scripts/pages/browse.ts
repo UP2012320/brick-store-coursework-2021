@@ -1,6 +1,6 @@
 import createFilterBar from 'Scripts/components/filterBar';
 import createShopCard from 'Scripts/components/shopCard';
-import {nameof} from 'Scripts/helpers';
+import {nameof, serverBaseUrl} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useRef} from 'Scripts/hooks/useRef';
 import {registerUseState} from 'Scripts/hooks/useState';
@@ -39,7 +39,7 @@ export default function createBrowse (props: BrowseProps) {
   const shoppingCardsScrollContainer = createElementWithStyles('div', undefined, browseStyles.shopCardsScrollContainer);
 
   const search = async () => {
-    const url = new URL('/api/v1/search', 'http://0.0.0.0:8085');
+    const url = new URL('/api/v1/search', serverBaseUrl);
     url.searchParams.set('query', searchArguments.query);
     url.searchParams.set('offset', nextId.current.toString());
 

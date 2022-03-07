@@ -32,9 +32,10 @@ nav {
   @extend .nav-side-container;
   justify-content: flex-end;
 
-  &:hover {
-    cursor: pointer;
-    color: $primary-colour;
+  p {
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .bi-cart2 {
@@ -51,6 +52,11 @@ nav {
       text-align: center;
       font-style: normal;
       user-select: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+      color: $primary-colour;
     }
   }
 }

@@ -1,5 +1,6 @@
 import {sendQuery} from 'Utils/helpers.js';
-import type {SearchQueryResponse, SearchRequestArguments} from 'api-types';
+import type {CartItem, SearchQueryResponse, SearchRequestArguments} from 'api-types';
+import config from 'config';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
 
 export default function api (
@@ -18,7 +19,7 @@ export default function api (
     const [searchQueryResult, searchQueryError] = await sendQuery(
       fastify.pg.pool,
       `SELECT *
-       FROM search_inventory($1, NULL, $2)`,
+       FROM search_inventory($1, $2)`,
       [
         body.query,
         body.offset ?? 0,
@@ -87,10 +88,29 @@ export default function api (
     reply.internalServerError();
   });
 
-  fastify.get<{ Querystring: { slug: string, }, }>('/getProduct', async (request, reply) => {
+  fastify.get<{ Querystring: { slug: string, }, }>('/getProductBySlug', async (request, reply) => {
     const [productDetails, error] = await sendQuery(fastify.pg.pool,
-      'SELECT * FROM search_inventory(NULL, $1)',
+      'SELECT * FROM get_product_by_slug($1)',
       [request.query.slug]);
+
+    if (error) {
+      console.debug(error);
+      reply.internalServerError();
+      return;
+    }
+
+    if (productDetails?.rows) {
+      await reply.send(productDetails.rows);
+      return;
+    }
+
+    reply.internalServerError();
+  });
+
+  fastify.get<{ Querystring: { inventoryId: string, }, }>('/getProductByInventoryId', async (request, reply) => {
+    const [productDetails, error] = await sendQuery(fastify.pg.pool,
+      'SELECT * FROM get_product_by_inventory_id($1)',
+      [request.query.inventoryId]);
 
     if (error) {
       console.debug(error);
@@ -122,6 +142,88 @@ export default function api (
     }
 
     reply.internalServerError();
+  });
+
+  fastify.get('/getAuth0Config', async (request, response) => {
+    response.send({clientId: config.clientId, domain: config.domain});
+  });
+
+  fastify.get<{ Querystring: { userId: string, }, }>('/getCart', async (request, response) => {
+    const {userId} = request.query;
+
+    if (!userId) {
+      response.badRequest();
+      return;
+    }
+
+    const [result, error] = await sendQuery(fastify.pg.pool,
+      `
+        SELECT json_build_object('product', p.*, 'quantity', c.quantity) AS "item"
+        FROM cart c
+               JOIN inventory i on i.inventory_id = c.inventory_id
+               LEFT JOIN LATERAL (
+          SELECT * FROM get_product_by_inventory_id(i.inventory_id)
+          ) AS p ON TRUE
+        WHERE user_id = $1;
+      `,
+      [userId]);
+
+    if (error) {
+      console.error(error);
+      response.internalServerError();
+      return;
+    }
+
+    if (result?.rows) {
+      const rows = result.rows as Array<{ item: CartItem, }>;
+
+      response.send(rows.map((row) => row.item));
+      return;
+    }
+
+    response.notFound();
+  });
+
+  fastify.post<{ Body: { inventoryId: string, quantity: number, userId: string, }, }>('/updateCart', async (request, response) => {
+    const {inventoryId, quantity, userId} = request.body;
+
+    if (!inventoryId || !quantity || !userId) {
+      response.badRequest();
+      return;
+    }
+
+    const [result, error] = await sendQuery(fastify.pg.pool,
+      'CALL update_cart_item($1, $2, $3);',
+      [userId, inventoryId, quantity]);
+
+    if (error) {
+      console.error(error);
+      response.internalServerError();
+      return;
+    }
+
+    response.status(200).send();
+  });
+
+  fastify.delete<{ Querystring: { inventoryId: string, userId: string, }, }>('/deleteFromCart', async (request, response) => {
+    const {inventoryId, userId} = request.query;
+
+    if (!inventoryId || !userId) {
+      response.badRequest();
+      return;
+    }
+
+    const [result, error] = await sendQuery(fastify.pg.pool,
+      'DELETE FROM cart WHERE user_id = $1 AND inventory_id = $2',
+      [userId, inventoryId]);
+
+    if (error) {
+      console.error(error);
+      response.internalServerError();
+      return;
+    }
+
+    response.status(200).send();
   });
 
   done();

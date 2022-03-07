@@ -1,4 +1,5 @@
 import logo from 'Assets/drawing512.png';
+import {auth0} from 'Scripts/auth0';
 import createNavbarMainContainerItem from 'Scripts/components/layout/navbarMainContainerItem';
 import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
@@ -11,6 +12,7 @@ import type {SearchQueryResult} from 'api-types';
 
 export default function createNavbar () {
   const [cartSize, setCartSize] = useState(nameof(createCart), 0);
+  const [isLoggedIn, setIsLoggedIn] = useState(nameof(createCart), false);
 
   const navbar = createElement('nav');
 
@@ -33,7 +35,7 @@ export default function createNavbar () {
   );
 
   const updateCartSize = () => {
-    const cartStorageString = window.localStorage.getItem('cart');
+    const cartStorageString = window.sessionStorage.getItem('cart');
 
     if (cartStorageString) {
       const cartStorage = JSON.parse(cartStorageString) as SearchQueryResult[];
@@ -50,8 +52,13 @@ export default function createNavbar () {
 
   window.addEventListener('storage', updateCartSize);
 
+  const checkIfLoggedIn = async () => {
+    setIsLoggedIn(await auth0.isAuthenticated());
+  };
+
   useEffect(nameof(createCart), () => {
     updateCartSize();
+    checkIfLoggedIn();
   }, []);
 
   const shoppingCart = createElementWithStyles('i', undefined, styles.biCart2);
@@ -71,6 +78,39 @@ export default function createNavbar () {
 
   registerLinkClickHandler(leftSideContainerLogo, '/');
 
+  const login = async () => {
+    try {
+      await auth0.loginWithPopup();
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+
+    setIsLoggedIn(true);
+  };
+
+  const logout = async () => {
+    await auth0.logout({
+      returnTo: window.location.origin,
+    });
+
+    setIsLoggedIn(false);
+  };
+
+  let loginElement;
+
+  if (isLoggedIn) {
+    loginElement = createElement('p', {textContent: 'logged in'});
+    loginElement.onclick = async () => {
+      await logout();
+    };
+  } else {
+    loginElement = createElement('p', {textContent: 'login here'});
+    loginElement.onclick = async () => {
+      await login();
+    };
+  }
+
   return htmlx`
     <${navbar}>
       <${leftSideContainer}>
@@ -80,6 +120,7 @@ export default function createNavbar () {
         <${navbarBrowseItem}/>
       </mainElement>
       <${rightSideContainer}>
+        <${loginElement}/>
         <${shoppingCart}>
           <${shoppingCartAmount}/>
         </shoppingCart>

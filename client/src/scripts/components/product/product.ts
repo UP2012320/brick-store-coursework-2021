@@ -1,5 +1,5 @@
 import images from 'Assets/2412b.png';
-import {addToCart, formatPrice, nameof} from 'Scripts/helpers';
+import {addToCart, formatPrice, nameof, serverBaseUrl} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
@@ -15,7 +15,7 @@ export default function createProduct (props: ProductProps) {
   const [productDetails, setProductDetails] = useState<SearchQueryResult | undefined>();
 
   const fetchProduct = async () => {
-    const url = new URL('/api/v1/getProduct', 'http://0.0.0.0:8085/');
+    const url = new URL('/api/v1/getProductBySlug', serverBaseUrl);
 
     if (props.restArgs?.slug) {
       url.searchParams.set('slug', props.restArgs?.slug);
