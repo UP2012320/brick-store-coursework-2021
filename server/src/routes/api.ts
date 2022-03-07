@@ -19,7 +19,7 @@ export default function api (
     const [searchQueryResult, searchQueryError] = await sendQuery(
       fastify.pg.pool,
       `SELECT *
-       FROM search_inventory($1, NULL, $2)`,
+       FROM search_inventory($1, $2)`,
       [
         body.query,
         body.offset ?? 0,
@@ -88,10 +88,29 @@ export default function api (
     reply.internalServerError();
   });
 
-  fastify.get<{ Querystring: { slug: string, }, }>('/getProduct', async (request, reply) => {
+  fastify.get<{ Querystring: { slug: string, }, }>('/getProductBySlug', async (request, reply) => {
     const [productDetails, error] = await sendQuery(fastify.pg.pool,
-      'SELECT * FROM search_inventory(NULL, $1)',
+      'SELECT * FROM get_product_by_slug($1)',
       [request.query.slug]);
+
+    if (error) {
+      console.debug(error);
+      reply.internalServerError();
+      return;
+    }
+
+    if (productDetails?.rows) {
+      await reply.send(productDetails.rows);
+      return;
+    }
+
+    reply.internalServerError();
+  });
+
+  fastify.get<{ Querystring: { inventoryId: string, }, }>('/getProductByInventoryId', async (request, reply) => {
+    const [productDetails, error] = await sendQuery(fastify.pg.pool,
+      'SELECT * FROM get_product_by_inventory_id($1)',
+      [request.query.inventoryId]);
 
     if (error) {
       console.debug(error);

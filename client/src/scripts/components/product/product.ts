@@ -15,7 +15,7 @@ export default function createProduct (props: ProductProps) {
   const [productDetails, setProductDetails] = useState<SearchQueryResult | undefined>();
 
   const fetchProduct = async () => {
-    const url = new URL('/api/v1/getProduct', serverBaseUrl);
+    const url = new URL('/api/v1/getProductBySlug', serverBaseUrl);
 
     if (props.restArgs?.slug) {
       url.searchParams.set('slug', props.restArgs?.slug);
