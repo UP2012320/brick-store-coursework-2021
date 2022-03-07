@@ -1,5 +1,5 @@
 import {auth0} from 'Scripts/auth0';
-import type {LocalCartItem, SearchQueryResult} from 'api-types';
+import type {CartItem, SearchQueryResult} from 'api-types';
 
 export const trimCharactersFromEnd = (text: string, character: string) => {
   const regex = new RegExp(`^(.+)${character}+$`, 'gimu');
@@ -18,10 +18,10 @@ export const serverBaseUrl = 'http://0.0.0.0:8085';
 export const addToCart = async (product: SearchQueryResult, quantity = 1) => {
   const cartStorageJson = window.sessionStorage.getItem('cart');
 
-  let cartItem: LocalCartItem;
+  let cartItem: CartItem;
 
   if (cartStorageJson) {
-    const cartStorage = JSON.parse(cartStorageJson) as LocalCartItem[];
+    const cartStorage = JSON.parse(cartStorageJson) as CartItem[];
 
     const existingItem = cartStorage.find((item) => item.product.inventory_id === product.inventory_id);
 

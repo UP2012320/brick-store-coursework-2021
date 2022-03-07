@@ -7,6 +7,7 @@ import {fireAfterRenderFunctions, resetUseAfterRenderStateIndexes} from 'Scripts
 import {fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
 import {resetRefIndexes} from 'Scripts/hooks/useRef';
 import {resetStateIndexes} from 'Scripts/hooks/useState';
+import init from 'Scripts/init';
 import withEvents from 'Scripts/morphdom-events';
 import type {BrowseProps} from 'Scripts/pages/browse';
 import createBrowse from 'Scripts/pages/browse';
@@ -96,6 +97,7 @@ const onPopState = async () => {
 
 const main = async () => {
   await fetchAuth0Config();
+  await init();
 
   await render();
 

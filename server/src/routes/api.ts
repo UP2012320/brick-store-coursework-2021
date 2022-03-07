@@ -1,5 +1,5 @@
 import {sendQuery} from 'Utils/helpers.js';
-import type {LocalCartItem, SearchQueryResponse, SearchRequestArguments} from 'api-types';
+import type {CartItem, SearchQueryResponse, SearchRequestArguments} from 'api-types';
 import config from 'config';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
 
@@ -175,7 +175,7 @@ export default function api (
     }
 
     if (result?.rows) {
-      const rows = result.rows as Array<{ item: LocalCartItem, }>;
+      const rows = result.rows as Array<{ item: CartItem, }>;
 
       response.send(rows.map((row) => row.item));
       return;

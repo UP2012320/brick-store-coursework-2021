@@ -31,12 +31,7 @@ export interface GetBrickTypesResponse {
   type: string;
 }
 
-export interface LocalCartItem {
+export interface CartItem {
   product: SearchQueryResult;
   quantity: number;
-}
-
-export interface CartItem extends LocalCartItem {
-  inventoryId: string;
-  userId: string;
 }
