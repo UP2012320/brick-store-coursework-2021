@@ -157,9 +157,14 @@ export default function api (
     }
 
     const [result, error] = await sendQuery(fastify.pg.pool,
-      `SELECT c.inventory_id, c.quantity, i.slug FROM cart c
-    JOIN inventory i on i.inventory_id = c.inventory_id
-    WHERE user_id = $1`,
+      `SELECT p.*, c.quantity
+       FROM cart c
+              JOIN inventory i on i.inventory_id = c.inventory_id
+              LEFT JOIN LATERAL (
+         SELECT * FROM get_product_by_inventory_id(i.inventory_id)
+         ) AS p ON TRUE
+       WHERE user_id = $1;
+      `,
       [userId]);
 
     if (error) {
