@@ -152,7 +152,7 @@ export default function api (
     response.send(result?.rows ?? []);
   });
 
-  fastify.post<{ Body: { inventoryId: string, quantity: number, userId: string, }, }>('/addToCart', async (request, response) => {
+  fastify.post<{ Body: { inventoryId: string, quantity: number, userId: string, }, }>('/updateCart', async (request, response) => {
     const {inventoryId, quantity, userId} = request.body;
 
     if (!inventoryId || !quantity || !userId) {
