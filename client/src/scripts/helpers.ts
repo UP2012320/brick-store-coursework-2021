@@ -1,5 +1,5 @@
 import {auth0} from 'Scripts/auth0';
-import type {SearchQueryResult} from 'api-types';
+import type {LocalCartItem, SearchQueryResult} from 'api-types';
 
 export const trimCharactersFromEnd = (text: string, character: string) => {
   const regex = new RegExp(`^(.+)${character}+$`, 'gimu');
@@ -13,17 +13,31 @@ export const formatPrice = (price: number) => new Intl.NumberFormat('en-GB', {cu
 
 export const formatPercent = (percent: number) => new Intl.NumberFormat('en-GB', {currency: 'GBP', style: 'percent'}).format(percent);
 
+export const serverBaseUrl = 'http://0.0.0.0:8085';
+
 export const addToCart = async (product: SearchQueryResult, quantity = 1) => {
   const cartStorageJson = window.sessionStorage.getItem('cart');
 
-  if (cartStorageJson) {
-    let cartStorage = JSON.parse(cartStorageJson);
+  let cartItem: LocalCartItem;
 
-    cartStorage = [...cartStorage, {product, quantity}];
+  if (cartStorageJson) {
+    const cartStorage = JSON.parse(cartStorageJson) as LocalCartItem[];
+
+    const existingItem = cartStorage.find((item) => item.product.inventory_id === product.inventory_id);
+
+    if (existingItem) {
+      existingItem.quantity += quantity;
+      cartItem = existingItem;
+    } else {
+      cartStorage.push({product, quantity});
+      cartItem = {product, quantity};
+    }
 
     window.sessionStorage.setItem('cart', JSON.stringify(cartStorage));
   } else {
     const cartStorage = JSON.stringify([{product, quantity}]);
+
+    cartItem = {product, quantity};
 
     window.sessionStorage.setItem('cart', cartStorage);
   }
@@ -36,10 +50,10 @@ export const addToCart = async (product: SearchQueryResult, quantity = 1) => {
       return;
     }
 
-    const url = new URL('/api/v1/addToCard', 'http://0.0.0.0:8085');
+    const url = new URL('/api/v1/addToCart', serverBaseUrl);
     const body = {
-      inventoryId: product.inventory_id,
-      quantity,
+      inventoryId: cartItem.product.inventory_id,
+      quantity: cartItem.quantity,
       userId: userInfo.sub,
     };
 
