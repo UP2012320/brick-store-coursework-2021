@@ -5,8 +5,10 @@ import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
+import init from 'Scripts/init';
 import createCart from 'Scripts/pages/cart';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
+import unload from 'Scripts/unload';
 import styles from 'Styles/components/navbar.module.scss';
 import type {SearchQueryResult} from 'api-types';
 
@@ -86,6 +88,7 @@ export default function createNavbar () {
       return;
     }
 
+    await init();
     setIsLoggedIn(true);
   };
 
@@ -94,6 +97,7 @@ export default function createNavbar () {
       returnTo: window.location.origin,
     });
 
+    unload();
     setIsLoggedIn(false);
   };
 

@@ -28,6 +28,8 @@ const initCart = async (userId: string) => {
   const cartItems = await cartResponse.json();
 
   window.sessionStorage.setItem('cart', JSON.stringify(cartItems));
+
+  window.dispatchEvent(new Event('storage'));
 };
 
 const init = async () => {
