@@ -1,5 +1,5 @@
 import {sendQuery} from 'Utils/helpers.js';
-import type {SearchQueryResponse, SearchRequestArguments} from 'api-types';
+import type {LocalCartItem, SearchQueryResponse, SearchRequestArguments} from 'api-types';
 import config from 'config';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
 
@@ -157,13 +157,14 @@ export default function api (
     }
 
     const [result, error] = await sendQuery(fastify.pg.pool,
-      `SELECT p.*, c.quantity
-       FROM cart c
-              JOIN inventory i on i.inventory_id = c.inventory_id
-              LEFT JOIN LATERAL (
-         SELECT * FROM get_product_by_inventory_id(i.inventory_id)
-         ) AS p ON TRUE
-       WHERE user_id = $1;
+      `
+        SELECT json_build_object('product', p.*, 'quantity', c.quantity) AS "item"
+        FROM cart c
+               JOIN inventory i on i.inventory_id = c.inventory_id
+               LEFT JOIN LATERAL (
+          SELECT * FROM get_product_by_inventory_id(i.inventory_id)
+          ) AS p ON TRUE
+        WHERE user_id = $1;
       `,
       [userId]);
 
@@ -173,7 +174,14 @@ export default function api (
       return;
     }
 
-    response.send(result?.rows ?? []);
+    if (result?.rows) {
+      const rows = result.rows as Array<{ item: LocalCartItem, }>;
+
+      response.send(rows.map((row) => row.item));
+      return;
+    }
+
+    response.notFound();
   });
 
   fastify.post<{ Body: { inventoryId: string, quantity: number, userId: string, }, }>('/updateCart', async (request, response) => {
