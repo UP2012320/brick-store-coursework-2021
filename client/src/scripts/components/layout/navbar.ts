@@ -40,10 +40,12 @@ export default function createNavbar () {
     const cartStorage = getItemFromSessionStorage<CartItem[]>('cart');
 
     if (cartStorage) {
-      if (cartStorage.length > 99) {
+      const totalQuantity = cartStorage.reduce((a, b) => a + b.quantity, 0);
+
+      if (totalQuantity > 99) {
         setCartSize(99);
       } else {
-        setCartSize(cartStorage.length);
+        setCartSize(totalQuantity);
       }
     } else {
       setCartSize(0);
