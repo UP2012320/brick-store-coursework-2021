@@ -82,4 +82,38 @@ export const addToCart = async (product: Product, quantity = 1) => {
   window.dispatchEvent(new Event('storage'));
 };
 
-export const deleteFromCart = async (product: Product) => {};
+const deleteFromSessionStorage = (inventoryId: string) => {
+  let cartStorage = getItemFromSessionStorage<CartItem[]>('cart');
+
+  if (cartStorage) {
+    cartStorage = cartStorage.filter((cartItem) => cartItem.product.inventory_id !== inventoryId);
+  }
+
+  window.sessionStorage.setItem('cart', JSON.stringify(cartStorage));
+};
+
+const deleteFromDatabase = async (userId: string, inventoryId: string) => {
+  const body = {inventoryId, userId};
+
+  try {
+    await fetch(new URL('/api/v1/deleteFromCart', serverBaseUrl).href, {
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Application': 'application/json',
+      },
+      method: 'DELETE',
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteFromCart = async (product: Product) => {
+  deleteFromSessionStorage(product.inventory_id);
+
+  await runIfAuthenticated(async (userInfo) => {
+    if (userInfo?.sub) {
+      await deleteFromDatabase(userInfo.sub, product.inventory_id);
+    }
+  });
+};

@@ -205,15 +205,15 @@ export default function api (
     response.status(200).send();
   });
 
-  fastify.delete<{ Querystring: { inventoryId: string, userId: string, }, }>('/deleteFromCart', async (request, response) => {
-    const {inventoryId, userId} = request.query;
+  fastify.delete<{ Body: { inventoryId: string, userId: string, }, }>('/deleteFromCart', async (request, response) => {
+    const {inventoryId, userId} = request.body;
 
     if (!inventoryId || !userId) {
       response.badRequest();
       return;
     }
 
-    const [result, error] = await sendQuery(fastify.pg.pool,
+    const [, error] = await sendQuery(fastify.pg.pool,
       'DELETE FROM cart WHERE user_id = $1 AND inventory_id = $2',
       [userId, inventoryId]);
 
