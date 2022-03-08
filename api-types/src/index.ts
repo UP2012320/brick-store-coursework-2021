@@ -5,10 +5,10 @@ export interface SearchRequestArguments {
 
 export interface SearchQueryResponse {
   nextId: number;
-  results: SearchQueryResult[];
+  results: Product[];
 }
 
-export interface SearchQueryResult {
+export interface Product {
   colour: string;
   description: string;
   discount?: number;
@@ -32,6 +32,6 @@ export interface GetBrickTypesResponse {
 }
 
 export interface CartItem {
-  product: SearchQueryResult;
+  product: Product;
   quantity: number;
 }

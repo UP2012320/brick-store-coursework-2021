@@ -1,5 +1,5 @@
-@import 'src/styles/utils';
-@import 'src/styles/theme';
+@import '../../../styles/utils';
+@import '../../../styles/theme';
 
 .product-scroll-container {
   @include column-centered;

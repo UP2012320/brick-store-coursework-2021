@@ -6,11 +6,11 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import init from 'Scripts/init';
-import createCart from 'Scripts/pages/cart';
+import createCart from 'Scripts/pages/cart/cart';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import unload from 'Scripts/unload';
 import styles from 'Styles/components/navbar.module.scss';
-import type {SearchQueryResult} from 'api-types';
+import type {Product} from 'api-types';
 
 export default function createNavbar () {
   const [cartSize, setCartSize] = useState(nameof(createCart), 0);
@@ -40,7 +40,7 @@ export default function createNavbar () {
     const cartStorageString = window.sessionStorage.getItem('cart');
 
     if (cartStorageString) {
-      const cartStorage = JSON.parse(cartStorageString) as SearchQueryResult[];
+      const cartStorage = JSON.parse(cartStorageString) as Product[];
 
       if (cartStorage.length > 99) {
         setCartSize(99);

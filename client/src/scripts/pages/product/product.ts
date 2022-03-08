@@ -1,18 +1,19 @@
 import images from 'Assets/2412b.png';
-import {addToCart, formatPrice, nameof, serverBaseUrl} from 'Scripts/helpers';
+import {addToCart} from 'Scripts/cartController';
+import {formatPrice, nameof, serverBaseUrl} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
 import type {FetchStatus, ProductProps} from 'Types/types';
-import type {SearchQueryResult} from 'api-types';
+import type {Product} from 'api-types';
 import productStyles from './product.module.scss';
 
 const useState = registerUseState(nameof(createProduct));
 
 export default function createProduct (props: ProductProps) {
   const [fetchStatus, setFetchStatus] = useState<FetchStatus>('pending');
-  const [productDetails, setProductDetails] = useState<SearchQueryResult | undefined>();
+  const [productDetails, setProductDetails] = useState<Product | undefined>();
 
   const fetchProduct = async () => {
     const url = new URL('/api/v1/getProductBySlug', serverBaseUrl);
@@ -34,7 +35,7 @@ export default function createProduct (props: ProductProps) {
       return;
     }
 
-    const responseBody = await response.json() as SearchQueryResult[];
+    const responseBody = await response.json() as Product[];
 
     if (responseBody.length > 0) {
       setProductDetails(responseBody[0]);

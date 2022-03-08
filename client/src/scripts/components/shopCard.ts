@@ -1,12 +1,13 @@
 import images from 'Assets/2412b.png';
-import {addToCart, formatPercent, formatPrice} from 'Scripts/helpers';
+import {addToCart} from 'Scripts/cartController';
+import {formatPercent, formatPrice} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import browseStyles from 'Styles/pages/browse.module.scss';
-import type {SearchQueryResult} from 'api-types';
+import type {Product} from 'api-types';
 
 export interface CreateShopCardProps {
-  searchResultArgument: SearchQueryResult;
+  searchResultArgument: Product;
 }
 
 export default function createShopCard (props: CreateShopCardProps) {

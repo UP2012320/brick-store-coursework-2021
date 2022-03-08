@@ -1,7 +1,6 @@
 import {fetchAuth0Config} from 'Scripts/auth0';
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
-import createProduct from 'Scripts/components/product/product';
 import createRouter from 'Scripts/createRouter';
 import {fireAfterRenderFunctions, resetUseAfterRenderStateIndexes} from 'Scripts/hooks/useAfterRender';
 import {fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
@@ -11,8 +10,9 @@ import init from 'Scripts/init';
 import withEvents from 'Scripts/morphdom-events';
 import type {BrowseProps} from 'Scripts/pages/browse';
 import createBrowse from 'Scripts/pages/browse';
-import createCart from 'Scripts/pages/cart';
+import createCart from 'Scripts/pages/cart/cart';
 import createMain from 'Scripts/pages/main';
+import createProduct from 'Scripts/pages/product/product';
 import {appendElements, createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
 import type {ProductProps} from 'Types/types';

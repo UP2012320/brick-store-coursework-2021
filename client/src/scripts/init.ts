@@ -1,5 +1,5 @@
 import {auth0} from 'Scripts/auth0';
-import {serverBaseUrl} from 'Scripts/helpers';
+import {getCart} from 'Scripts/cartController';
 import type {CartItem} from 'api-types';
 
 const initCart = async (userId: string) => {
@@ -13,19 +13,7 @@ const initCart = async (userId: string) => {
     }
   }
 
-  const url = new URL('/api/v1/getCart', serverBaseUrl);
-  url.searchParams.set('userId', userId);
-
-  let cartResponse;
-
-  try {
-    cartResponse = await fetch(url.href);
-  } catch (error) {
-    console.error(error);
-    return;
-  }
-
-  const cartItems = await cartResponse.json();
+  const cartItems = await getCart(userId);
 
   window.sessionStorage.setItem('cart', JSON.stringify(cartItems));
 
