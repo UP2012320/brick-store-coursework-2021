@@ -1,7 +1,7 @@
 import logo from 'Assets/drawing512.png';
 import {auth0} from 'Scripts/auth0';
 import createNavbarMainContainerItem from 'Scripts/components/layout/navbarMainContainerItem';
-import {nameof} from 'Scripts/helpers';
+import {getItemFromSessionStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
@@ -10,7 +10,7 @@ import createCart from 'Scripts/pages/cart/cart';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import unload from 'Scripts/unload';
 import styles from 'Styles/components/navbar.module.scss';
-import type {Product} from 'api-types';
+import type {CartItem} from 'api-types';
 
 export default function createNavbar () {
   const [cartSize, setCartSize] = useState(nameof(createCart), 0);
@@ -37,11 +37,9 @@ export default function createNavbar () {
   );
 
   const updateCartSize = () => {
-    const cartStorageString = window.sessionStorage.getItem('cart');
+    const cartStorage = getItemFromSessionStorage<CartItem[]>('cart');
 
-    if (cartStorageString) {
-      const cartStorage = JSON.parse(cartStorageString) as Product[];
-
+    if (cartStorage) {
       if (cartStorage.length > 99) {
         setCartSize(99);
       } else {

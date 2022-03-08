@@ -1,5 +1,5 @@
-import {auth0} from 'Scripts/auth0';
-import {serverBaseUrl} from 'Scripts/helpers';
+import {runIfAuthenticated} from 'Scripts/auth0';
+import {getItemFromSessionStorage, serverBaseUrl} from 'Scripts/helpers';
 import type {CartItem, Product} from 'api-types';
 
 export const getCart = async (userId: string) => {
@@ -19,30 +19,26 @@ export const getCart = async (userId: string) => {
 };
 
 const addToSessionStorage = (product: Product, quantity: number) => {
-  const cartStorageJson = window.sessionStorage.getItem('cart');
+  const cartStorage = getItemFromSessionStorage<CartItem[]>('cart');
 
-  let cartItem: CartItem = {product, quantity};
+  let newCartItem: CartItem = {product, quantity};
 
-  if (cartStorageJson) {
-    const cartStorage = JSON.parse(cartStorageJson) as CartItem[];
-
+  if (cartStorage) {
     const existingItem = cartStorage.find((item) => item.product.inventory_id === product.inventory_id);
 
     if (existingItem) {
       existingItem.quantity += quantity;
-      cartItem = existingItem;
+      newCartItem = existingItem;
     } else {
-      cartStorage.push({product, quantity});
+      cartStorage.push(newCartItem);
     }
 
     window.sessionStorage.setItem('cart', JSON.stringify(cartStorage));
   } else {
-    const cartStorage = JSON.stringify([{product, quantity}]);
-
-    window.sessionStorage.setItem('cart', cartStorage);
+    window.sessionStorage.setItem('cart', JSON.stringify(newCartItem));
   }
 
-  return cartItem;
+  return newCartItem;
 };
 
 const addToDatabase = async (cartItem: CartItem, userId: string) => {
@@ -76,21 +72,14 @@ const addToDatabase = async (cartItem: CartItem, userId: string) => {
 export const addToCart = async (product: Product, quantity = 1) => {
   const cartItem = addToSessionStorage(product, quantity);
 
-  if (await auth0.isAuthenticated()) {
-    const userInfo = await auth0.getUser();
-
-    if (!userInfo?.sub) {
-      console.error('Failed to get user info');
-      return;
+  await runIfAuthenticated(async (userInfo) => {
+    if (userInfo?.sub) {
+      await addToDatabase(cartItem, userInfo.sub);
     }
-
-    await addToDatabase(cartItem, userInfo.sub);
-  }
+  });
 
   // The storage event only fires in other windows, so we have to fire it manually
   window.dispatchEvent(new Event('storage'));
 };
 
-export const deleteFromCart = async (product: Product) => {
-
-}
+export const deleteFromCart = async (product: Product) => {};

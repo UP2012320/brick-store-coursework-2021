@@ -1,16 +1,13 @@
-import {auth0} from 'Scripts/auth0';
+import {runIfAuthenticated} from 'Scripts/auth0';
 import {getCart} from 'Scripts/cartController';
+import {getItemFromSessionStorage} from 'Scripts/helpers';
 import type {CartItem} from 'api-types';
 
 const initCart = async (userId: string) => {
-  const cartStorage = window.sessionStorage.getItem('cart');
+  const localCartItems = getItemFromSessionStorage<CartItem[]>('cart');
 
-  if (cartStorage) {
-    const localCartItems = JSON.parse(cartStorage) as CartItem[];
-
-    if (localCartItems.length !== 0) {
-      return;
-    }
+  if (localCartItems && localCartItems.length !== 0) {
+    return;
   }
 
   const cartItems = await getCart(userId);
@@ -21,19 +18,11 @@ const initCart = async (userId: string) => {
 };
 
 const init = async () => {
-  const isAuthenticated = await auth0.isAuthenticated();
-
-  if (!isAuthenticated) {
-    return;
-  }
-
-  const userInfo = await auth0.getUser();
-
-  if (!userInfo?.sub) {
-    return;
-  }
-
-  await initCart(userInfo.sub);
+  await runIfAuthenticated(async (userInfo) => {
+    if (userInfo?.sub) {
+      await initCart(userInfo.sub);
+    }
+  });
 };
 
 export default init;

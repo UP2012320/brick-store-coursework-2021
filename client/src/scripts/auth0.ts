@@ -1,5 +1,5 @@
 /* eslint-disable canonical/id-match,canonical/filename-match-regex */
-import type {Auth0Client} from '@auth0/auth0-spa-js';
+import type {Auth0Client, User} from '@auth0/auth0-spa-js';
 import createAuth0Client from '@auth0/auth0-spa-js';
 import {serverBaseUrl} from 'Scripts/helpers';
 
@@ -28,5 +28,18 @@ export const fetchAuth0Config = async () => {
     client_id: config.clientId,
     domain: config.domain,
   });
+};
+
+export const runIfAuthenticated = async (callback: (userInfo: User) => Promise<void> | void) => {
+  if (await auth0.isAuthenticated()) {
+    const userInfo = await auth0.getUser();
+
+    if (!userInfo) {
+      console.error('Failed to retrieve user info');
+      return;
+    }
+
+    await callback(userInfo);
+  }
 };
 
