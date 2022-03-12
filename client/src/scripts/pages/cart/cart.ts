@@ -10,7 +10,7 @@ import cartStyles from './cart.module.scss';
 export default function createCart () {
   const [cartItems, setCartItems] = useState<CartItem[]>(nameof(createCart), []);
 
-  useEffect(nameof(createCart), () => {
+  const getCartItems = () => {
     const cartItemss = getItemFromSessionStorage<CartItem[]>('cart');
 
     console.debug(cartItemss);
@@ -18,7 +18,13 @@ export default function createCart () {
     if (cartItemss) {
       setCartItems(cartItemss);
     }
+  };
+
+  useEffect(nameof(createCart), () => {
+    getCartItems();
   });
+
+  window.addEventListener('storage', getCartItems);
 
   const cartScrollContainer = createElementWithStyles('section', undefined, cartStyles.cartScrollContainer);
   const cartContainer = createElementWithStyles('div', undefined, cartStyles.cartContainer);

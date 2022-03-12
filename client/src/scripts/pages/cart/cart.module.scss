@@ -80,6 +80,7 @@
 
 .bi-x {
   font-size: 2rem;
+  transition: color .2s ease-in-out;
 
   &:hover {
     cursor: pointer;

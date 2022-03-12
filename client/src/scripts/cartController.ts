@@ -41,7 +41,7 @@ const addToSessionStorage = (product: Product, quantity: number) => {
   return newCartItem;
 };
 
-const addToDatabase = async (cartItem: CartItem, userId: string) => {
+const updateDatabase = async (cartItem: CartItem, userId: string) => {
   const url = new URL('/api/v1/updateCart', serverBaseUrl);
   const body = {
     inventoryId: cartItem.product.inventory_id,
@@ -73,8 +73,8 @@ export const addToCart = async (product: Product, quantity = 1) => {
   const cartItem = addToSessionStorage(product, quantity);
 
   await runIfAuthenticated(async (userInfo) => {
-    if (userInfo?.sub) {
-      await addToDatabase(cartItem, userInfo.sub);
+    if (userInfo.sub) {
+      await updateDatabase(cartItem, userInfo.sub);
     }
   });
 
@@ -112,8 +112,32 @@ export const deleteFromCart = async (product: Product) => {
   deleteFromSessionStorage(product.inventory_id);
 
   await runIfAuthenticated(async (userInfo) => {
-    if (userInfo?.sub) {
+    if (userInfo.sub) {
       await deleteFromDatabase(userInfo.sub, product.inventory_id);
     }
   });
+
+  window.dispatchEvent(new Event('storage'));
+};
+
+export const updateQuantity = async (inventoryId: string, quantity: number) => {
+  const cartItems = getItemFromSessionStorage<CartItem[]>('cart');
+
+  if (cartItems) {
+    const targetCartItem = cartItems.find((cartItem) => cartItem.product.inventory_id === inventoryId);
+
+    if (targetCartItem) {
+      targetCartItem.quantity = quantity;
+
+      window.sessionStorage.setItem('cart', JSON.stringify(cartItems));
+
+      await runIfAuthenticated(async (userInfo) => {
+        if (userInfo.sub) {
+          await updateDatabase(targetCartItem, userInfo.sub);
+        }
+      });
+
+      window.dispatchEvent(new Event('storage'));
+    }
+  }
 };
