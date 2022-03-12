@@ -1,5 +1,6 @@
 @import '../../../styles/utils';
 @import '../../../styles/theme';
+@import 'bootstrap-icons';
 
 .cart-scroll-container {
   @include column-centered;
@@ -19,10 +20,88 @@
 
 .cart-row {
   display: grid;
-  grid-template-areas:
-    'img title title quantity delete'
-    'img . . quantity delete';
+  grid-template-rows: 1fr;
+  grid-template-columns: 85px 2fr .5fr .75fr .25fr;
+  grid-template-areas: 'img title quantity price remove';
   border-radius: $medium-radius;
   background-color: $not-quite-white;
   padding: $spacing-medium;
+  width: 100%;
+}
+
+.cart-img-container {
+  grid-area: img;
+  max-width: 85px;
+  max-height: 85px;
+}
+
+.cart-img {
+  background-color: #FFF;
+  border-radius: $medium-radius;
+  padding: $spacing-small;
+}
+
+.cart-title {
+  grid-area: title;
+  margin-left: $spacing-medium;
+  font-size: 12pt;
+  font-weight: 500;
+  max-width: 600px;
+}
+
+.cart-quantity-container {
+  grid-area: quantity;
+  @include row-centered;
+}
+
+.cart-quantity {
+  max-height: 50px;
+  max-width: 80px;
+  border: 1px solid $not-quite-black;
+  border-radius: $small-radius;
+  padding: $spacing-medium;
+}
+
+.cart-price-container {
+  grid-area: price;
+  @include row-centered;
+}
+
+.cart-price {
+  @include font-large;
+}
+
+.cart-delete-icon-container {
+  grid-area: remove;
+  @include row-centered;
+}
+
+.bi-x {
+  font-size: 2rem;
+
+  &:hover {
+    cursor: pointer;
+    color: $invalid-red;
+  }
+}
+
+.cart-quantity-header {
+  @include font-medium;
+  grid-area: quantity;
+  text-align: center;
+  color: $not-quite-black;
+}
+
+.cart-price-header {
+  @include font-medium;
+  grid-area: price;
+  text-align: center;
+  color: $not-quite-black;
+}
+
+.cart-remove-header {
+  @include font-medium;
+  grid-area: remove;
+  text-align: center;
+  color: $not-quite-black;
 }
