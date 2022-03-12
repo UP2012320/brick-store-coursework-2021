@@ -21,3 +21,5 @@ export const getItemFromSessionStorage = <T>(itemName: string) => {
 
   return undefined;
 };
+
+export const getProductUrl = (slug: string) => `/product/${slug}`;

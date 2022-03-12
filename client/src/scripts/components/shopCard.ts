@@ -1,6 +1,6 @@
 import images from 'Assets/2412b.png';
 import {addToCart} from 'Scripts/cartController';
-import {formatPercent, formatPrice} from 'Scripts/helpers';
+import {formatPercent, formatPrice, getProductUrl} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import browseStyles from 'Styles/pages/browse.module.scss';
@@ -17,6 +17,12 @@ export default function createShopCard (props: CreateShopCardProps) {
     browseStyles.shopCardContainer,
   );
 
+  const imageContainer = createElementWithStyles('a', {
+    href: getProductUrl(props.searchResultArgument.slug),
+  }, browseStyles.shopCardImgHrefContainer);
+
+  registerLinkClickHandler(imageContainer);
+
   const image = createElementWithStyles(
     'img',
     {
@@ -26,17 +32,16 @@ export default function createShopCard (props: CreateShopCardProps) {
     browseStyles.shopCardImg,
   );
 
-  registerLinkClickHandler(image, `/product/${props.searchResultArgument.slug}`);
-
   const title = createElementWithStyles(
-    'p',
+    'a',
     {
+      href: getProductUrl(props.searchResultArgument.slug),
       textContent: props.searchResultArgument.name,
     },
     browseStyles.shopCardTitle,
   );
 
-  registerLinkClickHandler(title, `/product/${props.searchResultArgument.slug}`);
+  registerLinkClickHandler(title);
 
   const idStockRow = createElementWithStyles(
     'div',
@@ -98,10 +103,11 @@ export default function createShopCard (props: CreateShopCardProps) {
   actionsRow.style.gridArea = 'actionsRow';
 
   const viewLink = createElementWithStyles('a', {
+    href: getProductUrl(props.searchResultArgument.slug),
     textContent: 'View',
   }, browseStyles.shopCardButton);
 
-  registerLinkClickHandler(viewLink, `/product/${props.searchResultArgument.slug}`);
+  registerLinkClickHandler(viewLink);
 
   const addButton = createElementWithStyles(
     'div',
@@ -116,7 +122,9 @@ export default function createShopCard (props: CreateShopCardProps) {
 
   return htmlx`
     <${cardContainer}>
-      <${image}/>
+      <${imageContainer}>
+        <${image}/>
+      </imageContainer>
       <${title}/>
       <${idStockRow}>
         <${id}/>

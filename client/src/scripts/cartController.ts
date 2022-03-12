@@ -99,7 +99,7 @@ const deleteFromDatabase = async (userId: string, inventoryId: string) => {
     await fetch(new URL('/api/v1/deleteFromCart', serverBaseUrl).href, {
       body: JSON.stringify(body),
       headers: {
-        'Content-Application': 'application/json',
+        'Content-Type': 'application/json',
       },
       method: 'DELETE',
     });

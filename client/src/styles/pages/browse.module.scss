@@ -58,9 +58,13 @@
   }
 }
 
-.shop-card-img {
+.shop-card-img-href-container {
   grid-area: img;
   margin: auto;
+}
+
+.shop-card-img {
+  grid-area: img;
   width: 150px;
   height: 150px;
   border-radius: $small-radius;
@@ -81,6 +85,8 @@
   -webkit-line-clamp: 3;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  text-decoration: none;
+  color: inherit;
 
   &:hover {
     cursor: pointer;
@@ -134,6 +140,11 @@
   font-weight: 800;
   align-items: center;
   margin-left: $spacing-small;
+}
+
+.shop-card-button-href-container {
+  flex: 1;
+  padding: $spacing-small;
 }
 
 .shop-card-button {
