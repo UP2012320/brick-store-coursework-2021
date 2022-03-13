@@ -3,7 +3,7 @@ import {getItemFromSessionStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import type {CartItem} from 'api-types';
 import cartStyles from './cart.module.scss';
 
@@ -33,6 +33,14 @@ export default function createCart () {
   const priceHeading = createElementWithStyles('p', {textContent: 'Price'}, cartStyles.cartPriceHeader);
   const removeHeading = createElementWithStyles('p', {textContent: 'Remove'}, cartStyles.cartRemoveHeader);
 
+  const checkoutRow = createElementWithStyles('div', undefined, cartStyles.cartRow);
+  const checkoutButton = createElementWithStyles('a', {
+    href: '/checkout',
+    textContent: 'Checkout',
+  }, cartStyles.cartCheckoutButton);
+
+  registerLinkClickHandler(checkoutButton);
+
   return htmlx`
   <${cartScrollContainer}>
     <${cartContainer}>
@@ -42,6 +50,9 @@ export default function createCart () {
         <${removeHeading}/>
       </headingRow>
       <${cartItems.map((cartItem) => createCartRow({cartItem}))}/>
+      <${checkoutRow}>
+        <${checkoutButton}/>
+      </checkoutRow>
     </cartContainer>
   </cartScrollContainer>
   `;

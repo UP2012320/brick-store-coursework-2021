@@ -1,5 +1,6 @@
-@import '../../../styles/utils';
-@import '../../../styles/theme';
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
 @import 'bootstrap-icons';
 
 .cart-scroll-container {
@@ -107,4 +108,9 @@
   grid-area: remove;
   text-align: center;
   color: $not-quite-black;
+}
+
+.cart-checkout-button {
+  grid-area: remove;
+  @extend .action-button;
 }

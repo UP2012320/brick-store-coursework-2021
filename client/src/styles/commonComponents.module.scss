@@ -1,0 +1,31 @@
+@import './utils';
+@import './theme';
+
+.action-button {
+  flex: 1;
+  display: flex;
+  border-top: 2px solid transparent;
+  border-right: 2px solid transparent;
+  border-left: 2px solid transparent;
+  border-bottom: 2px solid $highlight-colour;
+  color: $highlight-colour;
+  padding: $spacing-small;
+  justify-content: center;
+  align-items: center;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out, border-color .2s ease-in-out;
+  user-select: none;
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+    color: #FFF;
+    background-color: $highlight-colour;
+    border-bottom-color: $highlight-colour;
+  }
+
+  &:active {
+    border: 2px solid $highlight-colour;
+    color: $highlight-colour;
+    background-color: transparent;
+  }
+}

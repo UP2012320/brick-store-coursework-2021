@@ -2,6 +2,7 @@
 // Please do not change this file!
 declare namespace CartModuleScssNamespace {
   export interface ICartModuleScss {
+    actionButton: string;
     bi: string;
     bi123: string;
     biActivity: string;
@@ -1686,6 +1687,7 @@ declare namespace CartModuleScssNamespace {
     biYoutube: string;
     biZoomIn: string;
     biZoomOut: string;
+    cartCheckoutButton: string;
     cartContainer: string;
     cartDeleteIconContainer: string;
     cartImg: string;

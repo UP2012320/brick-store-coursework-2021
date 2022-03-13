@@ -2,6 +2,7 @@
 // Please do not change this file!
 declare namespace ProductModuleScssNamespace {
   export interface IProductModuleScss {
+    actionButton: string;
     productAddToCartButton: string;
     productContainer: string;
     productDetailsContainer: string;

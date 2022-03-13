@@ -1689,7 +1689,6 @@ declare namespace BrowseModuleScssNamespace {
     bottomActionsRow: string;
     loadMoreBox: string;
     returnToTopButton: string;
-    shopCardButton: string;
     shopCardButtonHrefContainer: string;
     shopCardContainer: string;
     shopCardDiscountPercentage: string;

@@ -3,6 +3,7 @@ import {addToCart} from 'Scripts/cartController';
 import {formatPercent, formatPrice, getProductUrl} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
+import actionButtonStyles from 'Styles/commonComponents.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';
 import type {Product} from 'api-types';
 
@@ -105,7 +106,7 @@ export default function createShopCard (props: CreateShopCardProps) {
   const viewLink = createElementWithStyles('a', {
     href: getProductUrl(props.searchResultArgument.slug),
     textContent: 'View',
-  }, browseStyles.shopCardButton);
+  }, actionButtonStyles.actionButton);
 
   registerLinkClickHandler(viewLink);
 
@@ -117,7 +118,7 @@ export default function createShopCard (props: CreateShopCardProps) {
       },
       textContent: 'Add to Cart',
     },
-    browseStyles.shopCardButton,
+    actionButtonStyles.actionButton,
   );
 
   return htmlx`
