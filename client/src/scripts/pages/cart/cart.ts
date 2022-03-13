@@ -13,8 +13,6 @@ export default function createCart () {
   const getCartItems = () => {
     const cartItemss = getItemFromSessionStorage<CartItem[]>('cart');
 
-    console.debug(cartItemss);
-
     if (cartItemss) {
       setCartItems(cartItemss);
     }
@@ -22,9 +20,8 @@ export default function createCart () {
 
   useEffect(nameof(createCart), () => {
     getCartItems();
+    window.addEventListener('storage', getCartItems);
   });
-
-  window.addEventListener('storage', getCartItems);
 
   const cartScrollContainer = createElementWithStyles('section', undefined, cartStyles.cartScrollContainer);
   const cartContainer = createElementWithStyles('div', undefined, cartStyles.cartContainer);

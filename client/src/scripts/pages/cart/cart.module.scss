@@ -7,17 +7,18 @@
   @include column-centered;
   flex: 1 0 90%;
   justify-content: flex-start;
-  margin-top: $spacing-medium;
+  margin-top: $spacing-large;
   margin-bottom: $spacing-medium;
 }
 
 .cart-container {
   @include column-centered;
-  flex: 1;
   justify-content: flex-start;
-  max-width: 1200px;
-  min-width: 1100px;
   row-gap: $spacing-medium;
+  width: 100%;
+  padding: 0 4vw;
+  max-width: 1400px;
+  flex: 1 0;
 }
 
 .cart-row {
@@ -50,6 +51,7 @@
   max-width: 600px;
   color: inherit;
   text-decoration: none;
+  padding: $spacing-medium;
 }
 
 .cart-quantity-container {
@@ -63,6 +65,31 @@
   border: 1px solid $not-quite-black;
   border-radius: $small-radius;
   padding: $spacing-medium;
+}
+
+.bi-plus {
+  border: 1px solid $not-quite-black;
+  border-radius: $small-radius;
+  padding: $spacing-medium;
+  margin-left: $spacing-small;
+  display: none;
+  font-size: 1rem;
+
+  &:active, &:hover {
+    background-color: $not-really-white;
+  }
+}
+
+.bi-dash {
+  border: 1px solid $not-quite-black;
+  border-radius: $small-radius;
+  padding: $spacing-medium;
+  margin-right: $spacing-small;
+  display: none;
+
+  &:active, &:hover {
+    background-color: $not-really-white;
+  }
 }
 
 .cart-price-container {
@@ -79,8 +106,8 @@
   @include row-centered;
 }
 
-.bi-x {
-  font-size: 2rem;
+.bi-trash {
+  font-size: 1.5rem;
   transition: color .2s ease-in-out;
 
   &:hover {
@@ -113,4 +140,74 @@
 .cart-checkout-button {
   grid-area: remove;
   @extend .action-button;
+}
+
+@media only screen and (max-width: 1400px) {
+  .cart-container {
+    padding: 0 6vw;
+  }
+}
+
+@media only screen and (max-width: 968px) {
+  .cart-container > div:last-child {
+    margin-top: auto;
+    display: flex;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .cart-container > div:nth-child(1) {
+    display: none;
+  }
+
+  .cart-container > div:last-child {
+    padding-bottom: $spacing-medium;
+    padding-top: $spacing-medium;
+  }
+
+  .cart-row {
+    grid-template-rows: 1fr .75fr;
+    grid-template-columns: 1fr 1fr 1fr .7fr;
+    grid-row-gap: $spacing-small;
+    grid-template-areas:
+      'img title title remove'
+      'quantity quantity . price';
+    padding-bottom: unset;
+    padding-top: unset;
+  }
+
+  .cart-img-container {
+    @include row-centered;
+    max-width: 100%;
+    max-height: 100%;
+    padding-top: $spacing-medium;
+  }
+
+  .cart-img {
+    max-width: 85px;
+    max-height: 85px;
+    padding: $spacing-small;
+  }
+
+  .cart-title {
+    @include font-small;
+    margin-left: unset;
+    padding-top: $spacing-medium;
+  }
+
+  .cart-quantity-container {
+    justify-content: flex-start;
+  }
+
+  .cart-quantity {
+    max-width: 60px;
+  }
+
+  .bi-plus {
+    display: unset;
+  }
+
+  .bi-dash {
+    display: unset;
+  }
 }

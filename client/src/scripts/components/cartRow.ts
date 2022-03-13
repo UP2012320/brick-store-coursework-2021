@@ -26,7 +26,7 @@ export default function createCartRow (props: CartRowProps) {
 
   const cartQuantityContainer = createElementWithStyles('div', undefined, cartStyles.cartQuantityContainer);
   const cartQuantity = createElementWithStyles('input', {
-    defaultValue: props.cartItem.quantity.toString(),
+    defaultValue: props.cartItem.quantity.toString() ?? '1',
     min: '0',
     onchange: (event) => {
       const target = event.target as HTMLInputElement;
@@ -46,6 +46,38 @@ export default function createCartRow (props: CartRowProps) {
     type: 'number',
   }, cartStyles.cartQuantity);
 
+  const cartQuantityAdd = createElementWithStyles('button', {
+    onclick: () => {
+      if (quantityDebounceTimeout.current) {
+        window.clearTimeout(quantityDebounceTimeout.current);
+      }
+
+      quantityDebounceTimeout.current = setTimeout(() => {
+        const newQuantity = props.cartItem.quantity + 1;
+
+        updateQuantity(props.cartItem.product.inventory_id, newQuantity);
+      }, 100);
+    },
+  }, cartStyles.biPlus);
+
+  const cartQuantityMinus = createElementWithStyles('button', {
+    onclick: () => {
+      if (quantityDebounceTimeout.current) {
+        window.clearTimeout(quantityDebounceTimeout.current);
+      }
+
+      quantityDebounceTimeout.current = setTimeout(() => {
+        const newQuantity = props.cartItem.quantity - 1;
+
+        if (newQuantity === 0) {
+          deleteFromCart(props.cartItem.product);
+        } else {
+          updateQuantity(props.cartItem.product.inventory_id, newQuantity);
+        }
+      }, 100);
+    },
+  }, cartStyles.biDash);
+
   const cartPriceContainer = createElementWithStyles('div', undefined, cartStyles.cartPriceContainer);
   const cartPrice = createElementWithStyles('p', {textContent: formatPrice(props.cartItem.product.price)}, cartStyles.cartPrice);
   const cartDeleteIconContainer = createElementWithStyles('div', undefined, cartStyles.cartDeleteIconContainer);
@@ -54,7 +86,7 @@ export default function createCartRow (props: CartRowProps) {
     onclick: async () => {
       await deleteFromCart(props.cartItem.product);
     },
-  }, cartStyles.biX);
+  }, cartStyles.biTrash);
 
   return htmlx`
   <${cartRow}>
@@ -63,7 +95,9 @@ export default function createCartRow (props: CartRowProps) {
     </cartImageContainer>
     <${cartTitle}/>
     <${cartQuantityContainer}>
+       <${cartQuantityMinus}/>
        <${cartQuantity}/>
+       <${cartQuantityAdd}/>
     </cartQuantityContainer>
     <${cartPriceContainer}>
       <${cartPrice}/>
