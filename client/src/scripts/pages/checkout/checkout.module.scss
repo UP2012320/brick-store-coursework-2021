@@ -1,0 +1,38 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'bootstrap-icons';
+
+.checkout-container {
+  @include column-centered;
+}
+
+.checkout-content-container {
+  @include row-centered;
+  column-gap: $spacing-medium;
+  padding: $spacing-large;
+  background-color: $not-quite-white;
+  border-radius: $medium-radius;
+}
+
+.checkout-text {
+  @include font-large;
+}
+
+.bi-dash-lg {
+  @include font-xlarge;
+  animation-name: dash-spin;
+  animation-duration: 1s;
+  animation-delay: .75s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes dash-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

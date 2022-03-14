@@ -11,6 +11,7 @@ import withEvents from 'Scripts/morphdom-events';
 import type {BrowseProps} from 'Scripts/pages/browse';
 import createBrowse from 'Scripts/pages/browse';
 import createCart from 'Scripts/pages/cart/cart';
+import createCheckout from 'Scripts/pages/checkout/checkout';
 import createMain from 'Scripts/pages/main';
 import createProduct from 'Scripts/pages/product/product';
 import {appendElements, createElement} from 'Scripts/uiUtils';
@@ -50,6 +51,10 @@ const render = async () => {
       route: '/cart',
     },
     {
+      name: 'checkout',
+      route: '/checkout',
+    },
+    {
       name: 'main',
       route: '/',
     },
@@ -64,6 +69,9 @@ const render = async () => {
       break;
     case 'cart':
       appendElements(internalRoot, createCart());
+      break;
+    case 'checkout':
+      appendElements(internalRoot, createCheckout());
       break;
     case 'main':
       appendElements(internalRoot, createMain());
@@ -99,9 +107,9 @@ const main = async () => {
   await fetchAuth0Config();
   await init();
 
-  await render();
-
   window.onpopstate = async () => await onPopState();
+
+  await render();
 };
 
 (async () => {

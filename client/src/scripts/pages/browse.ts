@@ -24,9 +24,7 @@ export default function createBrowse (props: BrowseProps) {
   const nextId = useRef(nameof(createBrowse), 0);
   const isNewSearch = useRef(nameof(createBrowse), true);
 
-  const browseContainer = createElement('section', {
-    id: contentRootStyles.contentRoot,
-  });
+  const browseContainer = createElementWithStyles('section', undefined, contentRootStyles.contentRoot);
 
   const filterBar = createFilterBar({setSearchArguments});
 
