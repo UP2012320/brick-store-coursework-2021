@@ -4,7 +4,6 @@ export interface SearchRequestArguments {
 }
 
 export interface SearchQueryResponse {
-  nextId: number;
   results: Product[];
 }
 

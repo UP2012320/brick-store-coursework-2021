@@ -30,3 +30,8 @@ export interface HtmlTagResult {
 }
 
 export type FetchStatus = 'finished' | 'pending';
+
+export interface ReUsableComponentProps {
+  key?: string;
+}
+

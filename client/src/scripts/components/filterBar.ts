@@ -23,6 +23,8 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     filterBarStyles.filterBarContainer,
   );
 
+  container.setAttribute('key', nameof(createFilterBar));
+
   const mainRow = createElementWithStyles('div', undefined, filterBarStyles.filterBarRowContainer);
 
   const LeftSectionContainer = createElementWithStyles(
@@ -84,9 +86,9 @@ export default function createFilterBar (props: CreateFilterBarProps) {
       <${mainRow}>
         <${LeftSectionContainer}>
           <${sortBy}/>
-          <${createFilterBarFilterOptions(sortToggle)}/>
+          <${createFilterBarFilterOptions({key: 'sort', toggle: sortToggle})}/>
           <${filterBy}/>
-          <${createFilterBarFilterOptions(filterToggle)}/>
+          <${createFilterBarFilterOptions({key: 'filter', toggle: filterToggle})}/>
         </leftSectionContainer>
         <${rightSectionContainer}>
           <${searchRow}>

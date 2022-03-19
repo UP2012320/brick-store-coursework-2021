@@ -6,8 +6,8 @@ export function resetUseAfterRenderStateIndexes () {
   stateManager.resetStateIndexes();
 }
 
-export function useAfterRender (callerName: string, callback: () => void) {
-  stateManager.useStateManager(callerName, callback, {});
+export function useAfterRender (key: string, callback: () => void) {
+  stateManager.useStateManager(key, callback, {});
 }
 
 export function fireAfterRenderFunctions () {

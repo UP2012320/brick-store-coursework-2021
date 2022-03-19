@@ -4,13 +4,26 @@ import deepEqual from 'deep-equal';
 
 const stateManager = new StateManager<unknown[] | undefined, UseEffectCallerState<unknown[] | undefined>>();
 
-const useEffectQueue: Array<() => (() => void) | void> = [];
+const useEffectOnDiscardCallbacks: Record<string, () => void> = {};
+const useEffectQueue: Array<{callback: () => (() => void) | void, key: string, }> = [];
 
 export function fireUseEffectQueue () {
-  let callback;
+  let queueItem;
 
-  while ((callback = useEffectQueue.shift())) {
-    callback();
+  while ((queueItem = useEffectQueue.shift())) {
+    const result = queueItem.callback();
+
+    if (typeof result === 'function') {
+      useEffectOnDiscardCallbacks[queueItem.key] = result;
+    }
+  }
+}
+
+export function fireUseEffectDiscardQueue (key: string) {
+  const queueItem = useEffectOnDiscardCallbacks[key];
+
+  if (queueItem) {
+    queueItem();
   }
 }
 
@@ -18,18 +31,22 @@ export function resetUseEffectStateIndexes () {
   stateManager.resetStateIndexes();
 }
 
-export function useEffect (callerName: string, callback: () => (() => void) | void, dependencies?: unknown[]) {
-  const [callerState, callerStateIndex] = stateManager.useStateManager(callerName, dependencies, {isFirstRender: true});
+export function clearUseEffect (key: string) {
+  stateManager.stateStore.delete(key);
+}
+
+export function useEffect (key: string, callback: () => (() => void) | void, dependencies?: unknown[]) {
+  const [callerState, callerStateIndex] = stateManager.useStateManager(key, dependencies, {isFirstRender: true});
 
   const state = callerState.states[callerStateIndex];
 
   if (state === undefined || state === null) {
-    useEffectQueue.push(callback);
+    useEffectQueue.push({callback, key});
   } else if (state.length === 0 && callerState.isFirstRender) {
-    useEffectQueue.push(callback);
+    useEffectQueue.push({callback, key});
   } else if (state.length > 0 && !deepEqual(state, dependencies)) {
     callerState.states[callerStateIndex] = dependencies;
-    useEffectQueue.push(callback);
+    useEffectQueue.push({callback, key});
   } else if (state.length !== 0) {
     callerState.states[callerStateIndex] = dependencies;
   }

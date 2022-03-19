@@ -57,7 +57,12 @@ function updateEvents (fromElement: never, toElement: never) {
   }
 }
 
-export default function withEvents (input: {onBeforeElUpdated?: (fromElement: HTMLElement, toElement: HTMLElement) => unknown, }) {
+interface Input {
+  onBeforeElUpdated?: (fromElement: HTMLElement, toElement: HTMLElement) => unknown;
+  onNodeDiscarded?: ((node: Node) => void) | undefined;
+}
+
+export default function withEvents (input: Input) {
   return {
     ...input,
     onBeforeElUpdated (fromElement: HTMLElement, toElement: HTMLElement) {

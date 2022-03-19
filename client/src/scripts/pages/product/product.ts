@@ -50,9 +50,9 @@ export default function createProduct (props: ProductProps) {
     fetchProduct();
   }, []);
 
-  console.debug(productDetails);
-
   const ProductScrollContainer = createElementWithStyles('div', undefined, productStyles.productScrollContainer);
+  ProductScrollContainer.setAttribute('key', nameof(createProduct));
+
   const ProductContainer = createElementWithStyles('div', undefined, productStyles.productContainer);
 
   if (productDetails) {

@@ -1,3 +1,4 @@
+import {nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
@@ -8,6 +9,7 @@ export default function createNavbarMainContainerItem (props: { title: string, }
     undefined,
     styles.navMainContainerItem,
   );
+  container.setAttribute('key', nameof(createNavbarMainContainerItem));
 
   const browseIcon = createElementWithStyles('i', undefined, styles.biBag);
 

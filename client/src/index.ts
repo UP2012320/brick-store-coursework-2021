@@ -3,11 +3,11 @@ import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
 import {fireAfterRenderFunctions, resetUseAfterRenderStateIndexes} from 'Scripts/hooks/useAfterRender';
-import {fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
-import {resetRefIndexes} from 'Scripts/hooks/useRef';
-import {resetStateIndexes} from 'Scripts/hooks/useState';
+import {clearUseEffect, fireUseEffectDiscardQueue, fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
+import {clearRef, resetRefIndexes} from 'Scripts/hooks/useRef';
+import {clearState, resetStateIndexes} from 'Scripts/hooks/useState';
 import init from 'Scripts/init';
-import withEvents from 'Scripts/morphdom-events';
+import withEvents from 'Scripts/morphdomEvents';
 import type {BrowseProps} from 'Scripts/pages/browse';
 import createBrowse from 'Scripts/pages/browse';
 import createCart from 'Scripts/pages/cart/cart';
@@ -84,7 +84,20 @@ const render = async () => {
   appendElements(internalRoot, createFooter());
 
   if (currentRoot) {
-    morphdom(currentRoot, internalRoot, withEvents({}));
+    morphdom(currentRoot, internalRoot, withEvents({
+      onNodeDiscarded: (node) => {
+        if (node instanceof HTMLElement) {
+          const key = node.getAttribute('key');
+
+          if (key) {
+            fireUseEffectDiscardQueue(key);
+            clearUseEffect(key);
+            clearState(key);
+            clearRef(key);
+          }
+        }
+      },
+    }));
     // mergeDomTrees(internalRoot, currentRoot);
   } else {
     currentRoot = internalRoot;

@@ -18,12 +18,9 @@ export default function createCart () {
     }
   };
 
-  useEffect(nameof(createCart), () => {
-    getCartItems();
-    window.addEventListener('storage', getCartItems);
-  });
-
   const cartScrollContainer = createElementWithStyles('section', undefined, cartStyles.cartScrollContainer);
+  cartScrollContainer.setAttribute('key', nameof(createCart));
+
   const cartContainer = createElementWithStyles('div', undefined, cartStyles.cartContainer);
   const headingRow = createElementWithStyles('div', undefined, cartStyles.cartRow);
   const quantityHeading = createElementWithStyles('p', {textContent: 'Quantity'}, cartStyles.cartQuantityHeader);
@@ -38,6 +35,16 @@ export default function createCart () {
 
   registerLinkClickHandler(checkoutButton);
 
+  useEffect(nameof(createCart), () => {
+    console.debug('running');
+    getCartItems();
+    window.addEventListener('storage', getCartItems);
+
+    return () => {
+      window.removeEventListener('storage', getCartItems);
+    };
+  }, []);
+
   return htmlx`
   <${cartScrollContainer}>
     <${cartContainer}>
@@ -46,7 +53,7 @@ export default function createCart () {
         <${priceHeading}/>
         <${removeHeading}/>
       </headingRow>
-      <${cartItems.map((cartItem) => createCartRow({cartItem}))}/>
+      <${cartItems.map((cartItem) => createCartRow({cartItem, key: cartItem.product.inventory_id}))}/>
       <${checkoutRow}>
         <${checkoutButton}/>
       </checkoutRow>

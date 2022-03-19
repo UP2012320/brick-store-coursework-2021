@@ -6,17 +6,19 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import init from 'Scripts/init';
-import createCart from 'Scripts/pages/cart/cart';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import unload from 'Scripts/unload';
 import styles from 'Styles/components/navbar.module.scss';
 import type {CartItem} from 'api-types';
 
+const key = nameof(createNavbar);
+
 export default function createNavbar () {
-  const [cartSize, setCartSize] = useState(nameof(createCart), 0);
-  const [isLoggedIn, setIsLoggedIn] = useState(nameof(createCart), false);
+  const [cartSize, setCartSize] = useState(key, 0);
+  const [isLoggedIn, setIsLoggedIn] = useState(key, false);
 
   const navbar = createElement('nav');
+  navbar.setAttribute('key', key);
 
   const leftSideContainer = createElementWithStyles(
     'div',
@@ -52,15 +54,18 @@ export default function createNavbar () {
     }
   };
 
-  window.addEventListener('storage', updateCartSize);
-
   const checkIfLoggedIn = async () => {
     setIsLoggedIn(await auth0.isAuthenticated());
   };
 
-  useEffect(nameof(createCart), () => {
+  useEffect(key, () => {
     updateCartSize();
     checkIfLoggedIn();
+    window.addEventListener('storage', updateCartSize);
+
+    return () => {
+      window.removeEventListener('storage', updateCartSize);
+    };
   }, []);
 
   const shoppingCart = createElementWithStyles('i', undefined, styles.biCart2);

@@ -1,10 +1,10 @@
 import type {Pool, PoolClient, QueryConfig, QueryResult} from 'pg';
 
-export const sendQuery = async (
+export const sendQuery = async <T>(
   pg: Pool | PoolClient,
   query: QueryConfig | string,
   values?: unknown[],
-): Promise<[QueryResult | undefined, unknown | undefined]> => {
+): Promise<[QueryResult<T> | undefined, unknown | undefined]> => {
   let queryResponse;
 
   try {

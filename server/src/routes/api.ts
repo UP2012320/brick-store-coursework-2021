@@ -1,5 +1,5 @@
 import {sendQuery} from 'Utils/helpers.js';
-import type {CartItem, SearchQueryResponse, SearchRequestArguments} from 'api-types';
+import type {CartItem, Product, SearchRequestArguments} from 'api-types';
 import config from 'config';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
 
@@ -16,7 +16,7 @@ export default function api (
       return;
     }
 
-    const [searchQueryResult, searchQueryError] = await sendQuery(
+    const [searchQueryResult, searchQueryError] = await sendQuery<Product>(
       fastify.pg.pool,
       `SELECT *
        FROM search_inventory($1, $2)`,
@@ -33,42 +33,14 @@ export default function api (
     }
 
     if (searchQueryResult) {
-      let finalResult: SearchQueryResponse;
-
-      if (searchQueryResult.rowCount > 0) {
-        const [nextIdResult, nextIdError] = await sendQuery(
-          fastify.pg.pool,
-          'SELECT id FROM inventory WHERE inventory_id = $1',
-          [searchQueryResult.rows.slice(-1)[0].inventory_id],
-        );
-
-        if (nextIdError) {
-          console.debug(nextIdError);
-          reply.internalServerError();
-          return;
-        }
-
-        if (nextIdResult) {
-          finalResult = {
-            nextId: nextIdResult.rows[0].id,
-            results: searchQueryResult.rows,
-          };
-        } else {
-          reply.internalServerError();
-          return;
-        }
-      } else {
-        finalResult = {
-          nextId: 0,
-          results: searchQueryResult.rows,
-        };
-      }
-
-      await reply.send(finalResult);
-      return;
+      await reply.send({
+        results: searchQueryResult.rows,
+      });
+    } else {
+      await reply.send({
+        results: [],
+      });
     }
-
-    reply.internalServerError();
   });
 
   fastify.get('/getBrickTypes', async (request, reply) => {
@@ -224,6 +196,51 @@ export default function api (
     }
 
     response.status(200).send();
+  });
+
+  fastify.get<{ Querystring: { userId: string, }, }>('/canCheckout', async (request, response) => {
+    const {userId} = request.query;
+
+    if (!userId) {
+      response.badRequest();
+    }
+
+    const [cartItems, error] = await sendQuery<{ inventory_id: string, quantity: number, stock: number, }>(fastify.pg.pool, `
+  SELECT c.inventory_id, quantity, i.stock
+  FROM cart c
+         JOIN inventory i ON c.inventory_id = i.inventory_id
+  WHERE user_id = $1
+`, [userId]);
+
+    if (error) {
+      console.error(error);
+      response.internalServerError();
+      return;
+    }
+
+    if (!cartItems || cartItems.rowCount === 0) {
+      // Not sure if this is the best response code to use
+      response.badRequest();
+      return;
+    }
+
+    const responseBody = [];
+
+    for (const row of cartItems.rows) {
+      if (row.stock - row.quantity < 0) {
+        responseBody.push(row.inventory_id);
+      }
+    }
+
+    response.send(responseBody);
+  });
+
+  fastify.get<{ Querystring: { userId: string, }, }>('/checkout', async (request, response) => {
+    const {userId} = request.query;
+
+    if (!userId) {
+      response.badRequest();
+    }
   });
 
   done();

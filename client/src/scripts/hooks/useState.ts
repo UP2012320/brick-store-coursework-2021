@@ -8,12 +8,16 @@ export const resetStateIndexes = () => {
   stateManager.resetStateIndexes();
 };
 
+export function clearState (key: string) {
+  stateManager.clearState(key);
+}
+
 export type StateSetter<T> = (newState: (T | ((previous: T) => T))) => void;
 
-export function useState<T = undefined> (callerName: string, initialState?: undefined): [(T | undefined), (StateSetter<T>)];
-export function useState<T> (callerName: string, initialState: T): [(T), (StateSetter<T>)];
-export function useState<T> (callerName: string, initialState: T): unknown {
-  const [callerState, callerStateIndex] = stateManager.useStateManager(callerName, initialState, {});
+export function useState<T = undefined> (key: string, initialState?: undefined): [(T | undefined), (StateSetter<T>)];
+export function useState<T> (key: string, initialState: T): [(T), (StateSetter<T>)];
+export function useState<T> (key: string, initialState: T): unknown {
+  const [callerState, callerStateIndex] = stateManager.useStateManager(key, initialState, {});
 
   const setState = (newState: T | ((previous: T) => T)) => {
     let newStateValue;
@@ -41,7 +45,7 @@ interface registerUseStateOverloads {
   <T>(initialState: T): [(T), (StateSetter<T>)];
 }
 
-export function registerUseState (callerName: string) {
-  const overloadedFunction: registerUseStateOverloads = <T> (initialState: T) => useState(callerName, initialState);
+export function registerUseState (key: string) {
+  const overloadedFunction: registerUseStateOverloads = <T> (initialState: T) => useState(key, initialState);
   return overloadedFunction;
 }

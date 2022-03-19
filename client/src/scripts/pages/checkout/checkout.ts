@@ -1,3 +1,4 @@
+import {nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
@@ -5,6 +6,7 @@ import checkoutStyles from './checkout.module.scss';
 
 export default function createCheckout () {
   const container = createElementWithStyles('section', undefined, contentRootStyles.contentRoot);
+  container.setAttribute('key', nameof(createCheckout));
 
   const contentContainer = createElementWithStyles('div', undefined, checkoutStyles.checkoutContentContainer);
 

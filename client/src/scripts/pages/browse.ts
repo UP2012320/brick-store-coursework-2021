@@ -1,7 +1,7 @@
 import createFilterBar from 'Scripts/components/filterBar';
 import createShopCard from 'Scripts/components/shopCard';
 import {nameof, serverBaseUrl} from 'Scripts/helpers';
-import {useEffect} from 'Scripts/hooks/useEffect';
+import {registerUseEffect} from 'Scripts/hooks/useEffect';
 import {useRef} from 'Scripts/hooks/useRef';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
@@ -15,16 +15,18 @@ export interface BrowseProps {
 }
 
 const useState = registerUseState(nameof(createBrowse));
+const useEffect = registerUseEffect(nameof(createBrowse));
 
 export default function createBrowse (props: BrowseProps) {
   const [cards, setCards] = useState<Array<HTMLElement | null> | undefined>(undefined);
   const [searchResults, setSearchResults] = useState<SearchQueryResponse | undefined>(undefined);
   const [searchArguments, setSearchArguments] = useState<SearchRequestArguments>({query: ''});
   const [noMoreResults, setNoMoreResults] = useState(false);
-  const nextId = useRef(nameof(createBrowse), 0);
+  const page = useRef(nameof(createBrowse), 0);
   const isNewSearch = useRef(nameof(createBrowse), true);
 
   const browseContainer = createElementWithStyles('section', undefined, contentRootStyles.contentRoot);
+  browseContainer.setAttribute('key', nameof(createBrowse));
 
   const filterBar = createFilterBar({setSearchArguments});
 
@@ -39,9 +41,7 @@ export default function createBrowse (props: BrowseProps) {
   const search = async () => {
     const url = new URL('/api/v1/search', serverBaseUrl);
     url.searchParams.set('query', searchArguments.query);
-    url.searchParams.set('offset', nextId.current.toString());
-
-    console.debug(searchArguments.query);
+    url.searchParams.set('offset', (page.current * 50).toString());
 
     let response: Response;
 
@@ -54,26 +54,25 @@ export default function createBrowse (props: BrowseProps) {
 
     const result = await response.json() as SearchQueryResponse;
 
-    console.debug(result);
+    page.current += 1;
     // eslint-disable-next-line require-atomic-updates
-    nextId.current = result.nextId;
     setSearchResults(result);
   };
 
-  useEffect(nameof(createBrowse), () => {
+  useEffect(() => {
     search();
   }, []);
 
-  useEffect(nameof(createBrowse), () => {
-    nextId.current = 0;
+  useEffect(() => {
+    page.current = 0;
     isNewSearch.current = true;
     search();
   }, [searchArguments]);
 
-  useEffect(nameof(createBrowse), () => {
+  useEffect(() => {
     if (searchResults) {
       setCards((previous) => {
-        const newCards = [...searchResults.results.map((searchResult) => createShopCard({searchResultArgument: searchResult}))];
+        const newCards = [...searchResults.results.map((searchResult) => createShopCard({key: searchResult.inventory_id, searchResultArgument: searchResult}))];
 
         if (previous && !isNewSearch.current) {
           return [

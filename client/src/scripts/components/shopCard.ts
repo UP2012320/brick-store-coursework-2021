@@ -1,22 +1,27 @@
 import images from 'Assets/2412b.png';
 import {addToCart} from 'Scripts/cartController';
-import {formatPercent, formatPrice, getProductUrl} from 'Scripts/helpers';
+import {formatPercent, formatPrice, getProductUrl, nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import actionButtonStyles from 'Styles/commonComponents.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';
+import type {ReUsableComponentProps} from 'Types/types';
 import type {Product} from 'api-types';
 
-export interface CreateShopCardProps {
+export interface CreateShopCardProps extends ReUsableComponentProps {
   searchResultArgument: Product;
 }
 
 export default function createShopCard (props: CreateShopCardProps) {
+  props.key ??= nameof(createShopCard);
+
   const cardContainer = createElementWithStyles(
     'div',
     undefined,
     browseStyles.shopCardContainer,
   );
+
+  cardContainer.setAttribute('key', props.key);
 
   const imageContainer = createElementWithStyles('a', {
     href: getProductUrl(props.searchResultArgument.slug),

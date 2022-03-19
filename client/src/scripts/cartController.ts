@@ -35,7 +35,7 @@ const addToSessionStorage = (product: Product, quantity: number) => {
 
     window.sessionStorage.setItem('cart', JSON.stringify(cartStorage));
   } else {
-    window.sessionStorage.setItem('cart', JSON.stringify(newCartItem));
+    window.sessionStorage.setItem('cart', JSON.stringify([newCartItem]));
   }
 
   return newCartItem;

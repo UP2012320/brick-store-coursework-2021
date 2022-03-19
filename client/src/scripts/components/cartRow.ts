@@ -5,16 +5,21 @@ import {useRef} from 'Scripts/hooks/useRef';
 import htmlx from 'Scripts/htmlX';
 import cartStyles from 'Scripts/pages/cart/cart.module.scss';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
+import type {ReUsableComponentProps} from 'Types/types';
 import type {CartItem} from 'api-types';
 
-export interface CartRowProps {
+export interface CartRowProps extends ReUsableComponentProps {
   cartItem: CartItem;
 }
 
 export default function createCartRow (props: CartRowProps) {
-  const quantityDebounceTimeout = useRef<NodeJS.Timeout | undefined>(nameof(createCartRow), undefined);
+  props.key ??= nameof(createCartRow);
+
+  const quantityDebounceTimeout = useRef<NodeJS.Timeout | undefined>(props.key, undefined);
 
   const cartRow = createElementWithStyles('div', undefined, cartStyles.cartRow);
+  cartRow.setAttribute('key', props.key);
+
   const cartImageContainer = createElementWithStyles('a', {href: getProductUrl(props.cartItem.product.slug)}, cartStyles.cartImgContainer);
 
   registerLinkClickHandler(cartImageContainer);

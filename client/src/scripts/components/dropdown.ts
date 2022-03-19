@@ -4,16 +4,20 @@ import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import dropDownStyles from 'Styles/components/dropdown.module.scss';
+import type {ReUsableComponentProps} from 'Types/types';
 
-export interface createDropDownProps<T> {
+export interface createDropDownProps<T> extends ReUsableComponentProps {
   onselect: (valueSelected: [string, T]) => void;
   options: Record<string, T>;
 }
 
 export default function createDropDown<T> (props: createDropDownProps<T>) {
-  const [dropDownToggle, setDropDownToggle] = useState(nameof(createDropDown), false);
+  props.key ??= nameof(createDropDown);
+
+  const [dropDownToggle, setDropDownToggle] = useState(props.key, false);
 
   const dropDownContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownContainer);
+  dropDownContainer.setAttribute('key', props.key);
 
   const dropDownWidthContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownWidthContainer);
 
