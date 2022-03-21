@@ -2,10 +2,10 @@ import createFilterBar from 'Scripts/components/filterBar';
 import createShopCard from 'Scripts/components/shopCard';
 import {nameof, serverBaseUrl} from 'Scripts/helpers';
 import {registerUseEffect} from 'Scripts/hooks/useEffect';
-import {useRef} from 'Scripts/hooks/useRef';
+import {registerUseRef} from 'Scripts/hooks/useRef';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
+import {createComponentContainer, createElement, createElementWithStyles} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';
 import type {SearchQueryResponse, SearchRequestArguments} from 'api-types';
@@ -14,19 +14,20 @@ export interface BrowseProps {
   queryStrings?: Record<string, string>;
 }
 
-const useState = registerUseState(nameof(createBrowse));
-const useEffect = registerUseEffect(nameof(createBrowse));
+const key = nameof(createBrowse);
+const useState = registerUseState(key);
+const useEffect = registerUseEffect(key);
+const useRef = registerUseRef(key);
 
 export default function createBrowse (props: BrowseProps) {
   const [cards, setCards] = useState<Array<HTMLElement | null> | undefined>(undefined);
   const [searchResults, setSearchResults] = useState<SearchQueryResponse | undefined>(undefined);
   const [searchArguments, setSearchArguments] = useState<SearchRequestArguments>({query: ''});
   const [noMoreResults, setNoMoreResults] = useState(false);
-  const page = useRef(nameof(createBrowse), 0);
-  const isNewSearch = useRef(nameof(createBrowse), true);
+  const page = useRef(0);
+  const isNewSearch = useRef(true);
 
-  const browseContainer = createElementWithStyles('section', undefined, contentRootStyles.contentRoot);
-  browseContainer.setAttribute('key', nameof(createBrowse));
+  const browseContainer = createComponentContainer('section', key, undefined, contentRootStyles.contentRoot);
 
   const filterBar = createFilterBar({setSearchArguments});
 
