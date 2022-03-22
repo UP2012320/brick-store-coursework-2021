@@ -2,7 +2,6 @@ import {fetchAuth0Config} from 'Scripts/auth0';
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
-import {fireAfterRenderFunction, resetUseAfterRenderStateIndexes} from 'Scripts/hooks/useAfterRender';
 import {clearUseEffect, fireUseEffectDiscardQueue, fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
 import {clearRef, resetRefIndexes} from 'Scripts/hooks/useRef';
 import {clearState, resetStateIndexes} from 'Scripts/hooks/useState';
@@ -85,16 +84,18 @@ const render = async () => {
 
   if (currentRoot) {
     morphdom(currentRoot, internalRoot, withEvents({
-      onNodeAdded: (node) => {
-        if (node instanceof HTMLElement) {
-          const key = node.getAttribute('key');
+      onBeforeElUpdated: (fromElement, toElement) => {
+        const fromKey = fromElement.getAttribute('key');
+        const toKey = toElement.getAttribute('key');
 
-          if (key) {
-            fireAfterRenderFunction(key);
-          }
+        if (fromKey && fromKey !== toKey) {
+          fireUseEffectDiscardQueue(fromKey);
+          clearUseEffect(fromKey);
+          clearState(fromKey);
+          clearRef(fromKey);
         }
 
-        return node;
+        return true;
       },
       onNodeDiscarded: (node) => {
         if (node instanceof HTMLElement) {
@@ -122,7 +123,6 @@ const onPopState = async () => {
   resetStateIndexes();
   resetRefIndexes();
   resetUseEffectStateIndexes();
-  resetUseAfterRenderStateIndexes();
   await render();
 };
 

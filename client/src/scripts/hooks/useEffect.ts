@@ -28,6 +28,15 @@ export function fireUseEffectDiscardQueue (key: string) {
 }
 
 export function resetUseEffectStateIndexes () {
+  // If the indexes are being reset, then the first render is finished
+  // Any subsequent calls from within useEffect hooks that may trigger a re-render need to know
+
+  for (const state of stateManager.stateStore.values()) {
+    if (state.isFirstRender) {
+      state.isFirstRender = false;
+    }
+  }
+
   stateManager.resetStateIndexes();
 }
 
@@ -49,10 +58,6 @@ export function useEffect (key: string, callback: () => (() => void) | void, dep
     useEffectQueue.push({callback, key});
   } else if (state.length !== 0) {
     callerState.states[callerStateIndex] = dependencies;
-  }
-
-  if (callerState.isFirstRender && callerStateIndex === 0) {
-    callerState.isFirstRender = false;
   }
 }
 

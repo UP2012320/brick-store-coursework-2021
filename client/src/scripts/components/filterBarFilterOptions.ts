@@ -54,7 +54,7 @@ export default function createFilterBarFilterOptions (props: filterBarFilterOpti
   const rowItem = createElementWithStyles('div', undefined, filterBarStyles.filterBarOptionsRowItem);
 
   const dropDown = createDropDown({
-    key: 'name', onselect: (valueSelected) => {
+    key: props.key + 'dropdown', onselect: (valueSelected) => {
       console.debug(valueSelected);
     },
     options: {test: 'name'},

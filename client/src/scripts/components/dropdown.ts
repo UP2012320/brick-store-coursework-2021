@@ -1,5 +1,6 @@
 import {nameof} from 'Scripts/helpers';
-import {useAfterRender} from 'Scripts/hooks/useAfterRender';
+import {useEffect} from 'Scripts/hooks/useEffect';
+import {useRef} from 'Scripts/hooks/useRef';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
@@ -15,11 +16,16 @@ export default function createDropDown<T> (props: createDropDownProps<T>) {
   props.key ??= nameof(createDropDown);
 
   const [dropDownToggle, setDropDownToggle] = useState(props.key, false);
+  const maxDropDownWidth = useRef<string | undefined>(props.key, undefined);
 
   const dropDownContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownContainer);
   dropDownContainer.setAttribute('key', props.key);
 
   const dropDownWidthContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownWidthContainer);
+
+  if (maxDropDownWidth.current) {
+    dropDownWidthContainer.style.width = maxDropDownWidth.current;
+  }
 
   const dropDownSelectedRow = createElementWithStyles('div', {
     onclick: () => {
@@ -71,12 +77,13 @@ export default function createDropDown<T> (props: createDropDownProps<T>) {
   const dropDownOption2 = createElementWithStyles('div', {textContent: '12345678'}, dropDownStyles.dropdownOptionText);
   const dropDownOption3 = createElementWithStyles('div', {textContent: '123456789'}, dropDownStyles.dropdownOptionText);
 
-  useAfterRender(props.key, () => {
+  useEffect(props.key, () => {
     const targetWidth = Number.parseFloat(getComputedStyle(dropDownOptionsContainer).width);
+    const widthValue = (targetWidth - 2).toFixed(2) + 'px';
 
-    console.debug(targetWidth);
-    dropDownWidthContainer.style.width = (targetWidth - 2).toFixed(2) + 'px';
-  });
+    maxDropDownWidth.current = widthValue;
+    dropDownWidthContainer.style.width = widthValue;
+  }, []);
 
   return htmlx`
   <${dropDownContainer}>
