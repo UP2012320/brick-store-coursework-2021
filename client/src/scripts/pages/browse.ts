@@ -18,6 +18,7 @@ const key = nameof(createBrowse);
 const useState = registerUseState(key);
 const useEffect = registerUseEffect(key);
 const useRef = registerUseRef(key);
+const maxSearchResults = 50;
 
 export default function createBrowse (props: BrowseProps) {
   const [cards, setCards] = useState<Array<HTMLElement | null> | undefined>(undefined);
@@ -40,9 +41,11 @@ export default function createBrowse (props: BrowseProps) {
   const shoppingCardsScrollContainer = createElementWithStyles('div', undefined, browseStyles.shopCardsScrollContainer);
 
   const search = async () => {
+    setNoMoreResults(false);
+
     const url = new URL('/api/v1/search', serverBaseUrl);
     url.searchParams.set('query', searchArguments.query);
-    url.searchParams.set('offset', (page.current * 50).toString());
+    url.searchParams.set('offset', (page.current * maxSearchResults).toString());
 
     let response: Response;
 
@@ -54,6 +57,10 @@ export default function createBrowse (props: BrowseProps) {
     }
 
     const result = await response.json() as SearchQueryResponse;
+
+    if (result.results.length < maxSearchResults) {
+      setNoMoreResults(true);
+    }
 
     page.current += 1;
     // eslint-disable-next-line require-atomic-updates
@@ -90,9 +97,7 @@ export default function createBrowse (props: BrowseProps) {
 
   let statusMessage;
 
-  if (cards && searchResults && searchResults.results.length === 0) {
-    setNoMoreResults(true);
-  } else if (searchResults && searchResults.results.length === 0) {
+  if (noMoreResults) {
     statusMessage = createElement('p', {
       textContent: 'No results found',
     });
@@ -131,6 +136,7 @@ export default function createBrowse (props: BrowseProps) {
           <${cards ? cards : statusMessage}/>
         </shoppingCardsContainer>
         <${cards ? bottomActionRow : null}>
+          <${noMoreResults ? statusMessage : null}/>
           <${noMoreResults ? null : loadMoreButton}/>
           <${returnToTopButton}>
             <${returnToTopIcon}/>

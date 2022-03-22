@@ -59,6 +59,7 @@ function updateEvents (fromElement: never, toElement: never) {
 
 interface Input {
   onBeforeElUpdated?: (fromElement: HTMLElement, toElement: HTMLElement) => unknown;
+  onNodeAdded?: ((node: Node) => Node) | undefined;
   onNodeDiscarded?: ((node: Node) => void) | undefined;
 }
 

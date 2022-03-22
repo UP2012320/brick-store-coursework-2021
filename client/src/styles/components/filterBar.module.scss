@@ -90,7 +90,7 @@
   }
 }
 
-#filter-bar-search-button {
+.filter-bar-search-button {
   @include row-centered;
   flex: 1 0;
   height: 100%;
@@ -105,7 +105,7 @@
   }
 }
 
-#filter-bar-search-row {
+.filter-bar-search-row {
   @include row-centered;
   flex: 1 0;
   background-color: $not-quite-white;
@@ -164,7 +164,7 @@
     width: 100%;
   }
 
-  #filter-bar-search-row {
+  .filter-bar-search-row {
     margin: 0;
     border: unset;
     border-radius: 0;

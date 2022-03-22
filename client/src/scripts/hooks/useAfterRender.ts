@@ -10,11 +10,11 @@ export function useAfterRender (key: string, callback: () => void) {
   stateManager.useStateManager(key, callback, {});
 }
 
-export function fireAfterRenderFunctions () {
-  const stateStore = stateManager.stateStore;
+export function fireAfterRenderFunction (key: string) {
+  const states = stateManager.stateStore.get(key);
 
-  for (const state of Object.values(stateStore)) {
-    for (const afterRenderFunction of Object.values(state.states) as Array<() => void>) {
+  if (states) {
+    for (const afterRenderFunction of states.states as Array<() => void>) {
       afterRenderFunction();
     }
   }

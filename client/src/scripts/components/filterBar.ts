@@ -3,7 +3,7 @@ import {nameof} from 'Scripts/helpers';
 import type {StateSetter} from 'Scripts/hooks/useState';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
+import {createElementWithStyles} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import type {SearchRequestArguments} from 'api-types';
 
@@ -60,17 +60,20 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     filterBarStyles.filterBarItemLeft,
   );
 
-  const searchRow = createElement('div', {id: filterBarStyles.filterBarSearchRow});
+  const searchRow = createElementWithStyles('div', undefined, filterBarStyles.filterBarSearchRow);
+
+  const onSearch = (event: Event) => {
+    const element = event.target as HTMLInputElement;
+
+    props.setSearchArguments((previous) => ({...previous, query: element.value}));
+  };
 
   const search = createElementWithStyles(
     'input',
     {
       onkeydown: ((event) => {
         if (event.key === 'Enter') {
-          props.setSearchArguments((previous) => {
-            console.debug({...previous, query: search.value});
-            return ({...previous, query: search.value});
-          });
+          onSearch(event);
         }
       }),
       placeholder: 'Search',
@@ -78,7 +81,10 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     filterBarStyles.filterBarSearchItem,
   );
 
-  const searchButton = createElement('div', {id: filterBarStyles.filterBarSearchButton});
+  const searchButton = createElementWithStyles('div', {
+    onclick: (event) => onSearch(event),
+  }, filterBarStyles.filterBarSearchButton);
+
   const searchButtonIcon = createElementWithStyles('i', undefined, filterBarStyles.biSearch);
 
   return htmlx`

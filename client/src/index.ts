@@ -2,7 +2,7 @@ import {fetchAuth0Config} from 'Scripts/auth0';
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
-import {fireAfterRenderFunctions, resetUseAfterRenderStateIndexes} from 'Scripts/hooks/useAfterRender';
+import {fireAfterRenderFunction, resetUseAfterRenderStateIndexes} from 'Scripts/hooks/useAfterRender';
 import {clearUseEffect, fireUseEffectDiscardQueue, fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
 import {clearRef, resetRefIndexes} from 'Scripts/hooks/useRef';
 import {clearState, resetStateIndexes} from 'Scripts/hooks/useState';
@@ -85,6 +85,17 @@ const render = async () => {
 
   if (currentRoot) {
     morphdom(currentRoot, internalRoot, withEvents({
+      onNodeAdded: (node) => {
+        if (node instanceof HTMLElement) {
+          const key = node.getAttribute('key');
+
+          if (key) {
+            fireAfterRenderFunction(key);
+          }
+        }
+
+        return node;
+      },
       onNodeDiscarded: (node) => {
         if (node instanceof HTMLElement) {
           const key = node.getAttribute('key');
@@ -104,7 +115,6 @@ const render = async () => {
     root.append(currentRoot);
   }
 
-  fireAfterRenderFunctions();
   fireUseEffectQueue();
 };
 

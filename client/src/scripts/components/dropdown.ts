@@ -71,9 +71,10 @@ export default function createDropDown<T> (props: createDropDownProps<T>) {
   const dropDownOption2 = createElementWithStyles('div', {textContent: '12345678'}, dropDownStyles.dropdownOptionText);
   const dropDownOption3 = createElementWithStyles('div', {textContent: '123456789'}, dropDownStyles.dropdownOptionText);
 
-  useAfterRender(nameof(createDropDown), () => {
+  useAfterRender(props.key, () => {
     const targetWidth = Number.parseFloat(getComputedStyle(dropDownOptionsContainer).width);
 
+    console.debug(targetWidth);
     dropDownWidthContainer.style.width = (targetWidth - 2).toFixed(2) + 'px';
   });
 
