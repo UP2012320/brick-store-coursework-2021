@@ -62,10 +62,8 @@ export default function createFilterBar (props: CreateFilterBarProps) {
 
   const searchRow = createElementWithStyles('div', undefined, filterBarStyles.filterBarSearchRow);
 
-  const onSearch = (event: Event) => {
-    const element = event.target as HTMLInputElement;
-
-    props.setSearchArguments((previous) => ({...previous, query: element.value}));
+  const onSearch = (query: string) => {
+    props.setSearchArguments((previous) => ({...previous, query}));
   };
 
   const search = createElementWithStyles(
@@ -73,7 +71,9 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     {
       onkeydown: ((event) => {
         if (event.key === 'Enter') {
-          onSearch(event);
+          const target = event.target as HTMLInputElement;
+
+          onSearch(target.value);
         }
       }),
       placeholder: 'Search',
@@ -82,7 +82,13 @@ export default function createFilterBar (props: CreateFilterBarProps) {
   );
 
   const searchButton = createElementWithStyles('div', {
-    onclick: (event) => onSearch(event),
+    onclick: () => {
+      const searchInput = document.querySelector(`.${filterBarStyles.filterBarSearchItem}`) as HTMLInputElement | undefined;
+
+      if (searchInput) {
+        onSearch(searchInput.value);
+      }
+    },
   }, filterBarStyles.filterBarSearchButton);
 
   const searchButtonIcon = createElementWithStyles('i', undefined, filterBarStyles.biSearch);

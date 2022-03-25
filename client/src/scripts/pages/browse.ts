@@ -99,7 +99,7 @@ export default function createBrowse (props: BrowseProps) {
 
   if (noMoreResults) {
     statusMessage = createElement('p', {
-      textContent: 'No results found',
+      textContent: 'No more results found',
     });
   } else {
     statusMessage = createElement('p', {

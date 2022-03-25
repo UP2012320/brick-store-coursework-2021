@@ -15,8 +15,8 @@ export interface filterBarFilterOptionsProps extends ReUsableComponentProps {
 export default function createFilterBarFilterOptions (props: filterBarFilterOptionsProps) {
   props.key ??= nameof(createFilterBarFilterOptions);
 
-  const [colours, setColours] = useState<GetBrickColoursResponse | undefined>(props.key, undefined);
-  const [types, setTypes] = useState<GetBrickTypesResponse | undefined>(props.key, undefined);
+  const [colours, setColours] = useState<GetBrickColoursResponse[] | undefined>(props.key, undefined);
+  const [types, setTypes] = useState<GetBrickTypesResponse[] | undefined>(props.key, undefined);
 
   const getColours = async () => {
     let response;
@@ -28,7 +28,7 @@ export default function createFilterBarFilterOptions (props: filterBarFilterOpti
       return;
     }
 
-    setColours(await response.json() as GetBrickColoursResponse);
+    setColours(await response.json() as GetBrickColoursResponse[]);
   };
 
   const getTypes = async () => {
@@ -41,13 +41,15 @@ export default function createFilterBarFilterOptions (props: filterBarFilterOpti
       return;
     }
 
-    setTypes(await response.json() as GetBrickTypesResponse);
+    setTypes(await response.json() as GetBrickTypesResponse[]);
   };
 
   useEffect(props.key, () => {
     getColours();
     getTypes();
   }, []);
+
+  console.debug(colours);
 
   const rowContainer = createElementWithStyles('div', undefined, filterBarStyles.filterBarOptionsRowContainer);
 

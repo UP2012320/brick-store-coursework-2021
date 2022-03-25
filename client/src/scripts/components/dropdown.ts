@@ -16,6 +16,7 @@ export default function createDropDown<T> (props: createDropDownProps<T>) {
   props.key ??= nameof(createDropDown);
 
   const [dropDownToggle, setDropDownToggle] = useState(props.key, false);
+  const [options, setOptions] = useState(props.key, []);
   const maxDropDownWidth = useRef<string | undefined>(props.key, undefined);
 
   const dropDownContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownContainer);
@@ -66,8 +67,13 @@ export default function createDropDown<T> (props: createDropDownProps<T>) {
   const dropDownTick3 = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionCheckbox);
 
   const dropDownOptionContainer = createElementWithStyles('div', {
-    onclick: () => {
-      dropDownCheck.classList.toggle(dropDownStyles.ticked);
+    onclick: (event) => {
+      const target = event.currentTarget as HTMLElement;
+      const tick = target.querySelector('i');
+
+      if (tick) {
+        tick.classList.toggle(dropDownStyles.ticked);
+      }
     },
   }, dropDownStyles.dropdownOptionContainer);
   const dropDownOptionContainer2 = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionContainer);
