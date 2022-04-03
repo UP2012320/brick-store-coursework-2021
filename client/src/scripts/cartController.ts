@@ -120,6 +120,8 @@ export const deleteFromCart = async (product: Product) => {
   window.dispatchEvent(new Event('storage'));
 };
 
+
+
 export const updateQuantity = async (inventoryId: string, quantity: number) => {
   const cartItems = getItemFromSessionStorage<CartItem[]>('cart');
 

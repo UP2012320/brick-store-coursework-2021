@@ -4,15 +4,15 @@ import {formatPrice, nameof, serverBaseUrl} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElement, createElementWithStyles} from 'Scripts/uiUtils';
-import type {FetchStatus, ProductProps} from 'Types/types';
+import {createComponentContainer, createElement, createElementWithStyles} from 'Scripts/uiUtils';
+import type {ProductProps} from 'Types/types';
 import type {Product} from 'api-types';
 import productStyles from './product.module.scss';
 
-const useState = registerUseState(nameof(createProduct));
+const key = nameof(createProduct);
+const useState = registerUseState(key);
 
 export default function createProduct (props: ProductProps) {
-  const [fetchStatus, setFetchStatus] = useState<FetchStatus>('pending');
   const [productDetails, setProductDetails] = useState<Product | undefined>();
 
   const fetchProduct = async () => {
@@ -21,7 +21,6 @@ export default function createProduct (props: ProductProps) {
     if (props.restArgs?.slug) {
       url.searchParams.set('slug', props.restArgs?.slug);
     } else {
-      setFetchStatus('finished');
       return;
     }
 
@@ -31,7 +30,6 @@ export default function createProduct (props: ProductProps) {
       response = await fetch(url.href);
     } catch (error) {
       console.error(error);
-      setFetchStatus('finished');
       return;
     }
 
@@ -39,19 +37,14 @@ export default function createProduct (props: ProductProps) {
 
     if (responseBody.length > 0) {
       setProductDetails(responseBody[0]);
-      setFetchStatus('finished');
-      return;
     }
-
-    setFetchStatus('finished');
   };
 
-  useEffect(nameof(createProduct), () => {
+  useEffect(key, () => {
     fetchProduct();
   }, []);
 
-  const ProductScrollContainer = createElementWithStyles('div', undefined, productStyles.productScrollContainer);
-  ProductScrollContainer.setAttribute('key', nameof(createProduct));
+  const ProductScrollContainer = createComponentContainer('div', key, undefined, productStyles.productScrollContainer);
 
   const ProductContainer = createElementWithStyles('div', undefined, productStyles.productContainer);
 

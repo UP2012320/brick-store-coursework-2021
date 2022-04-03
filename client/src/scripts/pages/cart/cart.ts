@@ -35,7 +35,6 @@ export default function createCart () {
   registerLinkClickHandler(checkoutButton);
 
   useEffect(nameof(createCart), () => {
-    console.debug('running');
     getCartItems();
     window.addEventListener('storage', getCartItems);
 
