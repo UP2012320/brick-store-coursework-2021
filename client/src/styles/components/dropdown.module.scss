@@ -5,31 +5,32 @@
 .dropdown-container {
   @include column-centered;
   position: relative;
-  border: 1px solid $not-quite-black;
   background-color: $not-quite-white;
   margin: $spacing-medium;
   overflow: visible;
-  border-radius: $small-radius $small-radius 0 0;
+  min-width: 200px;
 }
 
-.dropdown-width-container {
-  @include column-centered;
-}
-
-.dropdown-selected-row {
+.dropdown-title-row {
   @include row-centered;
   width: 100%;
-  border-top-left-radius: $spacing-small;
-  border-top-right-radius: $spacing-small;
+  border-top-left-radius: $small-radius;
+  border-top-right-radius: $small-radius;
+  padding-left: $spacing-small;
+  padding-right: $spacing-small;
 
   &:hover {
     cursor: pointer;
     background-color: $not-really-white;
   }
+
+  &.open {
+    background-color: $not-really-white;
+  }
 }
 
-.dropdown-selected-option {
-  @include row-centered;
+.dropdown-title {
+  @include row;
   flex: 1 0 60%;
   padding: $spacing-medium;
   user-select: none;
@@ -53,14 +54,12 @@
   @include column-centered;
   position: absolute;
   top: 40px;
-  border: 1px solid $not-quite-black;
   transform: scaleY(0);
   transform-origin: top;
   transition: transform .5s cubic-bezier(.82,0,.35,1);
   z-index: 2;
   background-color: $not-quite-white;
   max-height: 500px;
-  overflow-y: scroll;
 
   & > div:not(:last-child) {
     border-bottom: 1px solid $not-quite-black;
@@ -73,7 +72,7 @@
 
 .dropdown-option-container {
   @include row-centered;
-  padding: $spacing-xsmall $spacing-small $spacing-xsmall $spacing-xsmall;
+  padding: $spacing-small;
   width: 100%;
   transition: background-color .2s ease-in-out;
 
@@ -81,6 +80,45 @@
     cursor: pointer;
     background-color: $not-really-white;
   }
+}
+
+.dropdown-option-header {
+  @extend .dropdown-option-container;
+
+  &:hover {
+    cursor: default;
+    background-color: $not-quite-white;
+  }
+}
+
+.dropdown-option-header-selected {
+  flex: 1 0;
+  font-size: 11pt;
+}
+
+.dropdown-option-header-select-all {
+  @include row-centered;
+  border: 1px solid black;
+  padding-left: $spacing-small;
+  padding-right: $spacing-small;
+  user-select: none;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $not-really-white;
+  }
+}
+
+.dropdown-option-header-select-all-title {
+  font-size: 11pt;
+}
+
+.dropdown-select-options-container {
+  @include column-centered;
+  justify-content: unset;
+  overflow-y: scroll;
+  width: 100%;
+  max-height: 250px;
 }
 
 .dropdown-search-option-container {
@@ -113,11 +151,10 @@
 
 .bi-check {
   @include row-centered;
-  display: none;
+}
 
-  &.ticked {
-    display: unset;
-  }
+.hidden {
+  display: none;
 }
 
 .dropdown-option-text {

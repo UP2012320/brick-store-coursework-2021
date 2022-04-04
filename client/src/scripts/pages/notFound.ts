@@ -27,8 +27,7 @@ const createNotFound = () => {
     textContent: 'Let\'s get back on track',
   });
 
-  preventHrefDefault(redirectLink);
-  registerLinkClickHandler(redirectButton, '/');
+  registerLinkClickHandler(redirectLink);
 
   return htmlx`
     <${container}>

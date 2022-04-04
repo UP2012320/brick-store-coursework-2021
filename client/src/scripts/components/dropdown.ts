@@ -1,42 +1,39 @@
 import {nameof} from 'Scripts/helpers';
-import {useEffect} from 'Scripts/hooks/useEffect';
-import {useRef} from 'Scripts/hooks/useRef';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import dropDownStyles from 'Styles/components/dropdown.module.scss';
 import type {ReUsableComponentProps} from 'Types/types';
 
+interface DropDownOption {
+  name: string;
+  toggled: boolean;
+  value: string;
+}
+
 export interface createDropDownProps<T> extends ReUsableComponentProps {
   onselect: (valueSelected: [string, T]) => void;
-  options: Record<string, T>;
+  options: DropDownOption[];
 }
 
 export default function createDropDown<T> (props: createDropDownProps<T>) {
   props.key ??= nameof(createDropDown);
 
   const [dropDownToggle, setDropDownToggle] = useState(props.key, false);
-  const [options, setOptions] = useState(props.key, []);
-  const maxDropDownWidth = useRef<string | undefined>(props.key, undefined);
+  const [options, setOptions] = useState(props.key, props.options);
 
   const dropDownContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownContainer);
   dropDownContainer.setAttribute('key', props.key);
-
-  const dropDownWidthContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownWidthContainer);
-
-  if (maxDropDownWidth.current) {
-    dropDownWidthContainer.style.width = maxDropDownWidth.current;
-  }
 
   const dropDownSelectedRow = createElementWithStyles('div', {
     onclick: () => {
       setDropDownToggle((previous) => !previous);
     },
-  }, dropDownStyles.dropdownSelectedRow);
+  }, dropDownStyles.dropdownTitleRow);
 
   const dropDownSelectedOption = createElementWithStyles('p',
     {textContent: 'test'},
-    dropDownStyles.dropdownSelectedOption);
+    dropDownStyles.dropdownTitle);
 
   const dropDownToggleArrow = createElementWithStyles('div', undefined, dropDownStyles.biCaretDownFill);
 
@@ -50,6 +47,20 @@ export default function createDropDown<T> (props: createDropDownProps<T>) {
     dropDownToggleArrow.classList.remove(dropDownStyles.dropdownOpen);
   }
 
+  const dropDownOptionHeader = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionHeader);
+
+  const dropDownOptionHeaderSelectedCount = createElementWithStyles('p', {
+    textContent: '0 Selected',
+  }, dropDownStyles.dropdownOptionHeaderSelected);
+
+  const dropDownOptionHeaderSelectAll = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionHeaderSelectAll);
+
+  const dropDownOptionHeaderSelectedTitle = createElementWithStyles('p', {
+    textContent: 'All',
+  }, dropDownStyles.dropdownOptionHeaderSelectAllTitle);
+
+  const dropDownOptionHeaderSelectAllCheckbox = createElementWithStyles('i', undefined, dropDownStyles.biCheck);
+
   const dropDownSearchOptionContainer = createElementWithStyles('div',
     undefined,
     dropDownStyles.dropdownSearchOptionContainer);
@@ -58,70 +69,64 @@ export default function createDropDown<T> (props: createDropDownProps<T>) {
     {placeholder: 'Search'},
     dropDownStyles.dropdownOptionText);
 
-  const dropDownCheck = createElementWithStyles('i', undefined, dropDownStyles.biCheck);
-  const dropDownCheck2 = createElementWithStyles('i', undefined, dropDownStyles.biCheck);
-  const dropDownCheck3 = createElementWithStyles('i', undefined, dropDownStyles.biCheck);
+  const dropDownSelectOptionsContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionsContainer);
 
-  const dropDownTick = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionCheckbox);
-  const dropDownTick2 = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionCheckbox);
-  const dropDownTick3 = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionCheckbox);
+  const dropDownOptions = [];
 
-  const dropDownOptionContainer = createElementWithStyles('div', {
-    onclick: (event) => {
-      const target = event.currentTarget as HTMLElement;
-      const tick = target.querySelector('i');
+  for (const option of props.options) {
+    const dropDownOptionContainer = createElementWithStyles('div', {
+      onclick: () => setOptions((previous) => {
+        console.debug(previous);
 
-      if (tick) {
-        tick.classList.toggle(dropDownStyles.ticked);
-      }
-    },
-  }, dropDownStyles.dropdownOptionContainer);
-  const dropDownOptionContainer2 = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionContainer);
-  const dropDownOptionContainer3 = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionContainer);
+        const newOptions = [...previous];
+        const index = newOptions.findIndex((newOption) => newOption.name === option.name);
+        newOptions[index].toggled = !newOptions[index].toggled;
 
-  const dropDownOption = createElementWithStyles('div', {textContent: '1234567'}, dropDownStyles.dropdownOptionText);
-  const dropDownOption2 = createElementWithStyles('div', {textContent: '12345678'}, dropDownStyles.dropdownOptionText);
-  const dropDownOption3 = createElementWithStyles('div', {textContent: '123456789'}, dropDownStyles.dropdownOptionText);
+        console.debug(newOptions);
 
-  useEffect(props.key, () => {
-    const targetWidth = Number.parseFloat(getComputedStyle(dropDownOptionsContainer).width);
-    const widthValue = (targetWidth - 2).toFixed(2) + 'px';
+        return newOptions;
+      }),
+    }, dropDownStyles.dropdownOptionContainer);
+    const dropDownCheck = createElementWithStyles('i', undefined, dropDownStyles.biCheck);
+    const dropDownTick = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionCheckbox);
 
-    maxDropDownWidth.current = widthValue;
-    dropDownWidthContainer.style.width = widthValue;
-  }, []);
+    if (!option.toggled) {
+      dropDownTick.classList.add(dropDownStyles.hidden);
+    }
+
+    const dropDownOption = createElementWithStyles('div', {textContent: option.name}, dropDownStyles.dropdownOptionText);
+
+    dropDownOptions.push(htmlx`
+    <${dropDownOptionContainer}>
+       <${dropDownTick}>
+         <${dropDownCheck}/>
+       </dropDownTick>
+       <${dropDownOption}/>
+     </dropDownOptionContainer>
+    `);
+  }
 
   return htmlx`
   <${dropDownContainer}>
-    <${dropDownWidthContainer}>
       <${dropDownSelectedRow}>
         <${dropDownSelectedOption}/>
         <${dropDownToggleArrow}/>
       </dropDownSelectedRow>
       <${dropDownOptionsContainer}>
+        <${dropDownOptionHeader}>
+          <${dropDownOptionHeaderSelectedCount}/>
+          <${dropDownOptionHeaderSelectAll}>
+            <${dropDownOptionHeaderSelectAllCheckbox}/>
+            <${dropDownOptionHeaderSelectedTitle}/>
+          </dropDownOptionHeaderSelectAll>
+        </dropDownOptionHeader>
         <${dropDownSearchOptionContainer}>
           <${dropDownSearchOption}/>
         </dropDownSearchOptionContainer>
-        <${dropDownOptionContainer}>
-          <${dropDownTick}>
-            <${dropDownCheck}/>
-          </dropDownTick>
-          <${dropDownOption}/>
-        </dropDownOptionContainer>
-        <${dropDownOptionContainer2}>
-          <${dropDownTick2}>
-            <${dropDownCheck2}/>
-          </dropDownTick2>
-          <${dropDownOption2}/>
-        </dropDownOptionContainer>
-        <${dropDownOptionContainer3}>
-          <${dropDownTick3}>
-            <${dropDownCheck3}/>
-          </dropDownTick3>
-          <${dropDownOption3}/>
-        </dropDownOptionContainer>
+        <${dropDownSelectOptionsContainer}>
+          <${dropDownOptions}/>
+        </dropDownSelectOptionsContainer>
       </dropDownOptionsContainer>
-    </dropDownWidthContainer>
   </dropDownContainer>
   `;
 }

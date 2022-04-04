@@ -1690,13 +1690,18 @@ declare namespace DropdownModuleScssNamespace {
     dropdownOpen: string;
     dropdownOptionCheckbox: string;
     dropdownOptionContainer: string;
+    dropdownOptionHeader: string;
+    dropdownOptionHeaderSelectAll: string;
+    dropdownOptionHeaderSelectAllTitle: string;
+    dropdownOptionHeaderSelected: string;
     dropdownOptionText: string;
     dropdownOptionsContainer: string;
     dropdownSearchOptionContainer: string;
-    dropdownSelectedOption: string;
-    dropdownSelectedRow: string;
-    dropdownWidthContainer: string;
-    ticked: string;
+    dropdownSelectOptionsContainer: string;
+    dropdownTitle: string;
+    dropdownTitleRow: string;
+    hidden: string;
+    open: string;
   }
 }
 

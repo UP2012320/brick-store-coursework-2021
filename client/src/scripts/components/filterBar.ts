@@ -1,4 +1,4 @@
-import createFilterBarFilterOptions from 'Scripts/components/filterBarFilterOptions';
+import createFilterBarDropdown from 'Scripts/components/filterBarDropdown/filterBarDropdown';
 import {nameof} from 'Scripts/helpers';
 import type {StateSetter} from 'Scripts/hooks/useState';
 import {registerUseState} from 'Scripts/hooks/useState';
@@ -14,9 +14,6 @@ export interface CreateFilterBarProps {
 }
 
 export default function createFilterBar (props: CreateFilterBarProps) {
-  const [filterToggle, setFilterToggle] = useState(false);
-  const [sortToggle, setSortToggle] = useState(false);
-
   const container = createElementWithStyles(
     'section',
     undefined,
@@ -36,28 +33,6 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     'section',
     undefined,
     filterBarStyles.filterBarSectionContainerRight,
-  );
-
-  const sortBy = createElementWithStyles(
-    'div',
-    {
-      onclick: () => {
-        setSortToggle((previous) => !previous);
-      },
-      textContent: 'Sort',
-    },
-    filterBarStyles.filterBarItemLeft,
-  );
-
-  const filterBy = createElementWithStyles(
-    'div',
-    {
-      onclick: () => {
-        setFilterToggle((previous) => !previous);
-      },
-      textContent: 'Filter',
-    },
-    filterBarStyles.filterBarItemLeft,
   );
 
   const searchRow = createElementWithStyles('div', undefined, filterBarStyles.filterBarSearchRow);
@@ -97,10 +72,20 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     <${container}>
       <${mainRow}>
         <${LeftSectionContainer}>
-          <${sortBy}/>
-          <${createFilterBarFilterOptions({key: 'sort', toggle: sortToggle})}/>
-          <${filterBy}/>
-          <${createFilterBarFilterOptions({key: 'filter', toggle: filterToggle})}/>
+          <${createFilterBarDropdown({
+    dropDownOptions: [
+      {name: 'test1', toggled: false, value: '1'},
+      {name: 'test2', toggled: false, value: '2'},
+      {name: 'test3', toggled: false, value: '3'},
+      {name: 'test4', toggled: false, value: '4'},
+      {name: 'test5', toggled: false, value: '5'},
+      {name: 'test6', toggled: false, value: '6'},
+      {name: 'test7', toggled: false, value: '7'},
+      {name: 'test8', toggled: false, value: '8'},
+      {name: 'test9', toggled: false, value: '9'},
+    ], key: 'sort', title: 'Sort By',
+  })}/>
+          <${createFilterBarDropdown({dropDownOptions: [], key: 'filter', title: 'Filter'})}/>
         </leftSectionContainer>
         <${rightSectionContainer}>
           <${searchRow}>

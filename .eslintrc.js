@@ -9,7 +9,7 @@ module.exports = {
       ],
       files: '*.ts',
       parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig?(.base).json',
       },
       rules: {
         'import/extensions': 0,
@@ -50,7 +50,7 @@ module.exports = {
       ],
       files: '*.test.{ts,tsx}',
       parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig?(.base).json',
       },
     },
     {

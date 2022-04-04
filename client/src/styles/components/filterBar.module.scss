@@ -9,6 +9,7 @@
   margin: $spacing-medium;
   border: 1px solid $not-quite-black;
   background-color: $not-quite-white;
+  max-width: 1400px;
 }
 
 .filter-bar-row-container {
@@ -26,6 +27,7 @@
   &.open {
     width: max-content;
     overflow: visible;
+    background-color: $not-quite-black;
   }
 }
 
