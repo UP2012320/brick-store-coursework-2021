@@ -2,6 +2,7 @@
 // Please do not change this file!
 declare namespace DropdownModuleScssNamespace {
   export interface IDropdownModuleScss {
+    actionButton: string;
     bi: string;
     bi123: string;
     biActivity: string;

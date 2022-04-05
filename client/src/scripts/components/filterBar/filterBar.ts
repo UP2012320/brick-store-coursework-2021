@@ -1,5 +1,9 @@
-import createFilterBarDropdown from 'Scripts/components/filterBarDropdown/filterBarDropdown';
+import createDropdownFrame from 'Scripts/components/dropdown/dropdownFrame/dropdownFrame';
+import createDropdownMultiSelectBody from 'Scripts/components/dropdown/dropdownMultiSelectBody/dropdownMultiSelectBody';
+import type {MultiSelectDropDownOption} from 'Scripts/components/dropdown/dropdownMultiSelectBody/dropdownMultiSelectBody';
+import {fetchColours, fetchTypes} from 'Scripts/components/filterBar/fetch';
 import {nameof} from 'Scripts/helpers';
+import {useEffect} from 'Scripts/hooks/useEffect';
 import type {StateSetter} from 'Scripts/hooks/useState';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
@@ -13,7 +17,51 @@ export interface CreateFilterBarProps {
   setSearchArguments: StateSetter<SearchRequestArguments>;
 }
 
+const orderBy = [
+  {
+    name: 'Price (low to high)',
+    toggled: false,
+    value: 'price',
+  },
+  {
+    name: 'Price (high to low)',
+    toggled: false,
+    value: '-price',
+  },
+  {
+    name: 'Name (A to Z)',
+    toggled: true,
+    value: 'name',
+  },
+  {
+    name: 'Name (Z to A)',
+    toggled: false,
+    value: '-name',
+  },
+] as MultiSelectDropDownOption[];
+
 export default function createFilterBar (props: CreateFilterBarProps) {
+  const [colours, setColours] = useState<MultiSelectDropDownOption[]>([]);
+  const [types, setTypes] = useState<MultiSelectDropDownOption[]>([]);
+  // const [orderBy, setOrderBy] = useState<DropDownOption[]>();
+
+  useEffect(nameof(createFilterBar), () => {
+    fetchColours().then((coloursResponse) => {
+      setColours(coloursResponse.map((colour) => ({
+        name: colour.name,
+        toggled: false,
+        value: colour.id,
+      })));
+    });
+    fetchTypes().then((typesResponse) => {
+      setTypes(typesResponse.map((type) => ({
+        name: type.type,
+        toggled: false,
+        value: type.id,
+      })));
+    });
+  }, []);
+
   const container = createElementWithStyles(
     'section',
     undefined,
@@ -72,20 +120,24 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     <${container}>
       <${mainRow}>
         <${LeftSectionContainer}>
-          <${createFilterBarDropdown({
-    dropDownOptions: [
-      {name: 'test1', toggled: false, value: '1'},
-      {name: 'test2', toggled: false, value: '2'},
-      {name: 'test3', toggled: false, value: '3'},
-      {name: 'test4', toggled: false, value: '4'},
-      {name: 'test5', toggled: false, value: '5'},
-      {name: 'test6', toggled: false, value: '6'},
-      {name: 'test7', toggled: false, value: '7'},
-      {name: 'test8', toggled: false, value: '8'},
-      {name: 'test9', toggled: false, value: '9'},
-    ], key: 'sort', title: 'Sort By',
+        <${createDropdownFrame({
+    body: createDropdownMultiSelectBody({
+      dropDownOptions: [
+        {name: 'test1', toggled: false, value: '1'},
+        {name: 'test2', toggled: false, value: '2'},
+        {name: 'test3', toggled: false, value: '3'},
+        {name: 'test4', toggled: false, value: '4'},
+        {name: 'test5', toggled: false, value: '5'},
+        {name: 'test6', toggled: false, value: '6'},
+        {name: 'test7', toggled: false, value: '7'},
+        {name: 'test8', toggled: false, value: '8'},
+        {name: 'test9', toggled: false, value: '9'},
+      ],
+      key: 'test-multi-select',
+    }),
+    key: 'test',
+    title: 'Colours',
   })}/>
-          <${createFilterBarDropdown({dropDownOptions: [], key: 'filter', title: 'Filter'})}/>
         </leftSectionContainer>
         <${rightSectionContainer}>
           <${searchRow}>

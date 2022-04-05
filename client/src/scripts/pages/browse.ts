@@ -1,4 +1,4 @@
-import createFilterBar from 'Scripts/components/filterBar';
+import createFilterBar from 'Scripts/components/filterBar/filterBar';
 import createShopCard from 'Scripts/components/shopCard';
 import {nameof, serverBaseUrl} from 'Scripts/helpers';
 import {registerUseEffect} from 'Scripts/hooks/useEffect';

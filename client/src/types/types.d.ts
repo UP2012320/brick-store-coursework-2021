@@ -35,3 +35,6 @@ export interface ReUsableComponentProps {
   key?: string;
 }
 
+export interface HasBodyProps {
+  body: Array<HTMLElement | SVGSVGElement | null | undefined>;
+}

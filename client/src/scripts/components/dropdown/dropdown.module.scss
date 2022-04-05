@@ -1,6 +1,7 @@
-@import '../utils';
+@import 'src/styles/utils';
 @import 'src/styles/theme';
-@import 'bootstrap-icons/font/bootstrap-icons';
+@import 'src/styles/commonComponents.module';
+@import 'bootstrap-icons';
 
 .dropdown-container {
   @include column-centered;
@@ -164,3 +165,4 @@
   width: 100%;
   height: 100%;
 }
+
