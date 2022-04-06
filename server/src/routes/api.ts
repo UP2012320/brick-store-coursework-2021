@@ -44,7 +44,7 @@ export default function api (
   });
 
   fastify.get('/getBrickTypes', async (request, reply) => {
-    const [brickTypes, error] = await sendQuery(fastify.pg.pool, 'SELECT type_id as "id", type_name as "type" FROM brick_types');
+    const [brickTypes, error] = await sendQuery(fastify.pg.pool, 'SELECT type_id as "id", type_name as "type" FROM brick_types ORDER BY type_name');
 
     if (error) {
       console.debug(error);
@@ -100,7 +100,7 @@ export default function api (
 
   fastify.get('/getBrickColours', async (request, reply) => {
     const [brickColours, error] = await sendQuery(fastify.pg.pool,
-      'SELECT colour_id as "id", colour_name as "name" FROM brick_colours');
+      'SELECT colour_id as "id", colour_name as "name" FROM brick_colours ORDER BY colour_name');
 
     if (error) {
       console.debug(error);

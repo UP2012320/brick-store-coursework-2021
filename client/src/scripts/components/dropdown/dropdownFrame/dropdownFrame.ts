@@ -36,7 +36,7 @@ export default function createDropdownFrame (props: DropdownFrameProps) {
   const dropDownBodyContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionsContainer);
 
   const onOutsideClick = (event: MouseEvent) => {
-    const dropDownOptionsContainerMouseEvent = document.querySelector(`.${dropDownStyles.dropdownContainer}`);
+    const dropDownOptionsContainerMouseEvent = document.querySelector(`.${dropDownStyles.dropdownContainer}[key="${props.key}"]`);
 
     if (!dropDownOptionsContainerMouseEvent?.contains(event.target as HTMLElement)) {
       setToggled(false);

@@ -122,21 +122,21 @@ export default function createFilterBar (props: CreateFilterBarProps) {
         <${LeftSectionContainer}>
         <${createDropdownFrame({
     body: createDropdownMultiSelectBody({
-      dropDownOptions: [
-        {name: 'test1', toggled: false, value: '1'},
-        {name: 'test2', toggled: false, value: '2'},
-        {name: 'test3', toggled: false, value: '3'},
-        {name: 'test4', toggled: false, value: '4'},
-        {name: 'test5', toggled: false, value: '5'},
-        {name: 'test6', toggled: false, value: '6'},
-        {name: 'test7', toggled: false, value: '7'},
-        {name: 'test8', toggled: false, value: '8'},
-        {name: 'test9', toggled: false, value: '9'},
-      ],
-      key: 'test-multi-select',
+      dropDownOptions: colours,
+      key: 'colours-multi-select',
+      onOptionsChange: (options) => {},
     }),
-    key: 'test',
+    key: 'colours',
     title: 'Colours',
+  })}/>
+         <${createDropdownFrame({
+    body: createDropdownMultiSelectBody({
+      dropDownOptions: types,
+      key: 'types-multi-select',
+      onOptionsChange: (options) => {},
+    }),
+    key: 'types',
+    title: 'Types',
   })}/>
         </leftSectionContainer>
         <${rightSectionContainer}>

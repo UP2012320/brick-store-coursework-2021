@@ -14,23 +14,30 @@ export interface MultiSelectDropDownOption {
 
 export interface dropdownMultiSelectBodyProps extends ReUsableComponentProps {
   dropDownOptions: MultiSelectDropDownOption[];
+  onOptionsChange: (options: MultiSelectDropDownOption[]) => void;
 }
 
 export default function createDropdownMultiSelectBody (props: dropdownMultiSelectBodyProps) {
   props.key ??= nameof(createDropdownMultiSelectBody);
 
   const [allToggled, setAllToggled] = useState(props.key, false);
-  const [options, setOptions] = useState(props.key, props.dropDownOptions);
+  const [options, setOptions] = useState(props.key, [...props.dropDownOptions]);
   const [visibleOptions, setVisibleOptions] = useState<string[]>(props.key, props.dropDownOptions.map((option) => option.value));
   const [inputValue, setInputValue] = useState(props.key, '');
 
   useEffect(props.key, () => {
+    props.onOptionsChange(options);
     setAllToggled(options.some((option) => option.toggled));
   }, [options]);
 
   useEffect(props.key, () => {
     setVisibleOptions(options.filter((option) => option.name.toLowerCase().includes(inputValue.toLowerCase()) || !inputValue).map((option) => option.value));
   }, [inputValue]);
+
+  useEffect(props.key, () => {
+    setOptions([...props.dropDownOptions]);
+    setVisibleOptions(props.dropDownOptions.map((option) => option.value));
+  }, [props.dropDownOptions]);
 
   const toggleOptions = (targetValues?: string[]) => {
     setOptions((previous) => {
@@ -44,7 +51,6 @@ export default function createDropdownMultiSelectBody (props: dropdownMultiSelec
           newOptions[index] = newOption;
         }
       } else {
-        console.debug(visibleOptions);
         const filteredNewOptions = newOptions.filter((option) => visibleOptions.includes(option.value));
 
         for (const option of filteredNewOptions) {
