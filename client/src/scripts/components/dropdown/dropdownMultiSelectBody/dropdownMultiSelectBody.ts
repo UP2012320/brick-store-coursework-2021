@@ -3,14 +3,8 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
-import type {ReUsableComponentProps} from 'Types/types';
+import type {MultiSelectDropDownOption, ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
-
-export interface MultiSelectDropDownOption {
-  name: string;
-  toggled: boolean;
-  value: string;
-}
 
 export interface dropdownMultiSelectBodyProps extends ReUsableComponentProps {
   dropDownOptions: MultiSelectDropDownOption[];

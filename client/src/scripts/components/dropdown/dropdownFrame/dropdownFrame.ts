@@ -7,12 +7,12 @@ import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import type {HasBodyProps, ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
 
-export interface DropdownFrameProps extends ReUsableComponentProps, HasBodyProps {
+export interface DropdownProps extends ReUsableComponentProps, HasBodyProps {
   title: string;
 }
 
-export default function createDropdownFrame (props: DropdownFrameProps) {
-  props.key ??= nameof(createDropdownFrame);
+export default function createDropdown (props: DropdownProps) {
+  props.key ??= nameof(createDropdown);
 
   const [toggled, setToggled] = useState(props.key, false);
 

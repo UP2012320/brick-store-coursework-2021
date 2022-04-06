@@ -36,5 +36,14 @@ export interface ReUsableComponentProps {
 }
 
 export interface HasBodyProps {
-  body: Array<HTMLElement | SVGSVGElement | null | undefined>;
+  body: Array<HTMLElement | SVGSVGElement | null | undefined> | HTMLElement | SVGSVGElement | null | undefined;
+}
+
+export interface DropDownOption {
+  name: string;
+  value: string;
+}
+
+export interface MultiSelectDropDownOption extends DropDownOption {
+  toggled: boolean;
 }

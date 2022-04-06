@@ -61,6 +61,7 @@
   z-index: 2;
   background-color: $not-quite-white;
   max-height: 500px;
+  width: 100%;
 
   & > div:not(:last-child) {
     border-bottom: 1px solid $not-quite-black;
@@ -152,6 +153,16 @@
 
 .bi-check {
   @include row-centered;
+}
+
+.bi-circle {
+  @include row-centered;
+  margin: $spacing-xsmall $spacing-small $spacing-xsmall $spacing-xsmall;
+}
+
+.bi-circle-fill {
+  @include row-centered;
+  margin: $spacing-xsmall $spacing-small $spacing-xsmall $spacing-xsmall;
 }
 
 .hidden {
