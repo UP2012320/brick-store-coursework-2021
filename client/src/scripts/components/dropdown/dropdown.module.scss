@@ -6,49 +6,13 @@
 .dropdown-container {
   @include column-centered;
   position: relative;
-  background-color: $not-quite-white;
-  margin: $spacing-medium;
   overflow: visible;
   min-width: 200px;
 }
 
-.dropdown-title-row {
-  @include row-centered;
-  width: 100%;
+.dropdown-container > .toggle-header {
   border-top-left-radius: $small-radius;
   border-top-right-radius: $small-radius;
-  padding-left: $spacing-small;
-  padding-right: $spacing-small;
-
-  &:hover {
-    cursor: pointer;
-    background-color: $not-really-white;
-  }
-
-  &.open {
-    background-color: $not-really-white;
-  }
-}
-
-.dropdown-title {
-  @include row;
-  flex: 1 0 60%;
-  padding: $spacing-medium;
-  user-select: none;
-}
-
-.bi-caret-down-fill {
-  @include row-centered;
-  flex: 1 0;
-  height: 100%;
-  width: 100%;
-  border-top-right-radius: $small-radius;
-  transition: transform .5s cubic-bezier(.82,0,.35,1);
-  margin-right: $spacing-xsmall;
-
-  &.dropdown-open {
-    transform: rotate(180deg);
-  }
 }
 
 .dropdown-options-container {
@@ -165,10 +129,6 @@
   margin: $spacing-xsmall $spacing-small $spacing-xsmall $spacing-xsmall;
 }
 
-.hidden {
-  display: none;
-}
-
 .dropdown-option-text {
   flex: 3 0;
   text-align: left;
@@ -177,3 +137,33 @@
   height: 100%;
 }
 
+.overlay {
+  @media only screen and (min-width: 769px) {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .dropdown-options-container {
+    position: fixed;
+    bottom: 0;
+    top: unset;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    transform-origin: bottom;
+    padding-top: $spacing-large;
+    border-top-left-radius: $medium-radius;
+    border-top-right-radius: $medium-radius;
+    max-height: calc(100% - 65%);
+  }
+
+  .dropdown-search-option-container {
+    order: 3;
+    border-top: 1px solid $not-quite-black;
+  }
+
+  .bi-caret-down-fill {
+    justify-content: flex-end;
+  }
+}

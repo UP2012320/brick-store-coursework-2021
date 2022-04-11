@@ -3,7 +3,7 @@ import {getItemFromSessionStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createComponentContainer, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
+import {createElementWithStyles, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
 import type {CartItem} from 'api-types';
 import cartStyles from './cart.module.scss';
 
@@ -18,7 +18,7 @@ export default function createCart () {
     }
   };
 
-  const cartScrollContainer = createComponentContainer('section', nameof(createCart), undefined, cartStyles.cartScrollContainer);
+  const cartScrollContainer = createKeyedContainer('section', nameof(createCart), undefined, cartStyles.cartScrollContainer);
 
   const cartContainer = createElementWithStyles('div', undefined, cartStyles.cartContainer);
   const headingRow = createElementWithStyles('div', undefined, cartStyles.cartRow);

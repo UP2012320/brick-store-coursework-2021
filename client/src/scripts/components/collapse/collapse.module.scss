@@ -1,0 +1,27 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
+@import 'bootstrap-icons';
+
+.collapse-container {
+  @include column-centered;
+  overflow: visible;
+  width: 100%;
+}
+
+.collapse-content-container {
+  @include column-centered;
+  background-color: $not-quite-white;
+  overflow: hidden;
+  transition: max-height .5s ease-in-out;
+  max-height: 0;
+  width: 100%;
+
+  & > div:not(:last-child) {
+    border-bottom: 1px solid $not-quite-black;
+  }
+
+  &.collapse-open {
+    max-height: 500px;
+  }
+}

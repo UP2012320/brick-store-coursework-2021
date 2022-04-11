@@ -3,7 +3,7 @@
  */
 import path from 'path';
 
-import {aliasItems, devServerUrl, externalItems} from './config';
+import {aliasItems, devServerUrl} from './config';
 import entry from './entry';
 import optimization from './optimization';
 import * as plugins from './plugins';
@@ -24,12 +24,11 @@ export default {
     filename: isDevServer ? '[name].[fullhash].js' : '[name].[contenthash].js',
   },
   module: {
-    rules: arrayFilterEmpty([rules.javascriptRule, rules.htmlRule, rules.imagesRule, rules.fontsRule, rules.cssRule, ...rules.sassRules, ...rules.svgRules,]),
+    rules: arrayFilterEmpty([rules.javascriptRule, rules.htmlRule, rules.imagesRule, rules.fontsRule, rules.bootstrapRule, rules.cssRule, ...rules.sassRules, ...rules.svgRules,]),
   },
   plugins: arrayFilterEmpty([plugins.htmlWebpackPlugin, plugins.providePlugin, plugins.definePlugin,]),
   resolve: {
     alias: aliasItems, extensions: ['.tsx', '.ts', '.js', '.jsx'],
   },
   optimization,
-  externals: externalItems,
 };

@@ -1,4 +1,5 @@
 import {nameof} from 'Scripts/helpers';
+import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
@@ -14,6 +15,10 @@ export default function createDropdownSingleSelectBody (props: DropdownSingleSel
   props.key ??= nameof(createDropdownSingleSelectBody);
 
   const [selected, setSelected] = useState(props.key, props.dropDownOptions[0]);
+
+  useEffect(props.key, () => {
+    props.onSelectedChange(selected);
+  }, [selected]);
 
   const dropDownSelectOptionsContainer = createElementWithStyles('ul', {
     ariaRoleDescription: 'list',

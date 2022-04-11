@@ -29,14 +29,14 @@ export interface HtmlTagResult {
   tagType: HtmlTagResultType;
 }
 
-export type FetchStatus = 'finished' | 'pending';
-
 export interface ReUsableComponentProps {
   key?: string;
 }
 
+export type HTMLXBody = Array<HTMLElement | SVGSVGElement | null | undefined> | HTMLElement | SVGSVGElement | null | undefined;
+
 export interface HasBodyProps {
-  body: Array<HTMLElement | SVGSVGElement | null | undefined> | HTMLElement | SVGSVGElement | null | undefined;
+  body: HTMLXBody
 }
 
 export interface DropDownOption {
@@ -47,3 +47,5 @@ export interface DropDownOption {
 export interface MultiSelectDropDownOption extends DropDownOption {
   toggled: boolean;
 }
+
+export type Filters = 'colours' | 'types' | 'order';

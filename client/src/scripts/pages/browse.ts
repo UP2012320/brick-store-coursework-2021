@@ -5,7 +5,7 @@ import {registerUseEffect} from 'Scripts/hooks/useEffect';
 import {registerUseRef} from 'Scripts/hooks/useRef';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createComponentContainer, createElement, createElementWithStyles} from 'Scripts/uiUtils';
+import {createElement, createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';
 import type {SearchQueryResponse, SearchRequestArguments} from 'api-types';
@@ -21,16 +21,16 @@ const useRef = registerUseRef(key);
 const maxSearchResults = 50;
 
 export default function createBrowse (props: BrowseProps) {
-  const [cards, setCards] = useState<Array<HTMLElement | null> | undefined>(undefined);
   const [searchResults, setSearchResults] = useState<SearchQueryResponse | undefined>(undefined);
   const [searchArguments, setSearchArguments] = useState<SearchRequestArguments>({query: ''});
   const [noMoreResults, setNoMoreResults] = useState(false);
+  const [filters, setFilters] = useState<Record<string, string[]>>({});
   const page = useRef(0);
   const isNewSearch = useRef(true);
 
-  const browseContainer = createComponentContainer('section', key, undefined, contentRootStyles.contentRoot);
+  const browseContainer = createKeyedContainer('section', key, undefined, contentRootStyles.contentRoot);
 
-  const filterBar = createFilterBar({setSearchArguments});
+  const filterBar = createFilterBar({setFilters, setSearchArguments});
 
   const shoppingCardsContainer = createElementWithStyles(
     'div',
@@ -46,6 +46,14 @@ export default function createBrowse (props: BrowseProps) {
     const url = new URL('/api/v1/search', serverBaseUrl);
     url.searchParams.set('query', searchArguments.query);
     url.searchParams.set('offset', (page.current * maxSearchResults).toString());
+
+    for (const [filterKey, value] of Object.entries(filters)) {
+      if (value.length > 1) {
+        url.searchParams.set(filterKey, value.join(','));
+      } else if (value.length === 1) {
+        url.searchParams.set(filterKey, value[0]);
+      }
+    }
 
     let response: Response;
 
@@ -64,7 +72,18 @@ export default function createBrowse (props: BrowseProps) {
 
     page.current += 1;
     // eslint-disable-next-line require-atomic-updates
-    setSearchResults(result);
+    setSearchResults((previousSearchResults) => {
+      if (previousSearchResults?.results && !isNewSearch.current) {
+        return {
+          results: [...previousSearchResults.results, ...result.results],
+        };
+      } else {
+        isNewSearch.current = false;
+        return {
+          results: [...result.results],
+        };
+      }
+    });
   };
 
   useEffect(() => {
@@ -75,25 +94,7 @@ export default function createBrowse (props: BrowseProps) {
     page.current = 0;
     isNewSearch.current = true;
     search();
-  }, [searchArguments]);
-
-  useEffect(() => {
-    if (searchResults) {
-      setCards((previous) => {
-        const newCards = [...searchResults.results.map((searchResult) => createShopCard({key: searchResult.inventory_id, searchResultArgument: searchResult}))];
-
-        if (previous && !isNewSearch.current) {
-          return [
-            ...previous,
-            ...newCards,
-          ];
-        } else {
-          isNewSearch.current = false;
-          return newCards;
-        }
-      });
-    }
-  }, [searchResults]);
+  }, [searchArguments, filters]);
 
   let statusMessage;
 
@@ -127,6 +128,8 @@ export default function createBrowse (props: BrowseProps) {
   });
 
   const returnToTopIcon = createElementWithStyles('i', undefined, browseStyles.biChevronUp);
+
+  const cards = searchResults?.results.map((searchResult) => createShopCard({key: searchResult.inventory_id, searchResultArgument: searchResult}));
 
   return htmlx`
     <${browseContainer}>

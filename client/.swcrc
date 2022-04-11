@@ -2,11 +2,18 @@
   "jsc": {
     "parser": {
       "syntax": "typescript",
-      "decorators": true,
-      "dynamicImport": true
+      "decorators": false,
+      "dynamicImport": false
     },
-    "externalHelpers": true
+    "externalHelpers": false,
+    "loose": false,
+    "keepClassNames": false,
+    "minify": {
+          "compress": true,
+          "mangle": false
+     }
   },
+  "minify": true,
   "env": {
     "targets": ">.25%, not dead"
   }

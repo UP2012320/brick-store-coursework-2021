@@ -1,7 +1,7 @@
 import {sendQuery} from 'Utils/helpers.js';
 import type {CartItem, Product, SearchRequestArguments} from 'api-types';
-import config from 'config';
 import type {FastifyInstance, FastifyServerOptions} from 'fastify';
+import config from '../config';
 
 export default function api (
   fastify: FastifyInstance,
@@ -16,13 +16,19 @@ export default function api (
       return;
     }
 
+    const direction = body.order?.startsWith('-') ? 'desc' : 'asc';
+
     const [searchQueryResult, searchQueryError] = await sendQuery<Product>(
       fastify.pg.pool,
       `SELECT *
-       FROM search_inventory($1, $2)`,
+       FROM search_inventory($1, $2, $3, $4, $5, $6)`,
       [
         body.query,
         body.offset ?? 0,
+        body.colours ? `{${body.colours}}` : null,
+        body.types ? `{${body.types}}` : null,
+        direction === 'desc' ? body.order?.slice(1) : body.order,
+        direction,
       ],
     );
 

@@ -4,7 +4,7 @@ import {formatPrice, nameof, serverBaseUrl} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createComponentContainer, createElement, createElementWithStyles} from 'Scripts/uiUtils';
+import {createElement, createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
 import type {ProductProps} from 'Types/types';
 import type {Product} from 'api-types';
 import productStyles from './product.module.scss';
@@ -44,7 +44,7 @@ export default function createProduct (props: ProductProps) {
     fetchProduct();
   }, []);
 
-  const ProductScrollContainer = createComponentContainer('div', key, undefined, productStyles.productScrollContainer);
+  const ProductScrollContainer = createKeyedContainer('div', key, undefined, productStyles.productScrollContainer);
 
   const ProductContainer = createElementWithStyles('div', undefined, productStyles.productContainer);
 

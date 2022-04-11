@@ -1,5 +1,6 @@
-@import './utils';
-@import './theme';
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'bootstrap-icons';
 
 .action-button {
   flex: 1;
@@ -28,4 +29,53 @@
     color: $highlight-colour;
     background-color: transparent;
   }
+}
+
+.toggle-header {
+  @include row-centered;
+  width: 100%;
+  padding-left: $spacing-small;
+  padding-right: $spacing-small;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $not-really-white;
+  }
+
+  &.open {
+    background-color: $not-really-white;
+  }
+}
+
+.toggle-header-title {
+  @include row;
+  flex: 1 0 60%;
+  padding: $spacing-medium;
+  user-select: none;
+}
+
+.bi-caret-down-fill {
+  @include row-centered;
+  height: 100%;
+  border-top-right-radius: $small-radius;
+  transition: transform .5s cubic-bezier(.82,0,.35,1);
+  margin-right: $spacing-xsmall;
+
+  &.caret-open {
+    transform: rotate(180deg);
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.5);
+  z-index: 1;
+}
+
+.hidden {
+  display: none;
 }

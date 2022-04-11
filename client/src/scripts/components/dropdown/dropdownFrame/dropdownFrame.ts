@@ -1,8 +1,10 @@
+import createToggleHeader from 'Scripts/components/toggleHeader/toggleHeader';
 import {nameof} from 'Scripts/helpers';
-import {useEffect} from 'Scripts/hooks/useEffect';
+import useFocusLost from 'Scripts/hooks/useFocusLost';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import commonComponentsStyles from 'Styles/commonComponents.module.scss';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import type {HasBodyProps, ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
@@ -15,60 +17,42 @@ export default function createDropdown (props: DropdownProps) {
   props.key ??= nameof(createDropdown);
 
   const [toggled, setToggled] = useState(props.key, false);
+  useFocusLost(props.key, `.${dropDownStyles.dropdownContainer}[key="${props.key}"]`, () => {
+    setToggled(false);
+  });
 
   const rowItem = createElementWithStyles('div', undefined, filterBarStyles.filterBarOptionsRowItem);
 
-  const dropDownContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownContainer);
-  dropDownContainer.setAttribute('key', props.key);
+  const dropdownToggleHeader = createToggleHeader({
+    key: `${props.key}-toggle-header`,
+    setToggled,
+    title: props.title,
+    toggled,
+  });
 
-  const dropDownTitleRow = createElementWithStyles('div', {
-    onclick: () => {
-      setToggled((previous) => !previous);
-    },
-  }, dropDownStyles.dropdownTitleRow);
-
-  const dropDownSelectedOption = createElementWithStyles('p',
-    {textContent: props.title},
-    dropDownStyles.dropdownTitle);
-
-  const dropDownToggleArrow = createElementWithStyles('div', undefined, dropDownStyles.biCaretDownFill);
+  const dropDownContainer = createKeyedContainer('div', props.key, undefined, dropDownStyles.dropdownContainer);
 
   const dropDownBodyContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionsContainer);
 
-  const onOutsideClick = (event: MouseEvent) => {
-    const dropDownOptionsContainerMouseEvent = document.querySelector(`.${dropDownStyles.dropdownContainer}[key="${props.key}"]`);
-
-    if (!dropDownOptionsContainerMouseEvent?.contains(event.target as HTMLElement)) {
-      setToggled(false);
-    }
-  };
-
-  useEffect(props.key, () => {
-    document.body.addEventListener('click', onOutsideClick);
-    return () => document.removeEventListener('click', onOutsideClick);
-  }, []);
+  const overlay = createElementWithStyles('div', undefined, dropDownStyles.overlay);
 
   if (toggled) {
-    dropDownTitleRow.classList.add(dropDownStyles.open);
     dropDownBodyContainer.classList.add(dropDownStyles.dropdownOpen);
-    dropDownToggleArrow.classList.add(dropDownStyles.dropdownOpen);
+    overlay.classList.remove(commonComponentsStyles.hidden);
   } else {
-    dropDownTitleRow.classList.remove(dropDownStyles.open);
     dropDownBodyContainer.classList.remove(dropDownStyles.dropdownOpen);
-    dropDownToggleArrow.classList.remove(dropDownStyles.dropdownOpen);
+    overlay.classList.add(commonComponentsStyles.hidden);
   }
 
   return htmlx`
   <${rowItem}>
     <${dropDownContainer}>
-      <${dropDownTitleRow}>
-        <${dropDownSelectedOption}/>
-        <${dropDownToggleArrow}/>
-      </dropDownTitleRow>
+      <${dropdownToggleHeader}/>
       <${dropDownBodyContainer}>
         <${props.body}/>
       </dropDownBodyContainer>
     </dropDownContainer>
+    <${overlay}/>
   </rowItem>
   `;
 }

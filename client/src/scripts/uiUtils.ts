@@ -18,7 +18,7 @@ export const createElementWithStyles = <K extends keyof HTMLElementTagNameMap> (
   return newElement;
 };
 
-export const createComponentContainer = <K extends keyof HTMLElementTagNameMap> (
+export const createKeyedContainer = <K extends keyof HTMLElementTagNameMap> (
   type: K,
   key: string,
   options?: Partial<HTMLElementTagNameMap[K]>,

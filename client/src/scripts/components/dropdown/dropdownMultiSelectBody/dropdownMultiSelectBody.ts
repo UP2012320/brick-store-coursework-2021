@@ -3,6 +3,7 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
+import commonComponentsStyles from 'Styles/commonComponents.module.scss';
 import type {MultiSelectDropDownOption, ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
 
@@ -48,7 +49,10 @@ export default function createDropdownMultiSelectBody (props: dropdownMultiSelec
         const filteredNewOptions = newOptions.filter((option) => visibleOptions.includes(option.value));
 
         for (const option of filteredNewOptions) {
-          option.toggled = !allToggled;
+          const index = newOptions.findIndex((newOptionArrow) => newOptionArrow.value === option.value);
+          const newOption = {...newOptions[index]};
+          newOption.toggled = !allToggled;
+          newOptions[index] = newOption;
         }
       }
 
@@ -70,7 +74,7 @@ export default function createDropdownMultiSelectBody (props: dropdownMultiSelec
   }, dropDownStyles.dropdownOptionHeaderSelectAll);
 
   if (visibleOptions.length !== options.length) {
-    dropDownOptionHeaderSelectAll.classList.toggle(dropDownStyles.hidden);
+    dropDownOptionHeaderSelectAll.classList.toggle(commonComponentsStyles.hidden);
   }
 
   const dropDownOptionHeaderSelectedTitle = createElementWithStyles('p', {
@@ -112,9 +116,9 @@ export default function createDropdownMultiSelectBody (props: dropdownMultiSelec
     const dropDownCheckBox = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionCheckbox);
 
     if (option.toggled) {
-      dropDownCheck.classList.remove(dropDownStyles.hidden);
+      dropDownCheck.classList.remove(commonComponentsStyles.hidden);
     } else {
-      dropDownCheck.classList.add(dropDownStyles.hidden);
+      dropDownCheck.classList.add(commonComponentsStyles.hidden);
     }
 
     const dropDownOption = createElementWithStyles('div', {textContent: option.name}, dropDownStyles.dropdownOptionText);

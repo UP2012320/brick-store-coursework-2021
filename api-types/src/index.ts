@@ -1,6 +1,9 @@
 export interface SearchRequestArguments {
+  colours?: string;
   offset?: number;
+  order?: string;
   query: string;
+  types?: string;
 }
 
 export interface SearchQueryResponse {

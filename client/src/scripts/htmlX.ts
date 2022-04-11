@@ -1,5 +1,5 @@
 import {appendElements} from 'Scripts/uiUtils';
-import type {HtmlTagResult} from 'Types/types';
+import type {HtmlTagResult, HTMLXBody} from 'Types/types';
 
 const parseHtmlTag = (tag: string): HtmlTagResult => {
   let match: RegExpMatchArray | null;
@@ -28,7 +28,7 @@ const parseHtmlTag = (tag: string): HtmlTagResult => {
 };
 
 const htmlx = (strings: TemplateStringsArray,
-  ...args: Array<Array<HTMLElement | SVGSVGElement | null | undefined> | HTMLElement | SVGSVGElement | null | undefined>) => {
+  ...args: HTMLXBody[]) => {
   if (Array.isArray(args[0])) {
     // eslint-disable-next-line unicorn/prefer-type-error
     throw new Error('The first argument cannot be an array');
