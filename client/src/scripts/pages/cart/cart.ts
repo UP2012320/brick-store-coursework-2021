@@ -9,6 +9,8 @@ import cartStyles from './cart.module.scss';
 
 export default function createCart () {
   const [cartItems, setCartItems] = useState<CartItem[]>(nameof(createCart), []);
+  const [outOfStockItems, setOutOfStockItems] = useState<Array<{ inventoryId: string, stock: number, }>>(nameof(createCart), []);
+  const history = window.history.state as Array<{ inventoryId: string, stock: number, }> | undefined;
 
   const getCartItems = () => {
     const cartItemss = getItemFromSessionStorage<CartItem[]>('cart');
@@ -51,7 +53,19 @@ export default function createCart () {
         <${priceHeading}/>
         <${removeHeading}/>
       </headingRow>
-      <${cartItems.map((cartItem) => createCartRow({cartItem, key: cartItem.product.inventory_id}))}/>
+      <${cartItems.map((cartItem) => {
+    if (history) {
+      const outOfStock = history.find((item) => item.inventoryId === cartItem.product.inventory_id);
+
+      if (outOfStock) {
+        return createCartRow({cartItem, key: cartItem.product.inventory_id, outOfStock: true, stockOnHand: outOfStock.stock});
+      } else {
+        return createCartRow({cartItem, key: cartItem.product.inventory_id, outOfStock: false});
+      }
+    } else {
+      return createCartRow({cartItem, key: cartItem.product.inventory_id, outOfStock: false});
+    }
+  })}/>
       <${checkoutRow}>
         <${checkoutButton}/>
       </checkoutRow>

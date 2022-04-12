@@ -70,7 +70,7 @@ export default function createNavbar () {
 
   const shoppingCart = createElementWithStyles('i', undefined, styles.biCart2);
 
-  registerLinkClickHandler(shoppingCart, '/cart');
+  registerLinkClickHandler(shoppingCart, undefined, undefined, '/cart');
 
   const shoppingCartAmount = createElement('span', {
     textContent: cartSize === 0 ? '' : cartSize.toString(),
@@ -83,7 +83,7 @@ export default function createNavbar () {
     src: logo,
   }, styles.navbarLogo);
 
-  registerLinkClickHandler(leftSideContainerLogo, '/');
+  registerLinkClickHandler(leftSideContainerLogo, undefined, undefined, '/');
 
   const login = async () => {
     try {

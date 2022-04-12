@@ -1,9 +1,9 @@
 import {runIfAuthenticated} from 'Scripts/auth0';
-import {getItemFromSessionStorage, serverBaseUrl} from 'Scripts/helpers';
+import {getItemFromSessionStorage, SERVER_BASE} from 'Scripts/helpers';
 import type {CartItem, Product} from 'api-types';
 
 export const getCart = async (userId: string) => {
-  const url = new URL('/api/v1/getCart', serverBaseUrl);
+  const url = new URL('/api/v1/getCart', SERVER_BASE);
   url.searchParams.set('userId', userId);
 
   let cartResponse;
@@ -42,7 +42,7 @@ const addToSessionStorage = (product: Product, quantity: number) => {
 };
 
 const updateDatabase = async (cartItem: CartItem, userId: string) => {
-  const url = new URL('/api/v1/updateCart', serverBaseUrl);
+  const url = new URL('/api/v1/updateCart', SERVER_BASE);
   const body = {
     inventoryId: cartItem.product.inventory_id,
     quantity: cartItem.quantity,
@@ -96,7 +96,7 @@ const deleteFromDatabase = async (userId: string, inventoryId: string) => {
   const body = {inventoryId, userId};
 
   try {
-    await fetch(new URL('/api/v1/deleteFromCart', serverBaseUrl).href, {
+    await fetch(new URL('/api/v1/deleteFromCart', SERVER_BASE).href, {
       body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json',
