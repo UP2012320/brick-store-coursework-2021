@@ -174,11 +174,12 @@
   }
 
   .cart-row {
-    grid-template-rows: 1fr .75fr;
+    grid-template-rows: 1fr .25fr .75fr;
     grid-template-columns: 1fr 1fr 1fr .7fr;
-    grid-row-gap: $spacing-small;
+    grid-row-gap: $spacing-medium;
     grid-template-areas:
       'img title title remove'
+      'img error error remove'
       'quantity quantity . price';
     padding-bottom: unset;
     padding-top: unset;
