@@ -1,8 +1,8 @@
-import {serverBaseUrl} from 'Scripts/helpers';
+import {SERVER_BASE} from 'Scripts/helpers';
 import type {GetBrickColoursResponse, GetBrickTypesResponse} from 'api-types';
 
 export const fetchColours = async () => {
-  const url = new URL('/api/v1/getBrickColours', serverBaseUrl);
+  const url = new URL('/api/v1/getBrickColours', SERVER_BASE);
 
   let response;
 
@@ -24,7 +24,7 @@ export const fetchColours = async () => {
 };
 
 export const fetchTypes = async () => {
-  const url = new URL('/api/v1/getBrickTypes', serverBaseUrl);
+  const url = new URL('/api/v1/getBrickTypes', SERVER_BASE);
 
   let response;
 

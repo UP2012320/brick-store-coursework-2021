@@ -1,6 +1,6 @@
 import createFilterBar from 'Scripts/components/filterBar/filterBar';
 import createShopCard from 'Scripts/components/shopCard';
-import {nameof, serverBaseUrl} from 'Scripts/helpers';
+import {nameof, SERVER_BASE} from 'Scripts/helpers';
 import {registerUseEffect} from 'Scripts/hooks/useEffect';
 import {registerUseRef} from 'Scripts/hooks/useRef';
 import {registerUseState} from 'Scripts/hooks/useState';
@@ -43,7 +43,7 @@ export default function createBrowse (props: BrowseProps) {
   const search = async () => {
     setNoMoreResults(false);
 
-    const url = new URL('/api/v1/search', serverBaseUrl);
+    const url = new URL('/api/v1/search', SERVER_BASE);
     url.searchParams.set('query', searchArguments.query);
     url.searchParams.set('offset', (page.current * maxSearchResults).toString());
 

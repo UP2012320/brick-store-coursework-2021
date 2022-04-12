@@ -10,7 +10,7 @@ export const formatPrice = (price: number) => new Intl.NumberFormat('en-GB', {cu
 
 export const formatPercent = (percent: number) => new Intl.NumberFormat('en-GB', {currency: 'GBP', style: 'percent'}).format(percent);
 
-export const serverBaseUrl = 'http://0.0.0.0:8085';
+export const SERVER_BASE = 'http://0.0.0.0:8085';
 
 export const getItemFromSessionStorage = <T>(itemName: string) => {
   const itemStorage = window.sessionStorage.getItem(itemName);

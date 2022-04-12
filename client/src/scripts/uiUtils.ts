@@ -55,19 +55,28 @@ export const preventHrefDefault = (href: HTMLAnchorElement) => {
   });
 };
 
-export function registerLinkClickHandler (container: HTMLElement, path: string): void;
-export function registerLinkClickHandler (container: HTMLAnchorElement): void;
-export function registerLinkClickHandler (element: HTMLElement, path?: string) {
-  element.addEventListener('click', (event) => {
+export function historyPush (data?: unknown, path?: string) {
+  history.pushState(data, '', path);
+
+  forceReRender();
+}
+
+export function registerLinkClickHandler (container: HTMLElement, preClickCallback?: () => Promise<boolean>, data?: unknown, path?: string): void;
+export function registerLinkClickHandler (container: HTMLAnchorElement, preClickCallback?: () => Promise<boolean>, data?: unknown): void;
+export function registerLinkClickHandler (element: HTMLElement, preClickCallback?: () => Promise<boolean>, data?: unknown, path?: string) {
+  // eslint-disable-next-line
+  element.addEventListener('click', async (event) => {
     event.preventDefault();
 
-    if (path) {
-      history.pushState({}, '', path);
-    } else if (element instanceof HTMLAnchorElement) {
-      history.pushState({}, '', element.href);
+    if (preClickCallback && !await preClickCallback()) {
+      return;
     }
 
-    forceReRender();
+    if (path) {
+      historyPush(data, path);
+    } else if (element instanceof HTMLAnchorElement) {
+      historyPush(data, element.href);
+    }
   });
 }
 

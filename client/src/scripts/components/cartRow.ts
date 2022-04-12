@@ -10,6 +10,8 @@ import type {CartItem} from 'api-types';
 
 export interface CartRowProps extends ReUsableComponentProps {
   cartItem: CartItem;
+  outOfStock: boolean;
+  stockOnHand?: number;
 }
 
 export default function createCartRow (props: CartRowProps) {
@@ -28,6 +30,14 @@ export default function createCartRow (props: CartRowProps) {
   const cartTitle = createElementWithStyles('a', {href: getProductUrl(props.cartItem.product.slug), textContent: props.cartItem.product.name}, cartStyles.cartTitle);
 
   registerLinkClickHandler(cartTitle);
+
+  let outOfStock;
+
+  if (props.outOfStock) {
+    outOfStock = createElementWithStyles('p',
+      {textContent: props.stockOnHand === 0 ? 'Sorry, this item is out of stock' : `Sorry, there is only ${props.stockOnHand} of this item available`},
+      cartStyles.cartError);
+  }
 
   const cartQuantityContainer = createElementWithStyles('div', undefined, cartStyles.cartQuantityContainer);
   const cartQuantity = createElementWithStyles('input', {
@@ -99,6 +109,7 @@ export default function createCartRow (props: CartRowProps) {
       <${cartImage}/>
     </cartImageContainer>
     <${cartTitle}/>
+    <${outOfStock}/>
     <${cartQuantityContainer}>
        <${cartQuantityMinus}/>
        <${cartQuantity}/>

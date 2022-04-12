@@ -23,9 +23,11 @@
 
 .cart-row {
   display: grid;
-  grid-template-rows: 1fr;
+  grid-template-rows: 2fr;
   grid-template-columns: 85px 2fr .5fr .75fr .25fr;
-  grid-template-areas: 'img title quantity price remove';
+  grid-template-areas:
+    'img title quantity price remove'
+    'img error quantity price remove';
   border-radius: $medium-radius;
   background-color: $not-quite-white;
   padding: $spacing-medium;
@@ -52,6 +54,12 @@
   color: inherit;
   text-decoration: none;
   padding: $spacing-medium;
+}
+
+.cart-error {
+  @extend .cart-title;
+  grid-area: error;
+  color: red;
 }
 
 .cart-quantity-container {
