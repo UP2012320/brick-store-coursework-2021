@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/server/src/dist/serverless.js"
-    }
-  ]
-}

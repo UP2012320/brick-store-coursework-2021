@@ -100,4 +100,9 @@
     margin-right: $spacing-large;
     row-gap: $spacing-medium;
   }
+
+  .product-image-container {
+    padding: $spacing-medium;
+    max-width: 300px;
+  }
 }
