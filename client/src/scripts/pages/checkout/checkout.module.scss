@@ -26,6 +26,11 @@
   animation-timing-function: ease-in-out;
 }
 
+.bi-check {
+  @include font-xlarge;
+  color: green;
+}
+
 @keyframes dash-spin {
   from {
     transform: rotate(0deg);

@@ -12,8 +12,8 @@ export const formatPercent = (percent: number) => new Intl.NumberFormat('en-GB',
 
 export const SERVER_BASE = 'http://0.0.0.0:8085';
 
-export const getItemFromSessionStorage = <T>(itemName: string) => {
-  const itemStorage = window.sessionStorage.getItem(itemName);
+export const getItemFromLocalStorage = <T>(itemName: string) => {
+  const itemStorage = window.localStorage.getItem(itemName);
 
   if (itemStorage) {
     return JSON.parse(itemStorage) as T;

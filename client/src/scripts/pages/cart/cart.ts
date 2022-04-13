@@ -1,5 +1,5 @@
 import createCartRow from 'Scripts/components/cartRow';
-import {getItemFromSessionStorage, nameof} from 'Scripts/helpers';
+import {getItemFromLocalStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
@@ -13,7 +13,7 @@ export default function createCart () {
   const history = window.history.state as Array<{ inventoryId: string, stock: number, }> | undefined;
 
   const getCartItems = () => {
-    const cartItemss = getItemFromSessionStorage<CartItem[]>('cart');
+    const cartItemss = getItemFromLocalStorage<CartItem[]>('cart');
 
     if (cartItemss) {
       setCartItems(cartItemss);
@@ -54,7 +54,7 @@ export default function createCart () {
         <${removeHeading}/>
       </headingRow>
       <${cartItems.map((cartItem) => {
-    if (history) {
+    if (Array.isArray(history)) {
       const outOfStock = history.find((item) => item.inventoryId === cartItem.product.inventory_id);
 
       if (outOfStock) {

@@ -1,7 +1,7 @@
 import logo from 'Assets/drawing512.png';
 import {auth0} from 'Scripts/auth0';
 import createNavbarMainContainerItem from 'Scripts/components/layout/navbarMainContainerItem';
-import {getItemFromSessionStorage, nameof} from 'Scripts/helpers';
+import {getItemFromLocalStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
@@ -39,7 +39,7 @@ export default function createNavbar () {
   );
 
   const updateCartSize = () => {
-    const cartStorage = getItemFromSessionStorage<CartItem[]>('cart');
+    const cartStorage = getItemFromLocalStorage<CartItem[]>('cart');
 
     if (cartStorage) {
       const totalQuantity = cartStorage.reduce((a, b) => a + b.quantity, 0);

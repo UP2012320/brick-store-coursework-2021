@@ -1,5 +1,5 @@
-import {auth0} from 'Scripts/auth0';
-import {getItemFromSessionStorage, nameof, SERVER_BASE} from 'Scripts/helpers';
+import {clearCart} from 'Scripts/cartController';
+import {getItemFromLocalStorage, nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
@@ -18,76 +18,47 @@ export default function createCheckout () {
   const contentContainer = createElementWithStyles('div', undefined, checkoutStyles.checkoutContentContainer);
 
   const checkingOut = createElementWithStyles('p', {
-    textContent: 'Checking you out',
+    textContent: checkoutComplete ? 'Checkout complete!' : 'Checking out...',
   }, checkoutStyles.checkoutText);
 
-  const loadingCircle = createElementWithStyles('i', undefined, checkoutStyles.biDashLg);
+  const statusCircle = createElementWithStyles('i', undefined, checkoutComplete ? checkoutStyles.biCheck : checkoutStyles.biDashLg);
 
   const checkoutProcess = async () => {
     console.debug('Checking out');
-    if (await auth0.isAuthenticated()) {
-      console.debug('User is authenticated');
-      const userInfo = await auth0.getUser();
 
-      console.debug('User info', userInfo);
+    const cart = getItemFromLocalStorage<CartItem[]>('cart');
 
-      if (!userInfo?.sub) {
-        console.error('User info is missing sub');
-        return;
-      }
+    const url = new URL('/api/v1/checkout', SERVER_BASE);
 
-      const url = new URL(`/api/v1/checkout/${userInfo.sub}`, SERVER_BASE);
+    let response;
 
-      let response;
-
-      try {
-        response = await fetch(url.href);
-      } catch (error) {
-        console.error(error);
-        return;
-      }
-
-      if (!response.ok) {
-        const data = await response.json() as Array<{ inventoryId: string, stock: number, }>;
-        console.error(response.statusText);
-        historyPush(data, '/cart');
-        return;
-      }
-
-      setTimeout(() => {
-        setCheckoutComplete(true);
-      }, 1_000);
-    } else {
-      const cart = getItemFromSessionStorage<CartItem[]>('cart');
-
-      const url = new URL('/api/v1/checkout', SERVER_BASE);
-
-      let response;
-
-      try {
-        response = await fetch(url.href, {
-          body: JSON.stringify(cart),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-        });
-      } catch (error) {
-        console.error(error);
-        return;
-      }
-
-      if (!response.ok) {
-        const data = await response.json() as Array<{ inventoryId: string, stock: number, }>;
-        console.error(response.statusText);
-        historyPush(data, '/cart');
-        return;
-      }
-
-      setTimeout(() => {
-        setCheckoutComplete(true);
-      }, 1_000);
+    try {
+      response = await fetch(url.href, {
+        body: JSON.stringify(cart),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
+    } catch (error) {
+      console.error('Error checking out', error);
+      return;
     }
+
+    if (!response.ok) {
+      const data = await response.json();
+      historyPush(data, '/cart');
+      return;
+    }
+
+    setTimeout(() => {
+      setCheckoutComplete(true);
+
+      setTimeout(() => {
+        clearCart();
+        historyPush(undefined, '/browse');
+      }, 2_500);
+    }, 1_000);
   };
 
   useEffect(key, () => {
@@ -100,7 +71,7 @@ export default function createCheckout () {
   <${container}>
     <${contentContainer}>
       <${checkingOut}/>
-      <${loadingCircle}/>
+      <${statusCircle}/>
     </contentContainer>
   </container>
   `;
