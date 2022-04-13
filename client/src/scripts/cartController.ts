@@ -56,7 +56,7 @@ export const updateQuantity = (inventoryId: string, quantity: number) => {
     if (targetCartItem) {
       targetCartItem.quantity = quantity;
 
-      window.sessionStorage.setItem('cart', JSON.stringify(cartItems));
+      window.localStorage.setItem('cart', JSON.stringify(cartItems));
 
       window.dispatchEvent(new Event('storage'));
     }

@@ -1,5 +1,5 @@
 const unloadCart = () => {
-  sessionStorage.removeItem('cart');
+  localStorage.removeItem('cart');
 };
 
 const unload = () => {

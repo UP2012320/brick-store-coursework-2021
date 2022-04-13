@@ -1,5 +1,5 @@
 import createCartRow from 'Scripts/components/cartRow';
-import {getItemFromLocalStorage, nameof} from 'Scripts/helpers';
+import {formatPrice, getItemFromLocalStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
@@ -28,7 +28,11 @@ export default function createCart () {
   const priceHeading = createElementWithStyles('p', {textContent: 'Price'}, cartStyles.cartPriceHeader);
   const removeHeading = createElementWithStyles('p', {textContent: 'Remove'}, cartStyles.cartRemoveHeader);
 
+  const totalPrice = formatPrice(cartItems.reduce((current, item) => (item.product.price * item.quantity) + current, 0));
+
   const checkoutRow = createElementWithStyles('div', undefined, cartStyles.cartRow);
+  const cartPriceContainer = createElementWithStyles('div', undefined, cartStyles.cartPriceContainer);
+  const cartPrice = createElementWithStyles('p', {textContent: totalPrice}, cartStyles.cartPrice);
   const checkoutButton = createElementWithStyles('a', {
     href: '/checkout',
     textContent: 'Checkout',
@@ -67,6 +71,9 @@ export default function createCart () {
     }
   })}/>
       <${checkoutRow}>
+        <${cartPriceContainer}>
+          <${cartPrice}/>
+        </cartPriceContainer>
         <${checkoutButton}/>
       </checkoutRow>
     </cartContainer>

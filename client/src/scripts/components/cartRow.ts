@@ -98,8 +98,8 @@ export default function createCartRow (props: CartRowProps) {
   const cartDeleteIconContainer = createElementWithStyles('div', undefined, cartStyles.cartDeleteIconContainer);
 
   const cartDeleteIcon = createElementWithStyles('i', {
-    onclick: async () => {
-      await deleteFromCart(props.cartItem.product);
+    onclick: () => {
+      deleteFromCart(props.cartItem.product);
     },
   }, cartStyles.biTrash);
 
