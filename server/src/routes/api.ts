@@ -1,4 +1,3 @@
-import type {JWTPayload} from 'api-types';
 import type {FastifyPluginAsync} from 'fastify';
 import config from '../config';
 import checkout from './checkout';
