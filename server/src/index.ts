@@ -1,5 +1,7 @@
 import path from 'node:path';
 import fastify from 'fastify';
+// eslint-disable-next-line
+import fastifyAuth0Verify from 'fastify-auth0-verify';
 import fastifyCors from 'fastify-cors';
 import fastifyHelmet from 'fastify-helmet';
 import fastifyPostgres from 'fastify-postgres';
@@ -22,6 +24,10 @@ const app = fastify();
   await app.register(fastifyCors, {origin: config.dev ? 'http://localhost:8080' : false});
   await app.register(fastifyPostgres, {
     connectionString: PG_CONNECTION_STRING,
+  });
+  await app.register(fastifyAuth0Verify, {
+    audience: config.audience,
+    domain: config.domain,
   });
 
   await app.register(fastifySensible);

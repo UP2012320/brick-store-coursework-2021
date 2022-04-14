@@ -1,5 +1,6 @@
 const config = {
   address: '0.0.0.0',
+  audience: 'staff',
   clientId: 'kq0D1YmYDfSH0UEai0TbxqHp8UkRptCR',
   dev: true,
   domain: 'bricks-store.eu.auth0.com',

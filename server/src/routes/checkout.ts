@@ -1,8 +1,8 @@
 import {checkIfCanCheckout, sendQuery} from 'Utils/helpers';
 import type {CartItem} from 'api-types';
-import type {FastifyPluginCallback} from 'fastify';
+import type {FastifyPluginAsync} from 'fastify';
 
-const checkout: FastifyPluginCallback = (fastify, options, done) => {
+const checkout: FastifyPluginAsync = async (fastify, options) => {
   fastify.addHook<{ Body?: CartItem[], }>('preHandler', async (request, reply) => {
     let canCheckout: Array<{ inventoryId: string, stock: number, }> | undefined = [];
 
@@ -21,10 +21,7 @@ const checkout: FastifyPluginCallback = (fastify, options, done) => {
     if (canCheckout.length > 0) {
       reply.header('Content-Type', 'application/json');
       reply.status(400).send(canCheckout);
-      return;
     }
-
-    done();
   });
 
   fastify.post<{ Body: CartItem[], }>('/', async (request, response) => {
@@ -51,8 +48,6 @@ const checkout: FastifyPluginCallback = (fastify, options, done) => {
 
     response.status(200).send();
   });
-
-  done();
 };
 
 export default checkout;
