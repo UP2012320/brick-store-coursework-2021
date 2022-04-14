@@ -123,7 +123,7 @@ const inventory: FastifyPluginAsync = async (fastify, options) => {
       const userAuth = request.user as JWTPayload;
 
       if (!userAuth.aud.includes('staff') || !userAuth.permissions.includes('write:product')) {
-        reply.unauthorized();
+        reply.forbidden();
         return;
       }
     }

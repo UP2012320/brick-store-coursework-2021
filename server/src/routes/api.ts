@@ -15,7 +15,7 @@ const api: FastifyPluginAsync = async (fastify, options) => {
       const userAuth = request.user as JWTPayload;
 
       if (!userAuth.aud.includes('staff')) {
-        reply.unauthorized();
+        reply.forbidden();
         return;
       }
     } else {
