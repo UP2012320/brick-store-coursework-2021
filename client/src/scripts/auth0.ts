@@ -24,6 +24,7 @@ export const fetchAuth0Config = async () => {
 
   // eslint-disable-next-line require-atomic-updates
   auth0 = await createAuth0Client({
+    audience: config.audience,
     cacheLocation: 'localstorage',
     client_id: config.clientId,
     domain: config.domain,
@@ -43,3 +44,19 @@ export const runIfAuthenticated = async (callback: (userInfo: User) => Promise<v
   }
 };
 
+export const getToken = async () => {
+  try {
+    const token = await auth0.getTokenSilently();
+
+    if (!token) {
+      return {};
+    }
+
+    return {
+      Authorization: `Bearer ${token}`,
+    };
+  } catch (error) {
+    console.error(error);
+    return {};
+  }
+};

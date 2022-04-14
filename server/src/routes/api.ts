@@ -1,11 +1,11 @@
 import type {FastifyPluginAsync} from 'fastify';
-import inventory from 'routes/inventory';
 import config from '../config';
 import checkout from './checkout';
+import inventory from './inventory';
 
 const api: FastifyPluginAsync = async (fastify, options) => {
   fastify.get('/getAuth0Config', async (request, response) => {
-    response.send({clientId: config.clientId, domain: config.domain});
+    response.send({audience: config.audience, clientId: config.clientId, domain: config.domain});
   });
 
   fastify.register(inventory);

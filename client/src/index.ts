@@ -1,7 +1,8 @@
-import {fetchAuth0Config} from 'Scripts/auth0';
+import {fetchAuth0Config, getToken, runIfAuthenticated} from 'Scripts/auth0';
 import createFooter from 'Scripts/components/layout/footer';
 import createNavbar from 'Scripts/components/layout/navbar';
 import createRouter from 'Scripts/createRouter';
+import {SERVER_BASE} from 'Scripts/helpers';
 import {clearUseEffect, fireUseEffectDiscardQueue, fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
 import {clearRef, resetRefIndexes} from 'Scripts/hooks/useRef';
 import {clearState, resetStateIndexes} from 'Scripts/hooks/useState';
@@ -54,6 +55,10 @@ const render = async () => {
       route: '/checkout',
     },
     {
+      name: 'staff',
+      route: '/staff',
+    },
+    {
       name: 'main',
       route: '/',
     },
@@ -79,6 +84,13 @@ const render = async () => {
       appendElements(internalRoot, createNavbar());
       break;
   }
+
+  await runIfAuthenticated(async () => {
+    await fetch(new URL('/api/v1/addProduct', SERVER_BASE).href, {
+      headers: await getToken() as HeadersInit,
+      method: 'POST',
+    });
+  });
 
   appendElements(internalRoot, createFooter());
 

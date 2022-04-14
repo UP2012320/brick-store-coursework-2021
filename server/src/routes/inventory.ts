@@ -2,6 +2,17 @@ import {sendQuery} from 'Utils/helpers';
 import type {Product, SearchRequestArguments} from 'api-types';
 import type {FastifyPluginAsync} from 'fastify';
 
+export interface UserAuth {
+  aud: string[];
+  azp: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  permissions: string[];
+  scope: string;
+  sub: string;
+}
+
 const inventory: FastifyPluginAsync = async (fastify, options) => {
   fastify.get<{ Querystring: SearchRequestArguments, }>('/search', async (request, reply) => {
     const body = request.query;
@@ -115,6 +126,20 @@ const inventory: FastifyPluginAsync = async (fastify, options) => {
     }
 
     reply.internalServerError();
+  });
+
+  // eslint-disable-next-line
+  fastify.post('/addProduct', {preValidation: fastify.authenticate}, async (request, reply) => {
+    if (typeof request.user === 'object') {
+      const userAuth = request.user as UserAuth;
+
+      if (!userAuth.aud.includes('staff') || !userAuth.permissions.includes('write:product')) {
+        reply.unauthorized();
+        return;
+      }
+    }
+
+    reply.status(200).send();
   });
 };
 
