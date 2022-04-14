@@ -1,4 +1,4 @@
-import {checkIfCanCheckout, sendQuery} from 'Utils/helpers';
+import {checkIfProductInStock, sendQuery} from 'Utils/helpers';
 import type {CartItem} from 'api-types';
 import type {FastifyPluginAsync} from 'fastify';
 
@@ -7,7 +7,7 @@ const checkout: FastifyPluginAsync = async (fastify, options) => {
     let canCheckout: Array<{ inventoryId: string, stock: number, }> | undefined = [];
 
     if (request.body) {
-      canCheckout = await checkIfCanCheckout(fastify.pg.pool, request.body);
+      canCheckout = await checkIfProductInStock(fastify.pg.pool, request.body);
     } else {
       reply.badRequest();
       return;
