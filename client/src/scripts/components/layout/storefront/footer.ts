@@ -1,8 +1,8 @@
+import {nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElement} from 'Scripts/uiUtils';
 // eslint-disable-next-line import/no-unassigned-import
 import 'Styles/components/footer.module.scss';
-import {nameof} from 'Scripts/helpers';
 
 export default function createFooter () {
   const footer = createElement('footer');

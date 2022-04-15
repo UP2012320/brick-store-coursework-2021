@@ -1,6 +1,6 @@
 import {fetchAuth0Config} from 'Scripts/auth0';
-import createFooter from 'Scripts/components/layout/footer';
-import createNavbar from 'Scripts/components/layout/navbar';
+import createFooter from 'Scripts/components/layout/storefront/footer';
+import createNavbar from 'Scripts/components/layout/storefront/navbar';
 import createRouter from 'Scripts/createRouter';
 import {clearUseEffect, fireUseEffectDiscardQueue, fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
 import {clearRef, resetRefIndexes} from 'Scripts/hooks/useRef';

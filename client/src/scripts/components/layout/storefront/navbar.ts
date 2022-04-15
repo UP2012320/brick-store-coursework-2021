@@ -1,6 +1,6 @@
 import logo from 'Assets/drawing512.png';
 import {auth0} from 'Scripts/auth0';
-import createNavbarMainContainerItem from 'Scripts/components/layout/navbarMainContainerItem';
+import createNavbarMainContainerItem from 'Scripts/components/layout/storefront/navbarMainContainerItem';
 import {getItemFromLocalStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';

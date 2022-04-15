@@ -1,4 +1,5 @@
 import {auth0, getAuthorizationHeader} from 'Scripts/auth0';
+import createSidebar from 'Scripts/components/layout/staff/sidebar';
 import {nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
@@ -13,8 +14,6 @@ export default function createStaff () {
 
   const checkIfAuthorized = async () => {
     const authorizationHeader = await getAuthorizationHeader();
-
-    console.debug(authorizationHeader);
 
     if (!authorizationHeader) {
       setResponseStatus('401');
@@ -40,7 +39,7 @@ export default function createStaff () {
     checkIfAuthorized();
   }, []);
 
-  const container = createElementWithStyles('div', undefined, staffStyles.container);
+  const container = createElementWithStyles('div', undefined, staffStyles.messageContainer);
   const statusContainer = createElementWithStyles('div', undefined, staffStyles.statusContainer);
 
   const titleRow = createElementWithStyles('div', undefined, staffStyles.statusRow);
@@ -114,20 +113,37 @@ export default function createStaff () {
       </statusContainer>
     </container>
     `;
-  } else if (responseStatus === '500') {
-    title.textContent = 'An error occurred, please refresh and try again';
+  } else if (responseStatus === '200') {
+    container.classList.remove(staffStyles.messageContainer);
+    container.classList.add(staffStyles.contentContainer);
+
+    const sidebar = createSidebar({
+      options: [
+        {
+          href: '/staff/add-product',
+          title: 'Add Product',
+        },
+      ],
+      title: 'Management Tools',
+    });
+
+    const body = createElementWithStyles('div', undefined, staffStyles.bodyContainer);
 
     return htmlx`
     <${container}>
-      <${statusContainer}>
-        <${titleRow}>
-          <${title}/>
-        </titleRow>
-      </statusContainer>
+      <${sidebar}/>
+      <${body}>
+
+      </${body}>
     </container>
     `;
   } else {
-    title.textContent = 'Success!';
+    title.textContent = 'An error occurred, please refresh and try again';
+
+    const messageRow = createElementWithStyles('div', undefined, staffStyles.statusRow);
+    const message = createElementWithStyles('p', {
+      textContent: 'Error code: ' + responseStatus,
+    }, staffStyles.statusMessage);
 
     return htmlx`
     <${container}>
@@ -135,6 +151,9 @@ export default function createStaff () {
         <${titleRow}>
           <${title}/>
         </titleRow>
+        <${messageRow}>
+          <${message}/>
+        </messageRow>
       </statusContainer>
     </container>
     `;

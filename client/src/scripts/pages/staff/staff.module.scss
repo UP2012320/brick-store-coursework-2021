@@ -3,11 +3,26 @@
 @import 'src/styles/commonComponents.module';
 @import 'bootstrap-icons';
 
-.container {
+.message-container {
   @include row-centered;
   width: 100%;
   height: 100%;
   flex: 1 0;
+}
+
+.content-container {
+  @include row;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  flex: 1 0;
+  overflow: hidden;
+}
+
+.body-container {
+  @include column;
+  height: 100%;
+  flex: 1 0 75%;
 }
 
 .status-container {
