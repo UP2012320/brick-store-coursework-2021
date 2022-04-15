@@ -44,12 +44,12 @@ export const runIfAuthenticated = async (callback: (userInfo: User) => Promise<v
   }
 };
 
-export const getToken = async () => {
+export const getAuthorizationHeader = async (): Promise<HeadersInit | undefined> => {
   try {
     const token = await auth0.getTokenSilently();
 
     if (!token) {
-      return {};
+      return undefined;
     }
 
     return {
@@ -57,6 +57,6 @@ export const getToken = async () => {
     };
   } catch (error) {
     console.error(error);
-    return {};
+    return undefined;
   }
 };

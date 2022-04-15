@@ -1,5 +1,5 @@
-import {sendQuery} from 'Utils/helpers';
-import type {JWTPayload, Product, SearchRequestArguments} from 'api-types';
+import {sendQuery, validatePermissions} from 'Utils/helpers';
+import type {Product, SearchRequestArguments} from 'api-types';
 import type {FastifyPluginAsync} from 'fastify';
 
 const inventory: FastifyPluginAsync = async (fastify, options) => {
@@ -117,17 +117,14 @@ const inventory: FastifyPluginAsync = async (fastify, options) => {
     reply.internalServerError();
   });
 
-  // eslint-disable-next-line
-  fastify.post('/addProduct', {preValidation: fastify.authenticate}, async (request, reply) => {
-    if (typeof request.user === 'object') {
-      const userAuth = request.user as JWTPayload;
-
-      if (!userAuth.aud.includes('staff') || !userAuth.permissions.includes('write:product')) {
-        reply.forbidden();
-        return;
-      }
-    }
-
+  fastify.post('/addProduct', {
+    preHandler: (request, reply, done) => {
+      validatePermissions(request, reply, ['write:product']);
+      done();
+    },
+    // eslint-disable-next-line
+    preValidation: fastify.authenticate,
+  }, async (request, reply) => {
     reply.status(200).send();
   });
 };

@@ -1,4 +1,5 @@
-import type {CartItem} from 'api-types';
+import type {CartItem, JWTPayload} from 'api-types';
+import type {FastifyReply, FastifyRequest} from 'fastify';
 import type {Pool, PoolClient, QueryConfig, QueryResult} from 'pg';
 
 export const sendQuery = async <T>(
@@ -44,4 +45,24 @@ export const checkIfProductInStock = async (pg: Pool | PoolClient, cartItems: Ca
   }
 
   return responseBody;
+};
+
+export const validatePermissions = (request: FastifyRequest, reply: FastifyReply, permissions: string[], all = false) => {
+  if (typeof request.user === 'object') {
+    const userAuth = request.user as JWTPayload;
+
+    let result;
+
+    if (all) {
+      result = permissions.every((permission) => userAuth.permissions.includes(permission));
+    } else {
+      result = permissions.some((permission) => userAuth.permissions.includes(permission));
+    }
+
+    if (!result) {
+      reply.forbidden();
+    }
+  } else {
+    reply.badRequest();
+  }
 };
