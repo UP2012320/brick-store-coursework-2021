@@ -7,10 +7,8 @@ const staff: FastifyPluginAsync = async (fastify, options) => {
     validatePermissions(request, reply, ['access:management']);
   });
 
-  fastify.get('/', async (request, reply) => {
-    reply.send({
-      message: 'Staff route',
-    });
+  fastify.get('/authorized', async (request, reply) => {
+    reply.status(200).send();
   });
 };
 

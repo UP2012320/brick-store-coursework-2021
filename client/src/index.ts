@@ -13,7 +13,7 @@ import createCart from 'Scripts/pages/cart/cart';
 import createCheckout from 'Scripts/pages/checkout/checkout';
 import createMain from 'Scripts/pages/main';
 import createProduct from 'Scripts/pages/product/product';
-import createStaffPage from 'Scripts/pages/staff/staffPage';
+import createStaff from 'Scripts/pages/staff/staff';
 import {appendElements, createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
 import type {ProductProps} from 'Types/types';
@@ -34,8 +34,6 @@ const render = async () => {
   const internalRoot = createElement('div', {
     id: rootStyles.root,
   });
-
-  appendElements(internalRoot, createNavbar());
 
   const [targetedRoute, restArgs, queryStrings] = createRouter([
     {
@@ -64,31 +62,39 @@ const render = async () => {
     },
   ]);
 
+  let body;
+
   switch (targetedRoute) {
     case 'browse':
-      appendElements(internalRoot, createBrowse({queryStrings} as BrowseProps));
+      body = createBrowse(queryStrings as BrowseProps);
       break;
     case 'product':
-      appendElements(internalRoot, createProduct({restArgs} as ProductProps));
+      body = createProduct(restArgs as ProductProps);
       break;
     case 'cart':
-      appendElements(internalRoot, createCart());
+      body = createCart();
       break;
     case 'checkout':
-      appendElements(internalRoot, createCheckout());
+      body = createCheckout();
       break;
     case 'staff':
-      appendElements(internalRoot, createStaffPage());
+      body = createStaff();
       break;
     case 'main':
-      appendElements(internalRoot, createMain());
-      break;
     default:
-      appendElements(internalRoot, createNavbar());
+      body = createMain();
       break;
   }
 
-  appendElements(internalRoot, createFooter());
+  if (targetedRoute !== 'staff') {
+    appendElements(internalRoot, createNavbar());
+  }
+
+  appendElements(internalRoot, body);
+
+  if (targetedRoute !== 'staff') {
+    appendElements(internalRoot, createFooter());
+  }
 
   if (currentRoot) {
     morphdom(currentRoot, internalRoot, withEvents({
