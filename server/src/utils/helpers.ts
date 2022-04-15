@@ -51,6 +51,11 @@ export const validatePermissions = (request: FastifyRequest, reply: FastifyReply
   if (typeof request.user === 'object') {
     const userAuth = request.user as JWTPayload;
 
+    if (!userAuth.permissions) {
+      reply.badRequest();
+      return;
+    }
+
     let result;
 
     if (all) {
