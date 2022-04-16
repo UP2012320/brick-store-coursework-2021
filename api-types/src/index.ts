@@ -1,8 +1,8 @@
 export interface SearchRequestArguments {
   colours?: string;
   offset?: number;
-  order?: string;
   query: string;
+  sort?: string;
   types?: string;
 }
 

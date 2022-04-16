@@ -1,9 +1,12 @@
 import {auth0, getAuthorizationHeader} from 'Scripts/auth0';
 import createSidebar from 'Scripts/components/layout/staff/sidebar';
+import createRouter from 'Scripts/createRouter';
 import {nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
+import createNotFound from 'Scripts/pages/notFound';
+import createManageProducts from 'Scripts/pages/staff/manageProducts/manageProducts';
 import {createElementWithStyles, historyPush} from 'Scripts/uiUtils';
 import staffStyles from './staff.module.scss';
 
@@ -120,12 +123,34 @@ export default function createStaff () {
     const sidebar = createSidebar({
       options: [
         {
-          href: '/staff/add-product',
-          title: 'Add Product',
+          href: '/staff/manage-products',
+          title: 'Products',
         },
       ],
       title: 'Management Tools',
     });
+
+    const [targetedRoute, restArgs, queryStrings] = createRouter([
+      {
+        name: 'products',
+        route: '/staff/manage-products',
+      },
+      {
+        name: 'main',
+        route: '/staff',
+      },
+    ]);
+
+    let page;
+
+    switch (targetedRoute) {
+      case 'main':
+      case 'products':
+        page = createManageProducts();
+        break;
+      default:
+        page = createNotFound();
+    }
 
     const body = createElementWithStyles('div', undefined, staffStyles.bodyContainer);
 
@@ -133,7 +158,7 @@ export default function createStaff () {
     <${container}>
       <${sidebar}/>
       <${body}>
-
+        <${page}/>
       </${body}>
     </container>
     `;

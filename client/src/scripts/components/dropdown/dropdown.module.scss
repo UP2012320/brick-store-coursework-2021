@@ -115,10 +115,6 @@
   margin: $spacing-xsmall $spacing-small $spacing-xsmall $spacing-xsmall;
 }
 
-.bi-check {
-  @include row-centered;
-}
-
 .bi-circle {
   @include row-centered;
   margin: $spacing-xsmall $spacing-small $spacing-xsmall $spacing-xsmall;

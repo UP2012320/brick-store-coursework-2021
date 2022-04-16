@@ -7,19 +7,17 @@ import {fetchColours, fetchTypes} from 'Scripts/components/filterBar/fetch';
 import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useRef} from 'Scripts/hooks/useRef';
-import type {StateSetter} from 'Scripts/hooks/useState';
+import type {SetSearchStateArguments} from 'Scripts/hooks/useSearch';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import type {DropDownOption, MultiSelectDropDownOption} from 'Types/types';
-import type {SearchRequestArguments} from 'api-types';
 
 const useState = registerUseState(nameof(createFilterBar));
 
 export interface CreateFilterBarProps {
-  setFilters: StateSetter<Record<string, string[]>>;
-  setSearchArguments: StateSetter<SearchRequestArguments>;
+  setSearchState: (newArguments: SetSearchStateArguments) => void;
 }
 
 const sortOptions = [
@@ -87,7 +85,10 @@ export default function createFilterBar (props: CreateFilterBarProps) {
   const searchRow = createElementWithStyles('div', undefined, filterBarStyles.filterBarSearchRow);
 
   const onSearch = (query: string) => {
-    props.setSearchArguments((previous) => ({...previous, query}));
+    props.setSearchState({
+      isNewSearch: true,
+      newSearchQuery: query,
+    });
   };
 
   const search = createElementWithStyles(
@@ -125,10 +126,11 @@ export default function createFilterBar (props: CreateFilterBarProps) {
       dropDownOptions: sortOptions,
       key: 'sort-select',
       onSelectedChange: (option) => {
-        props.setFilters((previous) => ({
-          ...previous,
-          order: [option.value],
-        }));
+        props.setSearchState({
+          newSearchFilters: {
+            sort: [option.value],
+          },
+        });
       },
     }),
     key: 'sort',
@@ -142,12 +144,14 @@ export default function createFilterBar (props: CreateFilterBarProps) {
       dropDownOptions: colours,
       key: 'colours-multi-select',
       onOptionsChange: (options) => {
-        props.setFilters((previous) => ({
-          ...previous,
-          colours: options
-            .filter((option) => option.toggled)
-            .map((option) => option.value),
-        }));
+        props.setSearchState({
+          isNewSearch: true,
+          newSearchFilters: {
+            colours: options
+              .filter((option) => option.toggled)
+              .map((option) => option.value),
+          },
+        });
       },
     }),
     key: 'colours',
@@ -161,12 +165,14 @@ export default function createFilterBar (props: CreateFilterBarProps) {
       dropDownOptions: types,
       key: 'types-multi-select',
       onOptionsChange: (options) => {
-        props.setFilters((previous) => ({
-          ...previous,
-          types: options
-            .filter((option) => option.toggled)
-            .map((option) => option.value),
-        }));
+        props.setSearchState({
+          isNewSearch: true,
+          newSearchFilters: {
+            types: options
+              .filter((option) => option.toggled)
+              .map((option) => option.value),
+          },
+        });
       },
     }),
     key: 'types',
@@ -181,12 +187,14 @@ export default function createFilterBar (props: CreateFilterBarProps) {
           dropDownOptions: types,
           key: 'types-multi-select-sidebar',
           onOptionsChange: (options) => {
-            props.setFilters((previous) => ({
-              ...previous,
-              types: options
-                .filter((option) => option.toggled)
-                .map((option) => option.value),
-            }));
+            props.setSearchState({
+              isNewSearch: true,
+              newSearchFilters: {
+                types: options
+                  .filter((option) => option.toggled)
+                  .map((option) => option.value),
+              },
+            });
           },
         }),
         key: 'types-sidebar',
@@ -197,12 +205,14 @@ export default function createFilterBar (props: CreateFilterBarProps) {
           dropDownOptions: colours,
           key: 'colours-multi-select-sidebar',
           onOptionsChange: (options) => {
-            props.setFilters((previous) => ({
-              ...previous,
-              colours: options
-                .filter((option) => option.toggled)
-                .map((option) => option.value),
-            }));
+            props.setSearchState({
+              isNewSearch: true,
+              newSearchFilters: {
+                colours: options
+                  .filter((option) => option.toggled)
+                  .map((option) => option.value),
+              },
+            });
           },
         }),
         key: 'colours-sidebar',

@@ -1,0 +1,30 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
+
+.container {
+  @include row-centered;
+  width: 100%;
+
+  & > button:not(:last-child) {
+    border-right: 2px solid $highlight-colour;
+  }
+}
+
+.action-button {
+  border: 2px solid transparent;
+  height: 50px;
+
+  &:hover {
+    cursor: pointer;
+    color: #FFF;
+    background-color: $highlight-colour;
+    border-bottom-color: transparent;
+  }
+
+  &:active, .selected {
+    color: $highlight-colour;
+    background-color: transparent;
+    border: 2px solid transparent;
+  }
+}

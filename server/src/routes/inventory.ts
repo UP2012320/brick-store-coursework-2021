@@ -11,7 +11,7 @@ const inventory: FastifyPluginAsync = async (fastify, options) => {
       return;
     }
 
-    const direction = body.order?.startsWith('-') ? 'desc' : 'asc';
+    const direction = body.sort?.startsWith('-') ? 'desc' : 'asc';
 
     const [searchQueryResult, searchQueryError] = await sendQuery<Product>(
       fastify.pg.pool,
@@ -22,7 +22,7 @@ const inventory: FastifyPluginAsync = async (fastify, options) => {
         body.offset ?? 0,
         body.colours ? `{${body.colours}}` : null,
         body.types ? `{${body.types}}` : null,
-        direction === 'desc' ? body.order?.slice(1) : body.order,
+        direction === 'desc' ? body.sort?.slice(1) : body.sort,
         direction,
       ],
     );

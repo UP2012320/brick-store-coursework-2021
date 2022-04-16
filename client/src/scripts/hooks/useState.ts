@@ -12,7 +12,7 @@ export function clearState (key: string) {
   stateManager.clearState(key);
 }
 
-export type StateSetter<T> = (newState: (T | ((previous: T) => T))) => void;
+export type StateSetter<T> = (newState: (T | ((previous: T) => T))) => boolean;
 
 export function useState<T = undefined> (key: string, initialState?: undefined): [(T | undefined), (StateSetter<T>)];
 export function useState<T> (key: string, initialState: T): [(T), (StateSetter<T>)];
@@ -29,12 +29,14 @@ export function useState<T> (key: string, initialState: T): unknown {
     }
 
     if (deepEqual(newStateValue, callerState.states[callerStateIndex])) {
-      return;
+      return false;
     }
 
     callerState.states[callerStateIndex] = newStateValue;
 
     forceReRender();
+
+    return true;
   };
 
   return [callerState.states[callerStateIndex] as T, setState];
