@@ -12,6 +12,7 @@ import createBrowse from 'Scripts/pages/browse';
 import createCart from 'Scripts/pages/cart/cart';
 import createCheckout from 'Scripts/pages/checkout/checkout';
 import createMain from 'Scripts/pages/main';
+import createNotFound from 'Scripts/pages/notFound';
 import createProduct from 'Scripts/pages/product/product';
 import createStaff from 'Scripts/pages/staff/staff';
 import {appendElements, createElement} from 'Scripts/uiUtils';
@@ -54,7 +55,7 @@ const render = async () => {
     },
     {
       name: 'staff',
-      route: '/staff',
+      route: '/staff/*',
     },
     {
       name: 'main',
@@ -81,8 +82,10 @@ const render = async () => {
       body = createStaff();
       break;
     case 'main':
-    default:
       body = createMain();
+      break;
+    default:
+      body = createNotFound();
       break;
   }
 
