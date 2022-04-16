@@ -17,19 +17,14 @@ const createRouter = <T extends string> (args: Array<RouterArgs<T>>): [T | undef
 
     routeRegexString = `^${routeRegexString}/?$`;
 
-    console.debug(routeRegexString);
-    console.debug(path);
-
     const routeRegex = new RegExp(routeRegexString, 'gimu');
 
     let result;
 
     // eslint-disable-next-line @typescript-eslint/no-extra-parens
     if ((result = routeRegex.exec(path))) {
-      console.debug(result);
       return [routerArgument.name, result.groups, new URLSearchParams(window.location.search)];
     }
-    console.debug(result);
   }
 
   return [undefined, undefined, undefined];

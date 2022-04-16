@@ -23,8 +23,6 @@ export default function createSidebar (props: CreateSidebarProps) {
     container.classList.remove(sidebarStyles.sidebarOpen);
   }
 
-  console.debug(props.body);
-
   return htmlx`
     <${container}>
       <${containerInner}>
