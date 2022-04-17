@@ -1,0 +1,92 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
+@import 'bootstrap-icons';
+
+.container {
+  display: grid;
+  grid-template-rows: .05fr 1fr;
+  grid-template-columns: auto;
+  height: 100%;
+}
+
+.header {
+  display: grid;
+  grid:
+    '. name . . . discounted_price . . search add' 1fr
+    / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  background-color: $not-quite-white;
+  border-bottom: 1px solid $not-quite-black;
+}
+
+@mixin header-toggle-item {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr auto;
+  @include font-medium;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $not-really-white;
+  }
+
+  & > p {
+    @include row-centered;
+    height: 100%;
+  }
+
+  &.toggled {
+    transform: rotate(180deg);
+  }
+
+  &.selected {
+    & > i {
+      display: flex;
+    }
+  }
+
+  & > i {
+    display: none;
+  }
+}
+
+.header-name {
+  @include header-toggle-item;
+  grid-area: name;
+}
+
+.header-price {
+  @include header-toggle-item;
+  grid-area: discounted_price;
+}
+
+@mixin header-action-item {
+  & > * {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.header-search {
+  @include header-action-item;
+  grid-area: search;
+
+  & > input {
+    border-left: 1px solid $not-quite-black;
+    border-right: 1px solid $not-quite-black;
+    @include font-large;
+  }
+}
+
+.header-add {
+  @include header-action-item;
+  grid-area: add;
+}
+
+.body {
+  display: grid;
+  grid:
+    'id name colour type price discounted_price discount stock edit delete' 1fr
+    / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  overflow: auto;
+}

@@ -31,6 +31,20 @@
   }
 }
 
+.action-button-no-border {
+  @extend .action-button;
+
+  border-bottom: 2px solid transparent;
+
+  &:hover {
+    border-bottom-color: transparent;
+  }
+
+  &:active {
+    border: 2px solid transparent;
+  }
+}
+
 .toggle-header {
   @include row-centered;
   width: 100%;
