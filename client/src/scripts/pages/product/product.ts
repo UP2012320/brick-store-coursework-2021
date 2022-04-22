@@ -16,8 +16,10 @@ export default function createProduct (props: ProductProps) {
   const [productDetails, setProductDetails] = useState<Product | undefined>();
 
   const fetchProduct = async () => {
-    const url = new URL('/api/v1/getProductBySlug', SERVER_BASE);
+    console.debug('running fetchProduct');
+    console.debug('fetching product', props.restArgs?.slug);
 
+    const url = new URL('/api/v1/getProductBySlug', SERVER_BASE);
     if (props.restArgs?.slug) {
       url.searchParams.set('slug', props.restArgs?.slug);
     } else {

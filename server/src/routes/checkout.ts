@@ -19,8 +19,7 @@ const checkout: FastifyPluginAsync = async (fastify, options) => {
     }
 
     if (canCheckout.length > 0) {
-      reply.header('Content-Type', 'application/json');
-      reply.status(400).send(canCheckout);
+      reply.header('Content-Type', 'application/json').status(400).send(canCheckout);
     }
   });
 

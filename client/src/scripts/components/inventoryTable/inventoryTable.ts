@@ -5,6 +5,20 @@ import inventoryTableStyles from './inventoryTable.module.scss';
 
 const key = nameof(createInventoryTable);
 
+/*
+ID NAME COLOUR TYPE PRICE DISCOUNTED_PRICE DISCOUNT STOCK EDIT DELETE
+
+  display: grid;
+  grid:
+    "id name colour type price discounted_price discount stock edit delete" 1fr
+    / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+display: grid;
+  grid:
+    ". name . . . discounted_price . . search add" 1fr
+    / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+ */
+
 export default function createInventoryTable () {
   const container = createKeyedContainer('div', key, undefined, inventoryTableStyles.container);
 

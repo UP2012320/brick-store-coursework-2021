@@ -70,7 +70,7 @@ const render = async () => {
       body = createBrowse(queryStrings as BrowseProps);
       break;
     case 'product':
-      body = createProduct(restArgs as ProductProps);
+      body = createProduct({restArgs} as ProductProps);
       break;
     case 'cart':
       body = createCart();
