@@ -2,6 +2,7 @@ import createBodyRow from 'Scripts/components/inventoryTable/bodyRow/bodyRow';
 import createHeaderRow from 'Scripts/components/inventoryTable/headerRow/headerRow';
 import type {SortSetting} from 'Scripts/helpers';
 import {nameof} from 'Scripts/helpers';
+import type {SetSearchStateArguments} from 'Scripts/hooks/useSearch';
 import type {StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
@@ -12,6 +13,8 @@ const key = nameof(createInventoryTable);
 
 interface InventoryTableProps {
   rows: Product[];
+  setAddModalIsOpen: StateSetter<boolean>;
+  setSearchSettings: (newArguments: SetSearchStateArguments) => void;
   setSortSetting: StateSetter<SortSetting>;
   sortSetting: SortSetting;
 }
@@ -20,6 +23,8 @@ export default function createInventoryTable (props: InventoryTableProps) {
   const container = createKeyedContainer('div', key, undefined, inventoryTableStyles.container);
 
   const header = createHeaderRow({
+    setAddModalIsOpen: props.setAddModalIsOpen,
+    setSearchSettings: props.setSearchSettings,
     setSortSetting: props.setSortSetting,
     sortSetting: props.sortSetting,
   });

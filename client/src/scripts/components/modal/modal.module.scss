@@ -1,0 +1,53 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
+@import 'bootstrap-icons';
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  display: grid;
+  grid:
+    "control" 10%
+    "body" 1fr
+    / auto;
+  border-radius: $medium-radius;
+  background-color: #fff;
+  min-width: 500px;
+  min-height: 500px;
+  z-index: 2;
+  border: 1px solid $not-quite-black;
+}
+
+.control-container {
+  grid-area: control;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: $spacing-medium;
+  border-bottom: 1px solid $not-quite-black;
+}
+
+.bi-x {
+  font-size: 22pt;
+
+  &::before {
+    transition: background-color 0.2s ease-in-out;
+    border-radius: 50px;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    &::before {
+      background-color: $not-quite-white;
+    }
+  }
+}
+
+.body-container {
+  grid-area: body;
+  padding: $spacing-medium;
+}

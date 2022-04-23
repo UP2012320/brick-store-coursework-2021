@@ -1,16 +1,25 @@
 import createHeaderItem from 'Scripts/components/inventoryTable/headerItem/headerItem';
 import inventoryTableStyles from 'Scripts/components/inventoryTable/inventoryTable.module.scss';
 import type {SortSetting} from 'Scripts/helpers';
+import {nameof} from 'Scripts/helpers';
+import type {SetSearchStateArguments} from 'Scripts/hooks/useSearch';
 import type {StateSetter} from 'Scripts/hooks/useState';
+import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 
+const key = nameof(createHeaderRow);
+
 interface HeaderRowProps {
+  setAddModalIsOpen: StateSetter<boolean>;
+  setSearchSettings: (newArguments: SetSearchStateArguments) => void;
   setSortSetting: StateSetter<SortSetting>;
   sortSetting: SortSetting;
 }
 
 export default function createHeaderRow (props: HeaderRowProps) {
+  const [searchInput, setSearchInput] = useState(key, '');
+
   const header = createElementWithStyles('header', undefined, inventoryTableStyles.header);
 
   const headerId = createHeaderItem({
@@ -80,11 +89,30 @@ export default function createHeaderRow (props: HeaderRowProps) {
 
   const headerSearch = createElementWithStyles('div', undefined, inventoryTableStyles.headerSearch);
   const headerSearchBox = createElementWithStyles('input', {
+    defaultValue: searchInput,
+    oninput: (event: Event) => {
+      const searchValue = (event.target as HTMLInputElement).value;
+      setSearchInput(searchValue);
+    },
+    onkeydown: (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        const searchValue = (event.target as HTMLInputElement).value;
+
+        setSearchInput(searchValue);
+
+        props.setSearchSettings({
+          newSearchQuery: searchInput,
+        });
+      }
+    },
     placeholder: 'Search',
   }, inventoryTableStyles.headerSearch);
 
   const headerAdd = createElementWithStyles('div', undefined, inventoryTableStyles.headerAdd);
   const headerAddButton = createElementWithStyles('button', {
+    onclick: () => {
+      props.setAddModalIsOpen(true);
+    },
     textContent: 'Add',
   }, inventoryTableStyles.actionButtonNoBorder);
 
