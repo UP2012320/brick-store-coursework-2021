@@ -1,19 +1,28 @@
 @import 'src/styles/utils';
 @import 'src/styles/theme';
 @import 'src/styles/commonComponents.module';
+@import 'bootstrap-icons';
 
 .sidebar-container {
   @include column;
   height: 100vh;
   flex: 1 0 auto;
   background-color: $not-quite-white;
+  transition: max-width 0.5s ease-in-out;
+  max-width: 300px;
+
+  &.collapsed {
+    max-width: 0;
+  }
 }
 
 .sidebar-title-container {
-  @include column-centered;
+  @include row-centered;
   padding-top: $spacing-xlarge;
   padding-bottom: $spacing-xlarge;
   background-color: $not-really-white;
+  position: relative;
+  overflow: hidden;
 }
 
 .sidebar-title {
@@ -28,4 +37,40 @@
 
 .action-button {
   width: 100%;
+}
+
+.bi-caret-left-fill {
+  position: absolute;
+  right: 0;
+  margin-right: $spacing-small;
+  font-size: 18pt;
+  transform: rotate(0deg);
+  transition: transform 0.2s ease-in-out;
+
+  &::before {
+    transition: background-color 0.2s ease-in-out;
+    padding: $spacing-xsmall;
+    border-radius: 50px;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    &::before {
+      background-color: $not-quite-white;
+    }
+  }
+
+  &.toggled {
+    transform: rotate(180deg);
+    position: fixed;
+    left: 0;
+    right: unset;
+
+    &:hover {
+      &::before {
+        background-color: $not-really-white;
+      }
+    }
+  }
 }

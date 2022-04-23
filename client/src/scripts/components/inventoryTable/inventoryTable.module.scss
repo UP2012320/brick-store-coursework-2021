@@ -25,6 +25,7 @@
   grid-template-columns: 1fr auto;
   padding-left: $spacing-small;
   padding-right: $spacing-small;
+  transition: background-color 0.2s ease-in-out;
   @include font-medium;
 
   &:hover {
