@@ -1,73 +1,38 @@
+import createBodyRow from 'Scripts/components/inventoryTable/bodyRow/bodyRow';
+import createHeaderRow from 'Scripts/components/inventoryTable/headerRow/headerRow';
+import type {SortSetting} from 'Scripts/helpers';
 import {nameof} from 'Scripts/helpers';
+import type {StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElement, createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import type {Product} from 'api-types';
 import inventoryTableStyles from './inventoryTable.module.scss';
 
 const key = nameof(createInventoryTable);
 
-/*
-ID NAME COLOUR TYPE PRICE DISCOUNTED_PRICE DISCOUNT STOCK EDIT DELETE
+interface InventoryTableProps {
+  rows: Product[];
+  setSortSetting: StateSetter<SortSetting>;
+  sortSetting: SortSetting;
+}
 
-  display: grid;
-  grid:
-    "id name colour type price discounted_price discount stock edit delete" 1fr
-    / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-
-display: grid;
-  grid:
-    ". name . . . discounted_price . . search add" 1fr
-    / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
- */
-
-export default function createInventoryTable () {
+export default function createInventoryTable (props: InventoryTableProps) {
   const container = createKeyedContainer('div', key, undefined, inventoryTableStyles.container);
 
-  const header = createElementWithStyles('header', undefined, inventoryTableStyles.header);
-
-  const headerName = createElementWithStyles('button', undefined, inventoryTableStyles.headerName, inventoryTableStyles.selected);
-  const headerNameText = createElement('p', {
-    textContent: 'Name',
+  const header = createHeaderRow({
+    setSortSetting: props.setSortSetting,
+    sortSetting: props.sortSetting,
   });
-  const headerNameSortArrow = createElementWithStyles('i', undefined, inventoryTableStyles.biCaretDownFill);
 
-  const headerPrice = createElementWithStyles('button', undefined, inventoryTableStyles.headerPrice);
-  const headerPriceText = createElement('p', {
-    textContent: 'Price',
-  });
-  const headerPriceSortArrow = createElementWithStyles('i', undefined, inventoryTableStyles.biCaretDownFill);
+  const body = createElementWithStyles('ul', undefined, inventoryTableStyles.body);
 
-  const headerSearch = createElementWithStyles('div', undefined, inventoryTableStyles.headerSearch);
-  const headerSearchBox = createElementWithStyles('input', {
-    placeholder: 'Search',
-  }, inventoryTableStyles.headerSearch);
-
-  const headerAdd = createElementWithStyles('div', undefined, inventoryTableStyles.headerAdd);
-  const headerAddButton = createElementWithStyles('button', {
-    textContent: 'Add',
-  }, inventoryTableStyles.actionButtonNoBorder);
-
-  const body = createElementWithStyles('section', undefined, inventoryTableStyles.body);
+  const rows = props.rows.map((row) => createBodyRow({key: row.inventory_id, row}));
 
   return htmlx`
   <${container}>
-    <${header}>
-      <${headerName}>
-        <${headerNameText}/>
-        <${headerNameSortArrow}/>
-      </${headerName}>
-      <${headerPrice}>
-        <${headerPriceText}/>
-        <${headerPriceSortArrow}/>
-      </${headerPrice}>
-      <${headerSearch}>
-        <${headerSearchBox}/>
-      </${headerSearch}>
-      <${headerAdd}>
-        <${headerAddButton}/>
-      </${headerAdd}>
-    </header>
+    <${header}/>
     <${body}>
-
+      <${rows}/>
     </body>
   </container>
   `;

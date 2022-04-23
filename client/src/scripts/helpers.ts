@@ -23,3 +23,32 @@ export const getItemFromLocalStorage = <T>(itemName: string) => {
 };
 
 export const getProductUrl = (slug: string) => `/product/${slug}`;
+
+export class SortSetting {
+  public readonly sortBy: string;
+
+  public readonly sortOrder: 'asc' | 'desc';
+
+  public constructor (sortBy: string, sortOrder: 'asc' | 'desc') {
+    this.sortBy = sortBy;
+    this.sortOrder = sortOrder;
+  }
+
+  public toString () {
+    return `${this.sortOrder === 'asc' ? '' : '-'}${this.sortBy}`;
+  }
+
+  public updateSortBy (sortBy: string) {
+    let newSortOrder: 'asc' | 'desc';
+    let newSortBy = this.sortBy;
+
+    if (this.sortBy === sortBy) {
+      newSortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      newSortBy = sortBy;
+      newSortOrder = 'asc';
+    }
+
+    return new SortSetting(newSortBy, newSortOrder);
+  }
+}

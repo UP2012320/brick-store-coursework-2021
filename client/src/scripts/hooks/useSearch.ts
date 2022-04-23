@@ -20,7 +20,7 @@ export interface SetSearchStateArguments {
 
 export default function useSearch (key: string,
   defaultSearchArguments: SearchArguments = {
-    filters: {colours: [], types: []},
+    filters: {colours: [], sort: ['item_name'], types: []},
     query: '',
   }): [products: Product[], setSearchState: (newArguments: SetSearchStateArguments) => void, pageNumber: number, noMoreResults: boolean, requestError: string | undefined] {
   const [searchResults, setSearchResults] = useState<Product[]>(key, []);

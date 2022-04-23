@@ -13,7 +13,7 @@
 .header {
   display: grid;
   grid:
-    '. name . . . discounted_price . . search add' 1fr
+    'id name colour type price discounted_price discount stock search add' 1fr
     / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   background-color: $not-quite-white;
   border-bottom: 1px solid $not-quite-black;
@@ -23,6 +23,8 @@
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 1fr auto;
+  padding-left: $spacing-small;
+  padding-right: $spacing-small;
   @include font-medium;
 
   &:hover {
@@ -35,8 +37,15 @@
     height: 100%;
   }
 
+  & > i {
+    transform: rotate(0deg);
+    transition: transform 0.2s ease-in-out;
+  }
+
   &.toggled {
-    transform: rotate(180deg);
+    & > i {
+      transform: rotate(180deg);
+    }
   }
 
   &.selected {
@@ -50,14 +59,44 @@
   }
 }
 
+.header-id {
+  @include header-toggle-item;
+  grid-area: id;
+}
+
 .header-name {
   @include header-toggle-item;
   grid-area: name;
 }
 
+.header-colour {
+  @include header-toggle-item;
+  grid-area: colour;
+}
+
+.header-type {
+  @include header-toggle-item;
+  grid-area: type;
+}
+
 .header-price {
   @include header-toggle-item;
+  grid-area: price;
+}
+
+.header-discounted-price {
+  @include header-toggle-item;
   grid-area: discounted_price;
+}
+
+.header-discount {
+  @include header-toggle-item;
+  grid-area: discount;
+}
+
+.header-stock {
+  @include header-toggle-item;
+  grid-area: stock;
 }
 
 @mixin header-action-item {
@@ -84,9 +123,78 @@
 }
 
 .body {
+  overflow: auto;
+  padding: 0;
+  margin: 0;
+
+  & > li:nth-child(even) {
+    background-color: $not-quite-white;
+  }
+
+  & > li:nth-child(odd) {
+    background-color: $not-really-white;
+  }
+}
+
+.body-row {
   display: grid;
   grid:
     'id name colour type price discounted_price discount stock edit delete' 1fr
     / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  overflow: auto;
+  padding: $spacing-small;
+}
+
+@mixin body-row-item {
+  @include row-centered;
+  text-align: center;
+}
+
+.body-row-id {
+  @include body-row-item;
+  grid-area: id;
+}
+
+.body-row-name {
+  @include body-row-item;
+  grid-area: name;
+}
+
+.body-row-colour {
+  @include body-row-item;
+  grid-area: colour;
+}
+
+.body-row-type {
+  @include body-row-item;
+  grid-area: type;
+}
+
+.body-row-price {
+  @include body-row-item;
+  grid-area: price;
+}
+
+.body-row-discounted-price {
+  @include body-row-item;
+  grid-area: discounted_price;
+}
+
+.body-row-discount {
+  @include body-row-item;
+  grid-area: discount;
+}
+
+.body-row-stock {
+  @include body-row-item;
+  grid-area: stock;
+}
+
+.body-row-edit {
+  @include body-row-item;
+  grid-area: edit;
+}
+
+.body-row-delete {
+  @include body-row-item;
+  grid-area: delete;
 }
