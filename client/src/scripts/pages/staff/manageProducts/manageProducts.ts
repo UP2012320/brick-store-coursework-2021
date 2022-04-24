@@ -1,11 +1,11 @@
 import createInventoryTable from 'Scripts/components/inventoryTable/inventoryTable';
 import createModal from 'Scripts/components/modal/modal';
+import createProductBody from 'Scripts/components/modal/productBody/productBody';
 import {nameof, SortSetting} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import useSearch from 'Scripts/hooks/useSearch';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElement} from 'Scripts/uiUtils';
 
 const key = nameof(createManageProducts);
 
@@ -28,7 +28,11 @@ export default function createManageProducts () {
   let addModal;
 
   if (addModalIsOpen) {
-    const modalBody = createElement('p', {textContent: 'test'});
+    const modalBody = createProductBody({
+      onSubmit: (product) => {
+        console.debug(product);
+      },
+    });
 
     addModal = createModal({
       body: htmlx`<${modalBody}/>`,

@@ -50,4 +50,5 @@
 .body-container {
   grid-area: body;
   padding: $spacing-medium;
+  overflow-y: auto;
 }

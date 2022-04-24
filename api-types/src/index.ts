@@ -15,6 +15,7 @@ export interface Product {
   description: string;
   discount?: number;
   discount_price: number;
+  imageUrl?: string;
   inventory_id: string;
   name: string;
   price: number;

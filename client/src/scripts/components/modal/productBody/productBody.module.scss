@@ -1,0 +1,67 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
+@import 'bootstrap-icons';
+
+.container {
+  display: grid;
+  grid:
+    "image ." 2fr
+    "name price" 1fr
+    "type colour" 1fr
+    "stock discount" 1fr
+    "actions actions" 1fr
+    / 1fr 1fr;
+  grid-gap: 8px;
+  height: 100%;
+  align-items: center;
+}
+
+.image-container {
+  grid-area: image;
+  height: 145px;
+  width: 145px;
+  transition: background-color 0.2s ease-in-out;
+  border: 1px solid $not-quite-black;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $not-quite-white;
+  }
+
+  &.empty {
+    @include row-centered;
+  }
+}
+
+.empty-image-text {
+  @include font-medium;
+}
+
+@mixin input-container {
+  @include column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.input-label {
+  grid-area: label;
+  @include font-small;
+}
+
+.input-field {
+  grid-area: field;
+  padding: $spacing-medium;
+  border: 1px solid $not-quite-black;
+}
+
+.name-input-container {
+  @include input-container;
+  grid-area: name;
+}
+
+.price-input-container {
+  @include input-container;
+  grid-area: price;
+}
