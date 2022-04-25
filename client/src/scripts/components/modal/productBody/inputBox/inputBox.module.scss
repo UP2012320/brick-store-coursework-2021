@@ -1,0 +1,80 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
+@import 'bootstrap-icons';
+
+@mixin input-container {
+  @include column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.input-label {
+  grid-area: label;
+  @include font-small;
+}
+
+.input-field-container {
+  grid-area: field;
+  display: flex;
+  border: 1px solid $not-quite-black;
+  border-radius: $medium-radius;
+
+}
+
+.input-prefix {
+  @include row-centered;
+  border-right: 1px solid $not-quite-black;
+  background-color: #cbcbd5;
+  padding: $spacing-medium;
+  border-top-left-radius: $medium-radius;
+  border-bottom-left-radius: $medium-radius;
+}
+
+.input-field {
+  flex: 1 0;
+  padding: $spacing-medium;
+  border: none;
+  border-top-right-radius: $medium-radius;
+  border-bottom-right-radius: $medium-radius;
+
+  &.no-prefix {
+    border-radius: $medium-radius;
+  }
+}
+
+.name-input-container {
+  @include input-container;
+  grid-area: name;
+}
+
+.price-input-container {
+  @include input-container;
+  grid-area: price;
+}
+
+.description-input-container {
+  @include input-container;
+  grid-area: description;
+}
+
+.type-input-container {
+  @include input-container;
+  grid-area: type;
+}
+
+.colour-input-container {
+  @include input-container;
+  grid-area: colour;
+}
+
+.stock-input-container {
+  @include input-container;
+  grid-area: stock;
+}
+
+.discount-input-container {
+  @include input-container;
+  grid-area: discount;
+}

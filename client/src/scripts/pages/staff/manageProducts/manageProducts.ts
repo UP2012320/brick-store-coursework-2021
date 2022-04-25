@@ -39,6 +39,7 @@ export default function createManageProducts () {
       isOpen: addModalIsOpen,
       key: 'addModal',
       setIsOpen: setAddModalIsOpen,
+      title: 'Add Product',
     });
   }
 

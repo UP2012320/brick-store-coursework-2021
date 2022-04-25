@@ -10,10 +10,15 @@ export const createElement = <K extends keyof HTMLElementTagNameMap> (
 export const createElementWithStyles = <K extends keyof HTMLElementTagNameMap> (
   type: K,
   options?: Partial<HTMLElementTagNameMap[K]>,
-  ...styles: string[]
+  ...styles: Array<string | null | undefined>
 ) => {
   const newElement = createElement(type, options);
-  newElement.classList.add(...styles);
+
+  for (const style of styles) {
+    if (style) {
+      newElement.classList.add(style);
+    }
+  }
 
   return newElement;
 };

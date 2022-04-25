@@ -10,13 +10,14 @@
   transform: translate(-50%,-50%);
   display: grid;
   grid:
-    "control" 10%
+    "control" 7%
     "body" 1fr
     / auto;
+  grid-row-gap: 1px;
   border-radius: $medium-radius;
   background-color: #fff;
-  min-width: 500px;
-  min-height: 500px;
+  width: 750px;
+  height: 75%;
   z-index: 2;
   border: 1px solid $not-quite-black;
 }
@@ -28,6 +29,15 @@
   align-items: center;
   padding: $spacing-medium;
   border-bottom: 1px solid $not-quite-black;
+
+  &:hover {
+    cursor: move;
+  }
+
+  .title {
+    @include font-large;
+    margin-right: auto;
+  }
 }
 
 .bi-x {

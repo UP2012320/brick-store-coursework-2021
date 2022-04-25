@@ -8,6 +8,7 @@
   grid:
     "image ." 2fr
     "name price" 1fr
+    "description description" 1fr
     "type colour" 1fr
     "stock discount" 1fr
     "actions actions" 1fr
@@ -38,30 +39,31 @@
   @include font-medium;
 }
 
-@mixin input-container {
-  @include column;
-  justify-content: center;
+.actions-container {
+  grid-area: actions;
+  grid:
+    "clear reset . . . submit" 1fr
+    / 1fr 1fr 1fr 1fr 1fr 1fr;
+  display: grid;
   height: 100%;
-  width: 100%;
+  align-items: center;
+  column-gap: $spacing-medium;
 }
 
-.input-label {
-  grid-area: label;
-  @include font-small;
+.clear-button {
+  @extend .action-button;
+  grid-area: clear;
+  height: 50%;
 }
 
-.input-field {
-  grid-area: field;
-  padding: $spacing-medium;
-  border: 1px solid $not-quite-black;
+.submit-button {
+  @extend .action-button;
+  grid-area: submit;
+  height: 50%;
 }
 
-.name-input-container {
-  @include input-container;
-  grid-area: name;
-}
-
-.price-input-container {
-  @include input-container;
-  grid-area: price;
+.reset-button {
+  @extend .action-button;
+  grid-area: reset;
+  height: 50%;
 }
