@@ -13,6 +13,9 @@ import {arrayFilterEmpty} from './utils/helpers';
 
 const publicPath = isDevServer ? devServerUrl : process.env.IS_VERCEL ? './' : './public/';
 
+console.debug(publicPath);
+console.debug(path.join(__dirname, '../../dist/public'));
+
 export default {
   context: __dirname,
   target: isDevServer ? 'web' : ['web', 'es6'],

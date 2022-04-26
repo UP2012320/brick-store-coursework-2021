@@ -1,5 +1,6 @@
+import {getAuthorizationHeader} from 'Scripts/auth0';
 import createInputBox from 'Scripts/components/modal/productBody/inputBox/inputBox';
-import {nameof} from 'Scripts/helpers';
+import {nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
@@ -43,12 +44,33 @@ export default function createProductBody (props: ProductBodyProps) {
     textContent: 'Add an Image',
   }, productBodyStyles.imageContainer);
 
+  const uploadImages = async (files: FileList) => {
+    const responses = await Promise.all([...files].map(async (file) => {
+      const url = new URL(`/api/v1/images/${props.existingProduct?.inventory_id ?? 'test1234'}`, SERVER_BASE);
+      const formData = new FormData();
+      formData.append('image', file);
+
+      // Don't set content-type header here, otherwise the boundary is not set
+
+      const response = await fetch(url.href, {
+        body: formData,
+        headers: await getAuthorizationHeader(),
+        method: 'POST',
+      });
+
+      console.debug(response);
+
+      return url;
+    }));
+
+    console.debug(responses);
+  };
+
   const imageUploadInput = createElementWithStyles('input', {
-    accept: 'image/*',
     id: 'productImageUpload',
     onchange: (event) => {
-      if (event.target instanceof HTMLInputElement) {
-        console.debug('Image uploaded', event.target.files);
+      if (event.target instanceof HTMLInputElement && event.target.files) {
+        uploadImages(event.target.files);
       }
     },
     type: 'file',

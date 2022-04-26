@@ -4,6 +4,7 @@ import fastify from 'fastify';
 import fastifyAuth0Verify from 'fastify-auth0-verify';
 import fastifyCors from 'fastify-cors';
 import fastifyHelmet from 'fastify-helmet';
+import fastifyMultipart from 'fastify-multipart';
 import fastifyPostgres from 'fastify-postgres';
 import fastifySensible from 'fastify-sensible';
 import fastifyStatic from 'fastify-static';
@@ -30,6 +31,11 @@ const app = fastify();
     domain: config.domain,
   });
 
+  await app.register(fastifyMultipart, {
+    limits: {
+      fileSize: 10 * 1_024 * 1_024,
+    },
+  });
   await app.register(fastifySensible);
   await app.register(fastifyStatic, {
     prefix: '/public/',

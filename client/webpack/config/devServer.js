@@ -3,6 +3,7 @@
  * @see https://webpack.js.org/configuration/dev-server/
  */
 import isWindows from 'is-windows';
+import path from 'path';
 
 const defaultPort = 8080;
 
@@ -16,6 +17,9 @@ export const devServerConfig = {
   headers: {'Access-Control-Allow-Origin': '*'},
   hot: true,
   host: devServerHost,
+  static: {
+    directory: path.join(__dirname, '../../../dist/public')
+  },
   client: {
     overlay: {
       warnings: false

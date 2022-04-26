@@ -1,6 +1,7 @@
 import type {FastifyPluginAsync} from 'fastify';
 import config from '../config';
 import checkout from './checkout';
+import images from './images';
 import inventory from './inventory';
 import staff from './staff';
 
@@ -10,6 +11,7 @@ const api: FastifyPluginAsync = async (fastify, options) => {
   });
 
   fastify.register(staff, {prefix: '/staff'});
+  fastify.register(images, {prefix: '/images'});
   fastify.register(inventory);
   fastify.register(checkout, {prefix: '/checkout'});
 };
