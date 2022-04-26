@@ -28,6 +28,7 @@ export default function createProductBody (props: ProductBodyProps) {
   props.key ??= nameof(createProductBody);
 
   const [name, setName] = useState(props.key, props.existingProduct?.name ?? '');
+  const [images, setImages] = useState(props.key, props.existingProduct?.images ?? []);
   const [description, setDescription] = useState(props.key, props.existingProduct?.description ?? '');
   const [price, setPrice] = useState(props.key, props.existingProduct?.price.toString() ?? '');
   const [stock, setStock] = useState(props.key, props.existingProduct?.stock.toString() ?? '');
@@ -37,36 +38,68 @@ export default function createProductBody (props: ProductBodyProps) {
 
   const container = createKeyedContainer('div', props.key, undefined, productBodyStyles.container);
 
-  let imageContainer;
+  const imageUploadText = createElementWithStyles('label', {
+    htmlFor: 'productImageUpload',
+    textContent: 'Add an Image',
+  }, productBodyStyles.imageContainer);
 
-  if (props.existingProduct?.imageUrl) {
-    imageContainer = createElementWithStyles('img', {
-      alt: 'Product Image',
-      src: props.existingProduct.imageUrl,
-      title: 'Click to change image',
-    }, productBodyStyles.imageContainer);
-  } else {
-    const imageText = createElementWithStyles('label', {
-      htmlFor: 'productImageUpload',
-      textContent: 'Add an Image',
-    }, productBodyStyles.imageContainer, productBodyStyles.empty);
-    const emptyImageContainer = createElementWithStyles('input', {
-      accept: 'image/*',
-      id: 'productImageUpload',
-      onchange: (event) => {
-        if (event.target instanceof HTMLInputElement) {
-          console.debug('Image uploaded', event.target.files);
+  const imageUploadInput = createElementWithStyles('input', {
+    accept: 'image/*',
+    id: 'productImageUpload',
+    onchange: (event) => {
+      if (event.target instanceof HTMLInputElement) {
+        console.debug('Image uploaded', event.target.files);
+      }
+    },
+    type: 'file',
+  }, productBodyStyles.hidden);
+
+  const galleryContainer = createElementWithStyles('div', undefined, productBodyStyles.galleryContainer);
+
+  const imagesContainers = images.map((image) => {
+    const imageContainer = createElementWithStyles('div', {
+      draggable: true,
+      ondragover: (event) => {
+        event.preventDefault();
+      },
+      ondragstart: (event) => {
+        if (event.target instanceof HTMLElement) {
+          event.dataTransfer?.setData('text/plain', image.order.toString());
         }
       },
-      type: 'file',
-    }, productBodyStyles.hidden);
+      ondrop: (event) => {
+        if (event.target instanceof HTMLElement) {
+          const order = Number.parseInt(event.dataTransfer?.getData('text/plain') ?? '', 10);
 
-    imageContainer = htmlx`
-    <${imageText}>
-      <${emptyImageContainer}/>
-    </imageText>>
+          const newImages = [...images];
+          const droppedImage = newImages.find((imageItem) => imageItem.order === order);
+
+          if (droppedImage) {
+            const temporary = image.order;
+            image.order = droppedImage.order;
+            droppedImage.order = temporary;
+            newImages.sort((a, b) => a.order - b.order);
+            setImages(newImages);
+          }
+        }
+      },
+    }, productBodyStyles.galleryImage);
+
+    const imageElement = createElementWithStyles('img', {
+      src: image.url,
+    });
+
+    const removeButton = createElementWithStyles('i', {
+      title: 'Remove Image',
+    }, productBodyStyles.biX);
+
+    return htmlx`
+    <${imageContainer}>
+      <${imageElement}/>
+      <${removeButton}/>
+    </imageContainer>
     `;
-  }
+  });
 
   const nameInput = createInputBox({
     classPrefix: 'name',
@@ -171,7 +204,12 @@ export default function createProductBody (props: ProductBodyProps) {
 
   return htmlx`
   <${container}>
-    <${imageContainer}/>
+    <${imageUploadText}>
+      <${imageUploadInput}/>
+    </imageUploadText>
+    <${galleryContainer}>
+      <${imagesContainers}/>
+    </galleryContainer>
     <${nameInput}/>
     <${priceInput}/>
     <${descriptionInput}/>

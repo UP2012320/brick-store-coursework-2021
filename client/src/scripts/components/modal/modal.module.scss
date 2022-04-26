@@ -17,7 +17,7 @@
   border-radius: $medium-radius;
   background-color: #fff;
   width: 750px;
-  height: 75%;
+  max-height: 70%;
   z-index: 2;
   border: 1px solid $not-quite-black;
 }
@@ -29,10 +29,6 @@
   align-items: center;
   padding: $spacing-medium;
   border-bottom: 1px solid $not-quite-black;
-
-  &:hover {
-    cursor: move;
-  }
 
   .title {
     @include font-large;

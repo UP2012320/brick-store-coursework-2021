@@ -6,32 +6,71 @@
 .container {
   display: grid;
   grid:
-    "image ." 2fr
-    "name price" 1fr
-    "description description" 1fr
-    "type colour" 1fr
-    "stock discount" 1fr
-    "actions actions" 1fr
-    / 1fr 1fr;
+    "image gallery gallery gallery" 2fr
+    "name name price price" 1fr
+    "description description description description" 1fr
+    "type type colour colour" 1fr
+    "stock stock discount discount" 1fr
+    "actions actions actions actions" 1fr
+    / 1fr 1fr 1fr 1fr;
   grid-gap: 8px;
   height: 100%;
   align-items: center;
 }
 
 .image-container {
+  @include row-centered;
   grid-area: image;
-  height: 145px;
-  width: 145px;
+  height: 100%;
+  width: 100%;
   transition: background-color 0.2s ease-in-out;
   border: 1px solid $not-quite-black;
+  user-select: none;
 
   &:hover {
     cursor: pointer;
     background-color: $not-quite-white;
   }
+}
 
-  &.empty {
-    @include row-centered;
+.gallery-container {
+  grid-area: gallery;
+  display: grid;
+  grid-template-columns: repeat(4, .25fr);
+  grid-template-rows: repeat(auto-fill, .25fr);
+  grid-gap: 8px;
+  height: 100%;
+  align-items: center;
+  justify-items: center;
+  overflow-y: auto;
+  padding: $spacing-medium;
+  background-color: $not-quite-white;
+}
+
+.gallery-image {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.bi-x {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.5rem;
+
+  &::before {
+    transition: background-color 0.2s ease-in-out;
+    background-color: $not-really-white;
+    border-radius: 50px;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    &::before {
+      background-color: #EE5862;
+    }
   }
 }
 
@@ -66,4 +105,8 @@
   @extend .action-button;
   grid-area: reset;
   height: 50%;
+}
+
+textarea {
+  resize: none;
 }
