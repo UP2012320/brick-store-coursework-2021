@@ -24,6 +24,8 @@ export const getItemFromLocalStorage = <T>(itemName: string) => {
 
 export const getProductUrl = (slug: string) => `/product/${slug}`;
 
+export const getImageUrl = (imageId: string) => `/images/${imageId}.jpg`;
+
 export class SortSetting {
   public readonly sortBy: string;
 

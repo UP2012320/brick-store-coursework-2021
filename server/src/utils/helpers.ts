@@ -47,7 +47,7 @@ export const checkIfProductInStock = async (pg: Pool | PoolClient, cartItems: Ca
   return responseBody;
 };
 
-export const validatePermissions = (request: FastifyRequest, reply: FastifyReply, permissions: string[], all = false) => {
+export const validatePermissions = (request: FastifyRequest, reply: FastifyReply, permissions: string[], all = true) => {
   if (typeof request.user === 'object') {
     const userAuth = request.user as JWTPayload;
 

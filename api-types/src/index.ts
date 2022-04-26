@@ -15,7 +15,7 @@ export interface Product {
   description: string;
   discount?: number;
   discount_price: number;
-  images?: Array<{order: number, url: string, }>;
+  images?: string[];
   inventory_id: string;
   name: string;
   price: number;

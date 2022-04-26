@@ -18,7 +18,8 @@ export const devServerConfig = {
   hot: true,
   host: devServerHost,
   static: {
-    directory: path.join(__dirname, '../../../dist/public')
+    directory: path.join(__dirname, '../../../dist/public'),
+    watch: false
   },
   client: {
     overlay: {

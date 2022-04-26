@@ -1,6 +1,6 @@
 import {getAuthorizationHeader} from 'Scripts/auth0';
 import createInputBox from 'Scripts/components/modal/productBody/inputBox/inputBox';
-import {nameof, SERVER_BASE} from 'Scripts/helpers';
+import {getImageUrl, nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
@@ -44,32 +44,59 @@ export default function createProductBody (props: ProductBodyProps) {
     textContent: 'Add an Image',
   }, productBodyStyles.imageContainer);
 
+  const test = createElementWithStyles('p', {
+    textContent: '\nMax 10MB, (JPG or PNG)',
+  }, productBodyStyles.imageContainerSubheading);
+
   const uploadImages = async (files: FileList) => {
     const responses = await Promise.all([...files].map(async (file) => {
-      const url = new URL(`/api/v1/images/${props.existingProduct?.inventory_id ?? 'test1234'}`, SERVER_BASE);
+      const url = new URL('/api/v1/images', SERVER_BASE);
       const formData = new FormData();
       formData.append('image', file);
 
       // Don't set content-type header here, otherwise the boundary is not set
 
-      const response = await fetch(url.href, {
-        body: formData,
-        headers: await getAuthorizationHeader(),
-        method: 'POST',
-      });
+      let response;
 
-      console.debug(response);
+      try {
+        response = await fetch(url.href, {
+          body: formData,
+          headers: await getAuthorizationHeader(),
+          method: 'POST',
+        });
+      } catch (error) {
+        console.error(error);
+        return undefined;
+      }
 
-      return url;
+      if (!response.ok) {
+        console.error(response);
+        return undefined;
+      }
+
+      const image = await response.json() as { id: string, };
+
+      return image.id;
     }));
 
-    console.debug(responses);
+    const filteredResponses = responses
+      .filter(Boolean) as string[];
+
+    setImages((existingImages) => [...existingImages, ...filteredResponses]);
   };
 
   const imageUploadInput = createElementWithStyles('input', {
+    accept: 'image/jpg,image/jpeg,image/png',
     id: 'productImageUpload',
+    max: '16',
+    multiple: true,
     onchange: (event) => {
       if (event.target instanceof HTMLInputElement && event.target.files) {
+        if (event.target.files.length + images.length > 16) {
+          // Add a message later
+          return;
+        }
+
         uploadImages(event.target.files);
       }
     },
@@ -78,7 +105,7 @@ export default function createProductBody (props: ProductBodyProps) {
 
   const galleryContainer = createElementWithStyles('div', undefined, productBodyStyles.galleryContainer);
 
-  const imagesContainers = images.map((image) => {
+  const imagesContainers = images.map((image, index) => {
     const imageContainer = createElementWithStyles('div', {
       draggable: true,
       ondragover: (event) => {
@@ -86,21 +113,20 @@ export default function createProductBody (props: ProductBodyProps) {
       },
       ondragstart: (event) => {
         if (event.target instanceof HTMLElement) {
-          event.dataTransfer?.setData('text/plain', image.order.toString());
+          event.dataTransfer?.setData('text/plain', index.toString());
         }
       },
       ondrop: (event) => {
         if (event.target instanceof HTMLElement) {
-          const order = Number.parseInt(event.dataTransfer?.getData('text/plain') ?? '', 10);
+          const droppedIndex = Number.parseInt(event.dataTransfer?.getData('text/plain') ?? '', 10);
 
           const newImages = [...images];
-          const droppedImage = newImages.find((imageItem) => imageItem.order === order);
+          const droppedImage = newImages[droppedIndex];
 
           if (droppedImage) {
-            const temporary = image.order;
-            image.order = droppedImage.order;
-            droppedImage.order = temporary;
-            newImages.sort((a, b) => a.order - b.order);
+            const temporary = newImages[index];
+            newImages[index] = newImages[droppedIndex];
+            newImages[droppedIndex] = temporary;
             setImages(newImages);
           }
         }
@@ -108,7 +134,7 @@ export default function createProductBody (props: ProductBodyProps) {
     }, productBodyStyles.galleryImage);
 
     const imageElement = createElementWithStyles('img', {
-      src: image.url,
+      src: getImageUrl(image),
     });
 
     const removeButton = createElementWithStyles('i', {
@@ -227,6 +253,7 @@ export default function createProductBody (props: ProductBodyProps) {
   return htmlx`
   <${container}>
     <${imageUploadText}>
+    <${test}/>
       <${imageUploadInput}/>
     </imageUploadText>
     <${galleryContainer}>

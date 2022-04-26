@@ -1,5 +1,6 @@
 import * as fs from 'node:fs/promises';
-import type {FastifyPluginAsync, onRequestAsyncHookHandler, preHandlerAsyncHookHandler} from 'fastify';
+import {validatePermissions} from 'Utils/helpers';
+import type {FastifyPluginAsync, onRequestHookHandler, preHandlerAsyncHookHandler} from 'fastify';
 import {nanoid} from 'nanoid';
 import sharp from 'sharp';
 
@@ -11,9 +12,10 @@ declare module 'fastify' {
   }
 }
 
-const onUploadRequest: onRequestAsyncHookHandler = async (request, reply) => {
+const onUploadRequest: onRequestHookHandler = (request, reply, done) => {
   // eslint-disable-next-line require-atomic-updates
   request.buffer = Buffer.from('');
+  done();
 };
 
 const validateUpload: preHandlerAsyncHookHandler = async (request, reply) => {
@@ -85,11 +87,10 @@ const saveImage = async (newId: string, buffer: Buffer) => {
 };
 
 const images: FastifyPluginAsync = async (fastify, options) => {
-  /* fastify.addHook('preValidation', fastify.authenticate);
+  fastify.addHook('preValidation', fastify.authenticate);
   fastify.addHook('preHandler', async (request, reply) => {
     validatePermissions(request, reply, ['access:management', 'write:image']);
   });
-   */
 
   fastify.decorateRequest('buffer', undefined);
 

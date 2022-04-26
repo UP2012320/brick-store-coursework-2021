@@ -19,7 +19,7 @@
 }
 
 .image-container {
-  @include row-centered;
+  @include column-centered;
   grid-area: image;
   height: 100%;
   width: 100%;
@@ -31,6 +31,12 @@
     cursor: pointer;
     background-color: $not-quite-white;
   }
+}
+
+.image-container-subheading {
+  @include font-small;
+  text-align: center;
+  color: #666;
 }
 
 .gallery-container {

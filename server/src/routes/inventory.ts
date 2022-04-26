@@ -117,7 +117,7 @@ const inventory: FastifyPluginAsync = async (fastify, options) => {
     reply.internalServerError();
   });
 
-  fastify.post('/addProduct', {
+  fastify.post<{Body: Product, }>('/addProduct', {
     preHandler: (request, reply, done) => {
       validatePermissions(request, reply, ['write:product']);
       done();
