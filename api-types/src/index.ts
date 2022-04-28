@@ -12,6 +12,7 @@ export interface SearchQueryResponse {
 
 export interface Product {
   colour: string;
+  date_added: string;
   description: string;
   discount?: number;
   discount_price: number;
@@ -26,6 +27,7 @@ export interface Product {
 }
 
 export type NewProduct = Omit<Product, 'discount_price' | 'inventory_id' | 'slug'>;
+export type UpdatedProduct = Omit<Product, 'discount_price' | 'slug'>;
 
 export interface GetBrickColoursResponse {
   id: string;

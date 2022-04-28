@@ -85,6 +85,24 @@ export default function createHeaderRow (props: HeaderRowProps) {
     title: 'Stock',
   });
 
+  const headerDateAdded = createHeaderItem({
+    key: 'date_added',
+    setSortSetting: props.setSortSetting,
+    sortBy: 'date_added',
+    sortSetting: props.sortSetting,
+    styleOverride: 'DateAdded',
+    title: 'Date Added',
+  });
+
+  const headerVisibility = createHeaderItem({
+    key: 'visibility',
+    setSortSetting: props.setSortSetting,
+    sortBy: 'visibility',
+    sortSetting: props.sortSetting,
+    styleOverride: 'Visibility',
+    title: 'Visible',
+  });
+
   const headerSearch = createElementWithStyles('div', undefined, inventoryTableStyles.headerSearch);
   const headerSearchBox = createElementWithStyles('input', {
     defaultValue: searchInput,
@@ -124,6 +142,8 @@ export default function createHeaderRow (props: HeaderRowProps) {
     <${headerDiscountedPrice}/>
     <${headerDiscount}/>
     <${headerStock}/>
+    <${headerDateAdded}/>
+    <${headerVisibility}/>
     <${headerSearch}>
       <${headerSearchBox}/>
     </${headerSearch}>

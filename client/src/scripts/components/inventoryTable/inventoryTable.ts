@@ -11,8 +11,11 @@ import inventoryTableStyles from './inventoryTable.module.scss';
 const key = nameof(createInventoryTable);
 
 interface InventoryTableProps {
+  reloadResults: () => void;
   rows: Product[];
   setAddModalIsOpen: StateSetter<boolean>;
+  setEditModalIsOpen: StateSetter<boolean>;
+  setProductToEdit: StateSetter<Product>;
   setSearchSettings: (newArguments: SetSearchStateArguments) => void;
   setSortSetting: StateSetter<SortSetting>;
   sortSetting: SortSetting;
@@ -30,7 +33,13 @@ export default function createInventoryTable (props: InventoryTableProps) {
 
   const body = createElementWithStyles('ul', undefined, inventoryTableStyles.body);
 
-  const rows = props.rows.map((row) => createBodyRow({key: row.inventory_id, row}));
+  const rows = props.rows.map((row) => createBodyRow({
+    key: row.inventory_id,
+    reloadResults: props.reloadResults,
+    row,
+    setEditModalIsOpen: props.setEditModalIsOpen,
+    setProductToEdit: props.setProductToEdit,
+  }));
 
   return htmlx`
   <${container}>

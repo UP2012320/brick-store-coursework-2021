@@ -3,6 +3,7 @@ import createCheckbox from 'Scripts/components/modal/productBody/checkbox/checkb
 import createInputBox from 'Scripts/components/modal/productBody/inputBox/inputBox';
 import {getImageUrl, nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
+import {useRef} from 'Scripts/hooks/useRef';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
@@ -10,10 +11,11 @@ import {type ReUsableComponentProps} from 'Types/types';
 import {type ApiResponse, type Product} from 'api-types';
 import productBodyStyles from './addProductModalBody.module.scss';
 
-interface AddProductModalBody extends ReUsableComponentProps {
+interface ModifyModalBody extends ReUsableComponentProps {
   closeModal: () => void;
   closed: boolean;
   existingProduct?: Product;
+  reloadResults: () => void;
 }
 
 /*
@@ -28,28 +30,30 @@ interface AddProductModalBody extends ReUsableComponentProps {
  * discount
  */
 
-const deleteImagesFromServer = async (imageId: string) => {
-  const url = new URL(`/api/v1/staff/images/${imageId}`, SERVER_BASE);
+const deleteImagesFromServer = async (...imageIds: string[]) => {
+  for (const imageId of imageIds) {
+    const url = new URL(`/api/v1/staff/images/${imageId}`, SERVER_BASE);
 
-  let response;
+    let response;
 
-  try {
-    response = await fetch(url.href, {
-      headers: await getAuthorizationHeader(),
-      method: 'DELETE',
-    });
-  } catch (error) {
-    console.error(error);
-    return;
-  }
+    try {
+      response = await fetch(url.href, {
+        headers: await getAuthorizationHeader(),
+        method: 'DELETE',
+      });
+    } catch (error) {
+      console.error(error);
+      return;
+    }
 
-  if (!response.ok) {
-    console.error(response);
+    if (!response.ok) {
+      console.error(response);
+    }
   }
 };
 
-export default function createAddProductModalBody (props: AddProductModalBody) {
-  props.key ??= nameof(createAddProductModalBody);
+export default function modifyProductModalBody (props: ModifyModalBody) {
+  props.key ??= nameof(modifyProductModalBody);
 
   const [name, setName] = useState(props.key, props.existingProduct?.name ?? '');
   const [images, setImages] = useState(props.key, props.existingProduct?.images ?? []);
@@ -61,6 +65,7 @@ export default function createAddProductModalBody (props: AddProductModalBody) {
   const [discount, setDiscount] = useState(props.key, props.existingProduct?.discount?.toString() ?? '0');
   const [visibility, setVisibility] = useState(props.key, props.existingProduct?.visibility ?? true);
   const [submitMessage, setSubmitMessage] = useState<{ error: boolean, message: string, }>(props.key, {error: false, message: ''});
+  const newImages = useRef<string[]>(props.key, []);
 
   useEffect(props.key, () => {}, [props.closed]);
 
@@ -109,6 +114,7 @@ export default function createAddProductModalBody (props: AddProductModalBody) {
     const filteredResponses = responses
       .filter(Boolean) as string[];
 
+    newImages.current = [...newImages.current, ...filteredResponses];
     setImages((existingImages) => [...existingImages, ...filteredResponses]);
   };
 
@@ -147,14 +153,14 @@ export default function createAddProductModalBody (props: AddProductModalBody) {
         if (event.target instanceof HTMLElement) {
           const droppedIndex = Number.parseInt(event.dataTransfer?.getData('text/plain') ?? '', 10);
 
-          const newImages = [...images];
-          const droppedImage = newImages[droppedIndex];
+          const newImagesOrder = [...images];
+          const droppedImage = newImagesOrder[droppedIndex];
 
           if (droppedImage) {
-            const temporary = newImages[index];
-            newImages[index] = newImages[droppedIndex];
-            newImages[droppedIndex] = temporary;
-            setImages(newImages);
+            const temporary = newImagesOrder[index];
+            newImagesOrder[index] = newImagesOrder[droppedIndex];
+            newImagesOrder[droppedIndex] = temporary;
+            setImages(newImagesOrder);
           }
         }
       },
@@ -166,7 +172,7 @@ export default function createAddProductModalBody (props: AddProductModalBody) {
 
     const removeButton = createElementWithStyles('i', {
       onclick: () => {
-        if (!props.existingProduct) {
+        if (newImages.current.includes(image)) {
           deleteImagesFromServer(image);
         }
 
@@ -271,6 +277,10 @@ export default function createAddProductModalBody (props: AddProductModalBody) {
       setType('');
       setColour('');
       setDiscount('');
+      setVisibility(false);
+      setImages([]);
+      deleteImagesFromServer(...newImages.current);
+      newImages.current = [];
     },
     textContent: 'Clear',
   }, productBodyStyles.clearButton);
@@ -284,6 +294,10 @@ export default function createAddProductModalBody (props: AddProductModalBody) {
       setType(props.existingProduct?.type ?? '');
       setColour(props.existingProduct?.colour ?? '');
       setDiscount(props.existingProduct?.discount?.toString() ?? '');
+      setVisibility(props.existingProduct?.visibility ?? false);
+      setImages(props.existingProduct?.images ?? []);
+      deleteImagesFromServer(...newImages.current);
+      newImages.current = [];
     },
     textContent: 'Reset',
   }, productBodyStyles.resetButton);
@@ -296,11 +310,12 @@ export default function createAddProductModalBody (props: AddProductModalBody) {
     try {
       response = await fetch(url.href, {
         body: JSON.stringify({
-          newProduct: {
+          product: {
             colour,
             description,
             discount,
             images,
+            inventory_id: props.existingProduct?.inventory_id,
             name,
             price,
             stock,
@@ -312,7 +327,7 @@ export default function createAddProductModalBody (props: AddProductModalBody) {
           'Content-Type': 'application/json',
           ...await getAuthorizationHeader(),
         },
-        method: 'POST',
+        method: props.existingProduct ? 'PUT' : 'POST',
       });
     } catch (error) {
       console.error(error);
@@ -320,6 +335,12 @@ export default function createAddProductModalBody (props: AddProductModalBody) {
         error: true,
         message: 'An error occurred while submitting the form',
       });
+
+      setTimeout(() => setSubmitMessage({
+        error: false,
+        message: '',
+      }), 5_000);
+
       return;
     }
 
@@ -328,8 +349,15 @@ export default function createAddProductModalBody (props: AddProductModalBody) {
     if (response.status === 200) {
       setSubmitMessage({
         error: false,
-        message: 'Product successfully created',
+        message: `Product successfully ${props.existingProduct ? 'updated' : 'created'}`,
       });
+
+      if (props.existingProduct?.images) {
+        const deletedImages = props.existingProduct.images.filter((image) => !images.includes(image));
+        deleteImagesFromServer(...deletedImages);
+      }
+
+      props.reloadResults();
     } else {
       setSubmitMessage({
         error: true,

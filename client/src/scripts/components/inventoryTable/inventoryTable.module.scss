@@ -13,8 +13,8 @@
 .header {
   display: grid;
   grid:
-    'id name colour type price discounted_price discount stock search add' 1fr
-    / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    'id name colour type price discounted_price discount stock date_added visibility search add' 1fr
+    / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   background-color: $not-quite-white;
   border-bottom: 1px solid $not-quite-black;
 }
@@ -100,6 +100,16 @@
   grid-area: stock;
 }
 
+.header-date-added {
+  @include header-toggle-item;
+  grid-area: date_added;
+}
+
+.header-visibility {
+  @include header-toggle-item;
+  grid-area: visibility;
+}
+
 @mixin header-action-item {
   & > * {
     height: 100%;
@@ -140,9 +150,11 @@
 .body-row {
   display: grid;
   grid:
-    'id name colour type price discounted_price discount stock edit delete' 1fr
-    / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    'id name colour type price discounted_price discount stock date_added visibility edit delete' 1fr
+    / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   padding: $spacing-small;
+  justify-items: center;
+  align-items: center;
 }
 
 @mixin body-row-item {
@@ -190,12 +202,24 @@
   grid-area: stock;
 }
 
-.body-row-edit {
+.body-row-date-added {
   @include body-row-item;
+  grid-area: date_added;
+}
+
+.body-row-visibility {
+  @include body-row-item;
+  grid-area: visibility;
+}
+
+.body-row-edit {
+  @extend .action-button-no-border;
+  border: 2px solid $not-quite-black;
   grid-area: edit;
 }
 
 .body-row-delete {
-  @include body-row-item;
+  @extend .action-button-no-border;
+  border: 2px solid $not-quite-black;
   grid-area: delete;
 }

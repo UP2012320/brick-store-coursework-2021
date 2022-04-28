@@ -2,6 +2,7 @@ import * as fs from 'node:fs/promises';
 import {sendQuery, validatePermissions} from 'Utils/helpers';
 import {type FastifyPluginAsync, type onRequestHookHandler, type preHandlerAsyncHookHandler} from 'fastify';
 import {nanoid} from 'nanoid';
+import {type Pool, type PoolClient} from 'pg';
 import sharp from 'sharp';
 
 const saveFolder = '../dist/public/images';
@@ -86,7 +87,15 @@ const saveImage = async (newId: string, buffer: Buffer) => {
   return true;
 };
 
-const deleteImageFile = async (id: string) => {
+export const deleteImageFromDatabase = async (client: Pool | PoolClient, id: string) => {
+  const [, error] = await sendQuery(client,
+    'DELETE FROM images WHERE image_id = $1',
+    [id]);
+
+  return error;
+};
+
+export const deleteImageFile = async (id: string) => {
   const filePath = `${saveFolder}/${id}.jpg`;
 
   try {
@@ -125,7 +134,7 @@ const images: FastifyPluginAsync = async (fastify, options) => {
     }
 
     const [, error] = await sendQuery(fastify.pg.pool,
-      'INSERT INTO images (id) VALUES ($1) RETURNING *',
+      'INSERT INTO images (image_id) VALUES ($1) RETURNING *',
       [fileUploadId]);
 
     if (error) {
@@ -158,9 +167,7 @@ const images: FastifyPluginAsync = async (fastify, options) => {
       return;
     }
 
-    const [, error] = await sendQuery(fastify.pg.pool,
-      'DELETE FROM images WHERE id = $1',
-      [request.params.id]);
+    const error = await deleteImageFromDatabase(fastify.pg.pool, request.params.id);
 
     if (error) {
       reply.code(500).send({

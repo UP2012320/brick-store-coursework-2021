@@ -22,7 +22,7 @@ export default function useSearch (key: string,
   defaultSearchArguments: SearchArguments = {
     filters: {colours: [], sort: ['item_name'], types: []},
     query: '',
-  }): [products: Product[], setSearchState: (newArguments: SetSearchStateArguments) => void, pageNumber: number, noMoreResults: boolean, requestError: string | undefined] {
+  }): [products: Product[], setSearchState: (newArguments: SetSearchStateArguments) => void, reload: () => void, pageNumber: number, noMoreResults: boolean, requestError: string | undefined] {
   const [searchResults, setSearchResults] = useState<Product[]>(key, []);
   const [searchArguments, setSearchArguments] = useState<SearchArguments>(key, defaultSearchArguments);
   const [requestError, setRequestError] = useState<string | undefined>(key, undefined);
@@ -116,5 +116,10 @@ export default function useSearch (key: string,
     }
   };
 
-  return [searchResults, setSearchState, page.current, noMoreResults, requestError];
+  const reload = () => {
+    isNewSearch.current = true;
+    search();
+  };
+
+  return [searchResults, setSearchState, reload, page.current, noMoreResults, requestError];
 }
