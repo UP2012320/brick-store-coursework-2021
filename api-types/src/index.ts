@@ -22,7 +22,10 @@ export interface Product {
   slug: string;
   stock: number;
   type: string;
+  visibility: boolean;
 }
+
+export type NewProduct = Omit<Product, 'discount_price' | 'inventory_id' | 'slug'>;
 
 export interface GetBrickColoursResponse {
   id: string;
@@ -48,4 +51,10 @@ export interface JWTPayload {
   permissions: string[];
   scope: string;
   sub: string;
+}
+
+export interface ApiResponse {
+  error: string;
+  message: string;
+  statusCode: number;
 }

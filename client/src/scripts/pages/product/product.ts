@@ -5,8 +5,8 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElement, createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
-import type {ProductProps} from 'Types/types';
-import type {Product} from 'api-types';
+import {type ProductProps} from 'Types/types';
+import {type Product} from 'api-types';
 import productStyles from './product.module.scss';
 
 const key = nameof(createProduct);

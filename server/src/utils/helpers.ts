@@ -1,12 +1,13 @@
-import type {CartItem, JWTPayload} from 'api-types';
-import type {FastifyReply, FastifyRequest} from 'fastify';
-import type {Pool, PoolClient, QueryConfig, QueryResult} from 'pg';
+import {type CartItem, type JWTPayload} from 'api-types';
+import {type FastifyReply, type FastifyRequest} from 'fastify';
+import {type PostgresDb} from 'fastify-postgres';
+import {type Pool, type PoolClient, type QueryConfig, type QueryResult} from 'pg';
 
-export const sendQuery = async <T>(
+export const sendQuery = async <T> (
   pg: Pool | PoolClient,
   query: QueryConfig | string,
   values?: unknown[],
-): Promise<[QueryResult<T> | undefined, unknown | undefined]> => {
+): Promise<[QueryResult<T> | undefined, {code: string, } | undefined]> => {
   let queryResponse;
 
   try {
@@ -14,11 +15,17 @@ export const sendQuery = async <T>(
   } catch (error) {
     // LOG
     console.debug(error);
-    return [undefined, error];
+    return [undefined, error as {code: string, }];
   }
 
   return [queryResponse, undefined];
 };
+
+export const sendQueryTransact = async <T> (
+  pg: PostgresDb,
+  query: QueryConfig | string,
+  values?: unknown[],
+): Promise<QueryResult<T> | unknown | undefined> => await pg.transact(async (client) => await client.query(query, values));
 
 export const checkIfProductInStock = async (pg: Pool | PoolClient, cartItems: CartItem[]) => {
   const responseBody = [];

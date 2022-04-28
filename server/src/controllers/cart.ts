@@ -1,6 +1,6 @@
 import {sendQuery} from 'Utils/helpers';
-import type {CartItem} from 'api-types';
-import type {Pool, PoolClient} from 'pg';
+import {type CartItem} from 'api-types';
+import {type Pool, type PoolClient} from 'pg';
 
 export const GetCart = async (pg: Pool | PoolClient, userId: string) => {
   const [cartItems, error] = await sendQuery<CartItem[]>(pg, `

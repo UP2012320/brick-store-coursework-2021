@@ -2,7 +2,7 @@ import {SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useRef} from 'Scripts/hooks/useRef';
 import {useState} from 'Scripts/hooks/useState';
-import type {Product, SearchQueryResponse} from 'api-types';
+import {type Product, type SearchQueryResponse} from 'api-types';
 
 const maxSearchResults = 50;
 

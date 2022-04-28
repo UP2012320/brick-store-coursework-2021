@@ -5,8 +5,8 @@ import {useRef} from 'Scripts/hooks/useRef';
 import htmlx from 'Scripts/htmlX';
 import cartStyles from 'Scripts/pages/cart/cart.module.scss';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
-import type {ReUsableComponentProps} from 'Types/types';
-import type {CartItem} from 'api-types';
+import {type ReUsableComponentProps} from 'Types/types';
+import {type CartItem} from 'api-types';
 
 export interface CartRowProps extends ReUsableComponentProps {
   cartItem: CartItem;

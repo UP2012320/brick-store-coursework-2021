@@ -13,5 +13,8 @@
     "client",
     "server"
   ],
-  "private": true
+  "private": true,
+  "dependencies": {
+    "typescript": "^4.6.3"
+  }
 }

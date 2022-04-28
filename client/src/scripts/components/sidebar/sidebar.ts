@@ -1,8 +1,8 @@
 import {nameof} from 'Scripts/helpers';
-import type {StateSetter} from 'Scripts/hooks/useState';
+import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
-import type {HasBodyProps, ReUsableComponentProps} from 'Types/types';
+import {type HasBodyProps, type ReUsableComponentProps} from 'Types/types';
 import sidebarStyles from './sidebar.module.scss';
 
 interface CreateSidebarProps extends ReUsableComponentProps, HasBodyProps {

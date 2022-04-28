@@ -4,7 +4,7 @@ import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
-import type {HasBodyProps} from 'Types/types';
+import {type HasBodyProps} from 'Types/types';
 
 const key = nameof(createAllFilters);
 

@@ -1,6 +1,6 @@
 import {checkIfProductInStock, sendQuery} from 'Utils/helpers';
-import type {CartItem} from 'api-types';
-import type {FastifyPluginAsync} from 'fastify';
+import {type CartItem} from 'api-types';
+import {type FastifyPluginAsync} from 'fastify';
 
 const checkout: FastifyPluginAsync = async (fastify, options) => {
   fastify.addHook<{ Body?: CartItem[], }>('preHandler', async (request, reply) => {

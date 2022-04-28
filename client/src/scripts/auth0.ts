@@ -1,6 +1,5 @@
 /* eslint-disable canonical/id-match,canonical/filename-match-regex */
-import type {Auth0Client, User} from '@auth0/auth0-spa-js';
-import createAuth0Client from '@auth0/auth0-spa-js';
+import createAuth0Client, {type Auth0Client, type User} from '@auth0/auth0-spa-js';
 import {SERVER_BASE} from 'Scripts/helpers';
 
 // eslint-disable-next-line import/no-mutable-exports

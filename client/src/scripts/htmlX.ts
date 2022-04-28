@@ -1,5 +1,5 @@
 import {appendElements} from 'Scripts/uiUtils';
-import type {HtmlTagResult, HTMLXBody} from 'Types/types';
+import {type HtmlTagResult, type HTMLXBody} from 'Types/types';
 
 const parseHtmlTag = (tag: string): HtmlTagResult => {
   let match: RegExpMatchArray | null;

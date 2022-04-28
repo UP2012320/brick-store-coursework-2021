@@ -1,16 +1,19 @@
 import {getAuthorizationHeader} from 'Scripts/auth0';
+import createCheckbox from 'Scripts/components/modal/productBody/checkbox/checkbox';
 import createInputBox from 'Scripts/components/modal/productBody/inputBox/inputBox';
 import {getImageUrl, nameof, SERVER_BASE} from 'Scripts/helpers';
+import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
-import type {ReUsableComponentProps} from 'Types/types';
-import type {Product} from 'api-types';
-import productBodyStyles from './productBody.module.scss';
+import {type ReUsableComponentProps} from 'Types/types';
+import {type ApiResponse, type Product} from 'api-types';
+import productBodyStyles from './addProductModalBody.module.scss';
 
-interface ProductBodyProps extends ReUsableComponentProps {
+interface AddProductModalBody extends ReUsableComponentProps {
+  closeModal: () => void;
+  closed: boolean;
   existingProduct?: Product;
-  onSubmit: (product: Product) => void;
 }
 
 /*
@@ -25,17 +28,41 @@ interface ProductBodyProps extends ReUsableComponentProps {
  * discount
  */
 
-export default function createProductBody (props: ProductBodyProps) {
-  props.key ??= nameof(createProductBody);
+const deleteImagesFromServer = async (imageId: string) => {
+  const url = new URL(`/api/v1/staff/images/${imageId}`, SERVER_BASE);
+
+  let response;
+
+  try {
+    response = await fetch(url.href, {
+      headers: await getAuthorizationHeader(),
+      method: 'DELETE',
+    });
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+
+  if (!response.ok) {
+    console.error(response);
+  }
+};
+
+export default function createAddProductModalBody (props: AddProductModalBody) {
+  props.key ??= nameof(createAddProductModalBody);
 
   const [name, setName] = useState(props.key, props.existingProduct?.name ?? '');
   const [images, setImages] = useState(props.key, props.existingProduct?.images ?? []);
   const [description, setDescription] = useState(props.key, props.existingProduct?.description ?? '');
-  const [price, setPrice] = useState(props.key, props.existingProduct?.price.toString() ?? '');
-  const [stock, setStock] = useState(props.key, props.existingProduct?.stock.toString() ?? '');
+  const [price, setPrice] = useState(props.key, props.existingProduct?.price.toString() ?? '0');
+  const [stock, setStock] = useState(props.key, props.existingProduct?.stock.toString() ?? '0');
   const [type, setType] = useState(props.key, props.existingProduct?.type ?? '');
   const [colour, setColour] = useState(props.key, props.existingProduct?.colour ?? '');
-  const [discount, setDiscount] = useState(props.key, props.existingProduct?.discount?.toString() ?? '');
+  const [discount, setDiscount] = useState(props.key, props.existingProduct?.discount?.toString() ?? '0');
+  const [visibility, setVisibility] = useState(props.key, props.existingProduct?.visibility ?? true);
+  const [submitMessage, setSubmitMessage] = useState<{ error: boolean, message: string, }>(props.key, {error: false, message: ''});
+
+  useEffect(props.key, () => {}, [props.closed]);
 
   const container = createKeyedContainer('div', props.key, undefined, productBodyStyles.container);
 
@@ -50,7 +77,7 @@ export default function createProductBody (props: ProductBodyProps) {
 
   const uploadImages = async (files: FileList) => {
     const responses = await Promise.all([...files].map(async (file) => {
-      const url = new URL('/api/v1/images', SERVER_BASE);
+      const url = new URL('/api/v1/staff/images', SERVER_BASE);
       const formData = new FormData();
       formData.append('image', file);
 
@@ -138,6 +165,13 @@ export default function createProductBody (props: ProductBodyProps) {
     });
 
     const removeButton = createElementWithStyles('i', {
+      onclick: () => {
+        if (!props.existingProduct) {
+          deleteImagesFromServer(image);
+        }
+
+        setImages((existingImages) => existingImages.filter((existingImage) => existingImage !== image));
+      },
       title: 'Remove Image',
     }, productBodyStyles.biX);
 
@@ -172,7 +206,7 @@ export default function createProductBody (props: ProductBodyProps) {
   const descriptionInput = createInputBox({
     classPrefix: 'description',
     key: 'descriptionInput',
-    label: 'Description',
+    label: 'Description (Max 2500 characters)',
     placeholder: 'Enter product description',
     setValue: setDescription,
     textarea: true,
@@ -218,6 +252,14 @@ export default function createProductBody (props: ProductBodyProps) {
     value: discount,
   });
 
+  const visibilityCheckbox = createCheckbox({
+    class: 'visibility',
+    key: 'visibilityCheckbox',
+    label: 'Visible on website',
+    setValue: setVisibility,
+    value: visibility,
+  });
+
   const actionsContainer = createElementWithStyles('div', undefined, productBodyStyles.actionsContainer);
 
   const clearButton = createElementWithStyles('button', {
@@ -246,9 +288,91 @@ export default function createProductBody (props: ProductBodyProps) {
     textContent: 'Reset',
   }, productBodyStyles.resetButton);
 
+  const onSubmit = async () => {
+    const url = new URL('/api/v1/staff/products', SERVER_BASE);
+
+    let response;
+
+    try {
+      response = await fetch(url.href, {
+        body: JSON.stringify({
+          newProduct: {
+            colour,
+            description,
+            discount,
+            images,
+            name,
+            price,
+            stock,
+            type,
+            visibility,
+          },
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          ...await getAuthorizationHeader(),
+        },
+        method: 'POST',
+      });
+    } catch (error) {
+      console.error(error);
+      setSubmitMessage({
+        error: true,
+        message: 'An error occurred while submitting the form',
+      });
+      return;
+    }
+
+    const body = await response.json() as ApiResponse;
+
+    if (response.status === 200) {
+      setSubmitMessage({
+        error: false,
+        message: 'Product successfully created',
+      });
+    } else {
+      setSubmitMessage({
+        error: true,
+        message: body.message,
+      });
+    }
+
+    setTimeout(() => setSubmitMessage({
+      error: false,
+      message: '',
+    }), 5_000);
+  };
+
   const submitButton = createElementWithStyles('button', {
+    onclick: () => {
+      onSubmit();
+    },
     textContent: 'Submit',
   }, productBodyStyles.submitButton);
+
+  let messageContainer;
+
+  if (submitMessage.message) {
+    messageContainer = createElementWithStyles('div', undefined, productBodyStyles.messageContainer, productBodyStyles.visible);
+
+    if (submitMessage.error) {
+      messageContainer.classList.add(productBodyStyles.errored);
+    } else {
+      messageContainer.classList.add(productBodyStyles.success);
+    }
+
+    const message = createElementWithStyles('p', {
+      textContent: submitMessage.message,
+    });
+
+    messageContainer = htmlx`
+    <${messageContainer}>
+      <${message}/>
+    </errorContainer>
+    `;
+  } else {
+    messageContainer = createElementWithStyles('div', undefined, productBodyStyles.messageContainer);
+  }
 
   return htmlx`
   <${container}>
@@ -266,11 +390,13 @@ export default function createProductBody (props: ProductBodyProps) {
     <${colourInput}/>
     <${stockInput}/>
     <${discountInput}/>
+    <${visibilityCheckbox}/>
     <${actionsContainer}>
       <${clearButton}/>
       <${resetButton}/>
       <${submitButton}/>
     </actionsContainer>
+    <${messageContainer}/>
   </container>
   `;
 }

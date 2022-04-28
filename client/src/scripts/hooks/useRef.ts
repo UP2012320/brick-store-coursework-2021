@@ -1,5 +1,5 @@
 import StateManager from 'Scripts/hooks/hookCallerStateManager';
-import type {Ref} from 'Types/types';
+import {type Ref} from 'Types/types';
 
 const stateManager = new StateManager();
 

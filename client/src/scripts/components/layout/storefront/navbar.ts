@@ -9,7 +9,7 @@ import init from 'Scripts/init';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import unload from 'Scripts/unload';
 import styles from 'Styles/components/navbar.module.scss';
-import type {CartItem} from 'api-types';
+import {type CartItem} from 'api-types';
 
 const key = nameof(createNavbar);
 

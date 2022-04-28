@@ -5,7 +5,7 @@ import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer, historyPush} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
-import type {CartItem} from 'api-types';
+import {type CartItem} from 'api-types';
 import checkoutStyles from './checkout.module.scss';
 
 const key = nameof(createCheckout);

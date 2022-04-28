@@ -7,12 +7,12 @@ import {fetchColours, fetchTypes} from 'Scripts/components/filterBar/fetch';
 import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useRef} from 'Scripts/hooks/useRef';
-import type {SetSearchStateArguments} from 'Scripts/hooks/useSearch';
+import {type SetSearchStateArguments} from 'Scripts/hooks/useSearch';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
-import type {DropDownOption, MultiSelectDropDownOption} from 'Types/types';
+import {type DropDownOption, type MultiSelectDropDownOption} from 'Types/types';
 
 const useState = registerUseState(nameof(createFilterBar));
 

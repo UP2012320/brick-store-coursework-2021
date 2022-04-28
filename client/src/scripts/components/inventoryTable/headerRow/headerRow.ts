@@ -1,10 +1,8 @@
 import createHeaderItem from 'Scripts/components/inventoryTable/headerItem/headerItem';
 import inventoryTableStyles from 'Scripts/components/inventoryTable/inventoryTable.module.scss';
-import type {SortSetting} from 'Scripts/helpers';
-import {nameof} from 'Scripts/helpers';
-import type {SetSearchStateArguments} from 'Scripts/hooks/useSearch';
-import type {StateSetter} from 'Scripts/hooks/useState';
-import {useState} from 'Scripts/hooks/useState';
+import {nameof, type SortSetting} from 'Scripts/helpers';
+import {type SetSearchStateArguments} from 'Scripts/hooks/useSearch';
+import {type StateSetter, useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 

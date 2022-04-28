@@ -1,6 +1,6 @@
 import {sendQuery, validatePermissions} from 'Utils/helpers';
-import type {Product, SearchRequestArguments} from 'api-types';
-import type {FastifyPluginAsync} from 'fastify';
+import {type Product, type SearchRequestArguments} from 'api-types';
+import {type FastifyPluginAsync} from 'fastify';
 
 const inventory: FastifyPluginAsync = async (fastify, options) => {
   fastify.get<{ Querystring: SearchRequestArguments, }>('/search', async (request, reply) => {

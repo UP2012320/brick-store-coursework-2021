@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import inventoryTableStyles from 'Scripts/components/inventoryTable/inventoryTable.module.scss';
-import type {SortSetting} from 'Scripts/helpers';
-import {nameof} from 'Scripts/helpers';
-import type {StateSetter} from 'Scripts/hooks/useState';
+import {nameof, type SortSetting} from 'Scripts/helpers';
+import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElement, createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
-import type {ReUsableComponentProps} from 'Types/types';
+import {type ReUsableComponentProps} from 'Types/types';
 
 interface HeaderItemProps extends ReUsableComponentProps {
   setSortSetting: StateSetter<SortSetting>;

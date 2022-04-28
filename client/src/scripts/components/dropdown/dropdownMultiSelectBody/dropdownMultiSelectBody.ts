@@ -4,7 +4,7 @@ import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
 import commonComponentsStyles from 'Styles/commonComponents.module.scss';
-import type {MultiSelectDropDownOption, ReUsableComponentProps} from 'Types/types';
+import {type MultiSelectDropDownOption, type ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
 
 export interface dropdownMultiSelectBodyProps extends ReUsableComponentProps {

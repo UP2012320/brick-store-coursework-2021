@@ -4,7 +4,7 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
-import type {CartItem} from 'api-types';
+import {type CartItem} from 'api-types';
 import cartStyles from './cart.module.scss';
 
 export default function createCart () {

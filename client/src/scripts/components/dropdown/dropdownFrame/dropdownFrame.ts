@@ -6,7 +6,7 @@ import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
 import commonComponentsStyles from 'Styles/commonComponents.module.scss';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
-import type {HasBodyProps, ReUsableComponentProps} from 'Types/types';
+import {type HasBodyProps, type ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
 
 export interface DropdownProps extends ReUsableComponentProps, HasBodyProps {

@@ -11,7 +11,9 @@
     "description description description description" 1fr
     "type type colour colour" 1fr
     "stock stock discount discount" 1fr
+    "visibility . . ." .5fr
     "actions actions actions actions" 1fr
+    "error error error error" minmax(0, .5fr)
     / 1fr 1fr 1fr 1fr;
   grid-gap: 8px;
   height: 100%;
@@ -111,6 +113,25 @@
   @extend .action-button;
   grid-area: reset;
   height: 50%;
+}
+
+.message-container {
+  @include row-centered;
+  grid-area: error;
+  height: 100%;
+  border-radius: $medium-radius;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s ease-in-out;
+
+  & > p {
+    @include font-medium;
+    color: #fff;
+  }
+
+  &.visible {
+    transform: scaleY(1);
+  }
 }
 
 textarea {

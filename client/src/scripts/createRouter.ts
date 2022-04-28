@@ -1,4 +1,4 @@
-import type {RouterArgs} from 'Types/types';
+import {type RouterArgs} from 'Types/types';
 
 const createRouter = <T extends string> (args: Array<RouterArgs<T>>): [T | undefined, Record<string, string> | undefined, URLSearchParams | undefined] => {
   const path = window.location.pathname;

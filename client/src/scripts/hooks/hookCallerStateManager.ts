@@ -1,4 +1,4 @@
-import type {CallerState} from 'Types/types';
+import {type CallerState} from 'Types/types';
 
 export default class StateManager<T, S extends CallerState<T>> {
   public stateStore: Map<string, S>;

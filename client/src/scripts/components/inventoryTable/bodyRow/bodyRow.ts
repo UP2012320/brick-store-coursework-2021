@@ -2,8 +2,8 @@ import inventoryTableStyles from 'Scripts/components/inventoryTable/inventoryTab
 import {formatPercent, formatPrice, nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
-import type {ReUsableComponentProps} from 'Types/types';
-import type {Product} from 'api-types';
+import {type ReUsableComponentProps} from 'Types/types';
+import {type Product} from 'api-types';
 
 interface BodyRowProps extends ReUsableComponentProps {
   row: Product;

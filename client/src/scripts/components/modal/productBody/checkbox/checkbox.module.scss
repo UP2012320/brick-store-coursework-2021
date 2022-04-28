@@ -1,0 +1,13 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
+@import 'bootstrap-icons';
+
+@mixin checkbox-container {
+  @include row-centered;
+}
+
+.visibility-checkbox-container {
+  @include checkbox-container;
+  grid-area: visibility;
+}

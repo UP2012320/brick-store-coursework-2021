@@ -3,7 +3,7 @@ import {nameof} from 'Scripts/helpers';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
-import type {HasBodyProps, ReUsableComponentProps} from 'Types/types';
+import {type HasBodyProps, type ReUsableComponentProps} from 'Types/types';
 import collapseStyles from './collapse.module.scss';
 
 export interface CreateCollapseProps extends ReUsableComponentProps, HasBodyProps {

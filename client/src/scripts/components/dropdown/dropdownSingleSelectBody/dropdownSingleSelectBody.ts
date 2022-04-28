@@ -3,7 +3,7 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles} from 'Scripts/uiUtils';
-import type {DropDownOption, ReUsableComponentProps} from 'Types/types';
+import {type DropDownOption, type ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
 
 export interface DropdownSingleSelectBodyProps extends ReUsableComponentProps {

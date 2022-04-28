@@ -1,8 +1,8 @@
 import {nameof} from 'Scripts/helpers';
-import type {StateSetter} from 'Scripts/hooks/useState';
+import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
-import type {ReUsableComponentProps} from 'Types/types';
+import {type ReUsableComponentProps} from 'Types/types';
 import inputBoxStyles from './inputBox.module.scss';
 
 interface InputBoxProps extends ReUsableComponentProps {
@@ -41,6 +41,7 @@ export default function createInputBox (props: InputBoxProps) {
   if (props.textarea) {
     input = createElementWithStyles('textarea', {
       id: props.key,
+      maxLength: 2_500,
       oninput: (event) => {
         if (event.target instanceof HTMLTextAreaElement) {
           props.setValue(event.target.value);

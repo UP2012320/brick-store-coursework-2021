@@ -1,6 +1,6 @@
 import * as fs from 'node:fs/promises';
-import {validatePermissions} from 'Utils/helpers';
-import type {FastifyPluginAsync, onRequestHookHandler, preHandlerAsyncHookHandler} from 'fastify';
+import {sendQuery, validatePermissions} from 'Utils/helpers';
+import {type FastifyPluginAsync, type onRequestHookHandler, type preHandlerAsyncHookHandler} from 'fastify';
 import {nanoid} from 'nanoid';
 import sharp from 'sharp';
 
@@ -86,10 +86,23 @@ const saveImage = async (newId: string, buffer: Buffer) => {
   return true;
 };
 
+const deleteImageFile = async (id: string) => {
+  const filePath = `${saveFolder}/${id}.jpg`;
+
+  try {
+    await fs.unlink(filePath);
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+
+  return true;
+};
+
 const images: FastifyPluginAsync = async (fastify, options) => {
   fastify.addHook('preValidation', fastify.authenticate);
   fastify.addHook('preHandler', async (request, reply) => {
-    validatePermissions(request, reply, ['access:management', 'write:image']);
+    validatePermissions(request, reply, ['access:management', 'write:image', 'delete:image']);
   });
 
   fastify.decorateRequest('buffer', undefined);
@@ -111,27 +124,52 @@ const images: FastifyPluginAsync = async (fastify, options) => {
       return;
     }
 
+    const [, error] = await sendQuery(fastify.pg.pool,
+      'INSERT INTO images (id) VALUES ($1) RETURNING *',
+      [fileUploadId]);
+
+    if (error) {
+      await deleteImageFile(fileUploadId);
+      reply.code(500).send({
+        error: 'Failed to save image',
+      });
+      return;
+    }
+
     reply.code(200).send({
       id: fileUploadId,
     });
   });
 
-  fastify.delete<{Params: {id: string, }, }>('/:id', async (request, reply) => {
-    const filePath = `${saveFolder}/${request.params.id}.jpg`;
+  fastify.delete<{ Params: { id: string, }, }>('/:id', async (request, reply) => {
+    if (!request.params.id) {
+      reply.code(400).send({
+        error: 'Invalid image id',
+      });
+      return;
+    }
 
-    try {
-      await fs.unlink(filePath);
-    } catch (error) {
-      console.error(error);
+    const result = await deleteImageFile(request.params.id);
+
+    if (!result) {
       reply.code(500).send({
         error: 'Failed to delete image',
       });
       return;
     }
 
-    reply.code(200).send({
-      id: request.params.id,
-    });
+    const [, error] = await sendQuery(fastify.pg.pool,
+      'DELETE FROM images WHERE id = $1',
+      [request.params.id]);
+
+    if (error) {
+      reply.code(500).send({
+        error: 'Failed to delete image',
+      });
+      return;
+    }
+
+    reply.code(200).send();
   });
 };
 

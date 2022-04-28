@@ -1,5 +1,5 @@
 import StateManager from 'Scripts/hooks/hookCallerStateManager';
-import type {UseEffectCallerState} from 'Types/types';
+import {type UseEffectCallerState} from 'Types/types';
 import deepEqual from 'deep-equal';
 
 const stateManager = new StateManager<unknown[] | undefined, UseEffectCallerState<unknown[] | undefined>>();

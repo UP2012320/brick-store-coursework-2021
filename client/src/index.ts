@@ -7,8 +7,7 @@ import {clearRef, resetRefIndexes} from 'Scripts/hooks/useRef';
 import {clearState, resetStateIndexes} from 'Scripts/hooks/useState';
 import init from 'Scripts/init';
 import withEvents from 'Scripts/morphdomEvents';
-import type {BrowseProps} from 'Scripts/pages/browse';
-import createBrowse from 'Scripts/pages/browse';
+import createBrowse, {type BrowseProps} from 'Scripts/pages/browse';
 import createCart from 'Scripts/pages/cart/cart';
 import createCheckout from 'Scripts/pages/checkout/checkout';
 import createMain from 'Scripts/pages/main';
@@ -17,7 +16,7 @@ import createProduct from 'Scripts/pages/product/product';
 import createStaff from 'Scripts/pages/staff/staff';
 import {appendElements, createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
-import type {ProductProps} from 'Types/types';
+import {type ProductProps} from 'Types/types';
 import morphdom from 'morphdom';
 
 let currentRoot: HTMLElement;

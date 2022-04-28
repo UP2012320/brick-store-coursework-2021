@@ -1,7 +1,7 @@
 import {nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
-import type {ReUsableComponentProps} from 'Types/types';
+import {type ReUsableComponentProps} from 'Types/types';
 import tabNavbarStyles from './tabNavbar.module.scss';
 
 export interface TabNavbarProps extends ReUsableComponentProps{

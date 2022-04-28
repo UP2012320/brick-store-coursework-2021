@@ -5,8 +5,8 @@ import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import actionButtonStyles from 'Styles/commonComponents.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';
-import type {ReUsableComponentProps} from 'Types/types';
-import type {Product} from 'api-types';
+import {type ReUsableComponentProps} from 'Types/types';
+import {type Product} from 'api-types';
 
 export interface CreateShopCardProps extends ReUsableComponentProps {
   searchResultArgument: Product;

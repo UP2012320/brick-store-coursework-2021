@@ -1,5 +1,5 @@
 import {getItemFromLocalStorage} from 'Scripts/helpers';
-import type {CartItem, Product} from 'api-types';
+import {type CartItem, type Product} from 'api-types';
 
 const addToLocalStorage = (product: Product, quantity: number) => {
   const cartStorage = getItemFromLocalStorage<CartItem[]>('cart');

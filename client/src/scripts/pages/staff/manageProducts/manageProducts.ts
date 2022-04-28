@@ -1,6 +1,6 @@
 import createInventoryTable from 'Scripts/components/inventoryTable/inventoryTable';
 import createModal from 'Scripts/components/modal/modal';
-import createProductBody from 'Scripts/components/modal/productBody/productBody';
+import createAddProductModalBody from 'Scripts/components/modal/productBody/addProductModalBody';
 import {nameof, SortSetting} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import useSearch from 'Scripts/hooks/useSearch';
@@ -28,10 +28,9 @@ export default function createManageProducts () {
   let addModal;
 
   if (addModalIsOpen) {
-    const modalBody = createProductBody({
-      onSubmit: (product) => {
-        console.debug(product);
-      },
+    const modalBody = createAddProductModalBody({
+      closed: addModalIsOpen,
+      closeModal: () => setAddModalIsOpen(false),
     });
 
     addModal = createModal({

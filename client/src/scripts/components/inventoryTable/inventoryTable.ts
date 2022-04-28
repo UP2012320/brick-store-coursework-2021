@@ -1,12 +1,11 @@
 import createBodyRow from 'Scripts/components/inventoryTable/bodyRow/bodyRow';
 import createHeaderRow from 'Scripts/components/inventoryTable/headerRow/headerRow';
-import type {SortSetting} from 'Scripts/helpers';
-import {nameof} from 'Scripts/helpers';
-import type {SetSearchStateArguments} from 'Scripts/hooks/useSearch';
-import type {StateSetter} from 'Scripts/hooks/useState';
+import {nameof, type SortSetting} from 'Scripts/helpers';
+import {type SetSearchStateArguments} from 'Scripts/hooks/useSearch';
+import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
-import type {Product} from 'api-types';
+import {type Product} from 'api-types';
 import inventoryTableStyles from './inventoryTable.module.scss';
 
 const key = nameof(createInventoryTable);

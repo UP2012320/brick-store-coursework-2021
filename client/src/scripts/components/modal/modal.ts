@@ -1,8 +1,8 @@
 import {nameof} from 'Scripts/helpers';
-import type {StateSetter} from 'Scripts/hooks/useState';
+import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
-import type {HasBodyProps, ReUsableComponentProps} from 'Types/types';
+import {type HasBodyProps, type ReUsableComponentProps} from 'Types/types';
 import modalStyles from './modal.module.scss';
 
 interface ModalProps extends ReUsableComponentProps, HasBodyProps {
@@ -13,6 +13,8 @@ interface ModalProps extends ReUsableComponentProps, HasBodyProps {
 
 export default function createModal (props: ModalProps) {
   props.key ??= nameof(createModal);
+
+  const close = () => props.setIsOpen(false);
 
   const container = createKeyedContainer('div', props.key, {
     onmousedown: (event) => {
@@ -26,17 +28,13 @@ export default function createModal (props: ModalProps) {
   }, modalStyles.title);
 
   const closeButton = createElementWithStyles('i', {
-    onclick: () => {
-      props.setIsOpen(false);
-    },
+    onclick: () => close(),
   }, modalStyles.biX);
 
   const bodyContainer = createElementWithStyles('div', undefined, modalStyles.bodyContainer);
 
   const overlay = createElementWithStyles('div', {
-    onmousedown: () => {
-      props.setIsOpen(false);
-    },
+    onmousedown: () => close(),
   }, modalStyles.overlay);
 
   return htmlx`
