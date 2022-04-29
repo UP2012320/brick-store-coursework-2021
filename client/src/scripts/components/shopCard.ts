@@ -1,6 +1,5 @@
-import images from 'Assets/2412b.png';
 import {addToCart} from 'Scripts/cartController';
-import {formatPercent, formatPrice, getProductUrl, nameof} from 'Scripts/helpers';
+import {formatPercent, formatPrice, getImageUrl, getProductUrl, nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import actionButtonStyles from 'Styles/commonComponents.module.scss';
@@ -29,14 +28,18 @@ export default function createShopCard (props: CreateShopCardProps) {
 
   registerLinkClickHandler(imageContainer);
 
-  const image = createElementWithStyles(
-    'img',
-    {
-      loading: 'lazy',
-      src: images,
-    },
-    browseStyles.shopCardImg,
-  );
+  let image;
+
+  if (props.searchResultArgument.images) {
+    image = createElementWithStyles(
+      'img',
+      {
+        loading: 'lazy',
+        src: getImageUrl(props.searchResultArgument.images[0]),
+      },
+      browseStyles.shopCardImg,
+    );
+  }
 
   const title = createElementWithStyles(
     'a',

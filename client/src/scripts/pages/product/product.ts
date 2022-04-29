@@ -1,6 +1,5 @@
-import images from 'Assets/2412b.png';
 import {addToCart} from 'Scripts/cartController';
-import {formatPrice, nameof, SERVER_BASE} from 'Scripts/helpers';
+import {formatPrice, getImageUrl, nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
@@ -51,7 +50,12 @@ export default function createProduct (props: ProductProps) {
   const ProductContainer = createElementWithStyles('div', undefined, productStyles.productContainer);
 
   if (productDetails) {
-    const ProductImage = createElementWithStyles('img', {src: images}, productStyles.productImageContainer);
+    let ProductImage;
+
+    if (productDetails.images) {
+      ProductImage = createElementWithStyles('img', {src: getImageUrl(productDetails.images[0])}, productStyles.productImageContainer);
+    }
+
     const ProductDetailsContainer = createElementWithStyles('div', undefined, productStyles.productDetailsContainer);
     const ProductDetailsTitle = createElementWithStyles('h1', {textContent: productDetails.name}, productStyles.productDetailsTitle);
     const ProductDetailsId = createElementWithStyles('p', {textContent: productDetails.inventory_id.toUpperCase()}, productStyles.productDetailsId);

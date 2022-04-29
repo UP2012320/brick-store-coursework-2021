@@ -1,3 +1,5 @@
+import {type Product} from 'api-types';
+
 export interface BrickColours {
   colour_hex: string;
   colour_id: number;
@@ -21,6 +23,10 @@ export interface Inventory {
   stock: number;
   type?: number;
   visible?: boolean;
+}
+
+export interface QueryProduct extends Product {
+  images: string;
 }
 
 export interface InventoryImages {

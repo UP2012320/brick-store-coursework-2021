@@ -21,7 +21,7 @@
   padding: $spacing-xlarge;
   justify-items: center;
   border-radius: $medium-radius;
-  max-width: 1200px;
+  max-width: 80%;
   background-color: $not-quite-white;
 }
 
@@ -29,6 +29,8 @@
   grid-area: img;
   background-color: #FFF;
   border-radius: $medium-radius;
+  max-height: 400px;
+  max-width: 400px;
 }
 
 .product-details-container {

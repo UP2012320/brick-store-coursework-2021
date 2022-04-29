@@ -14,7 +14,7 @@ export interface BrowseProps {
 const key = nameof(createBrowse);
 
 export default function createBrowse (props: BrowseProps) {
-  const [searchResults, setSearchState, pageNumber, noMoreResults, requestError] = useSearch(key);
+  const [searchResults, setSearchState, reload, pageNumber, noMoreResults, requestError] = useSearch(key);
 
   console.debug(searchResults);
 

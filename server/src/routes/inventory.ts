@@ -1,3 +1,4 @@
+import {type QueryProduct} from 'Types/types';
 import {sendQuery, validatePermissions} from 'Utils/helpers';
 import {type Product, type SearchRequestArguments} from 'api-types';
 import {type FastifyPluginAsync} from 'fastify';
@@ -13,10 +14,10 @@ const inventory: FastifyPluginAsync = async (fastify, options) => {
 
     const direction = body.sort?.startsWith('-') ? 'desc' : 'asc';
 
-    const [searchQueryResult, searchQueryError] = await sendQuery<Product>(
+    const [searchQueryResult, searchQueryError] = await sendQuery<QueryProduct>(
       fastify.pg.pool,
       `SELECT *
-       FROM search_inventory($1, $2, $3, $4, $5, $6)`,
+       FROM search_inventory($1, $2, $3, $4, $5, $6, null)`,
       [
         body.query,
         body.offset ?? 0,
@@ -34,8 +35,13 @@ const inventory: FastifyPluginAsync = async (fastify, options) => {
     }
 
     if (searchQueryResult) {
+      const products = searchQueryResult.rows.map((row) => ({
+        ...row,
+        images: row.images?.split(', ') ?? [],
+      }));
+
       await reply.send({
-        results: searchQueryResult.rows,
+        results: products,
       });
     } else {
       await reply.send({
@@ -80,8 +86,8 @@ const inventory: FastifyPluginAsync = async (fastify, options) => {
   });
 
   fastify.get<{ Querystring: { slug: string, }, }>('/getProductBySlug', async (request, reply) => {
-    const [productDetails, error] = await sendQuery(fastify.pg.pool,
-      'SELECT * FROM get_product_by_slug($1)',
+    const [productDetails, error] = await sendQuery<QueryProduct>(fastify.pg.pool,
+      'SELECT * FROM search_inventory(null, null, null, null, null, null, $1)',
       [request.query.slug]);
 
     if (error) {
@@ -91,7 +97,12 @@ const inventory: FastifyPluginAsync = async (fastify, options) => {
     }
 
     if (productDetails?.rows) {
-      await reply.send(productDetails.rows);
+      const products = productDetails.rows.map((row) => ({
+        ...row,
+        images: row.images?.split(', ') ?? [],
+      }));
+
+      await reply.send(products);
       return;
     }
 
