@@ -1,13 +1,13 @@
 import path from 'node:path';
-import fastify from 'fastify';
 // eslint-disable-next-line
 import fastifyAuth0Verify from 'fastify-auth0-verify';
-import fastifyCors from 'fastify-cors';
-import fastifyHelmet from 'fastify-helmet';
-import fastifyMultipart from 'fastify-multipart';
-import fastifyPostgres from 'fastify-postgres';
-import fastifySensible from 'fastify-sensible';
-import fastifyStatic from 'fastify-static';
+import fastifyCors from '@fastify/cors';
+import fastifyHelmet from '@fastify/helmet';
+import fastifyMultipart from '@fastify/multipart';
+import fastifyPostgres from '@fastify/postgres';
+import fastifySensible from '@fastify/sensible';
+import fastifyStatic from '@fastify/static';
+import fastify from 'fastify';
 import config from './config.js';
 import api from './routes/api.js';
 

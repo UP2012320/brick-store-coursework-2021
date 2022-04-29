@@ -86,6 +86,7 @@ export default function createNavbar () {
   registerLinkClickHandler(leftSideContainerLogo, undefined, undefined, '/');
 
   const login = async () => {
+    console.debug('Logging in...');
     try {
       await auth0.loginWithPopup();
     } catch (error) {

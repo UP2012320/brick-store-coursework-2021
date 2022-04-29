@@ -1,3 +1,4 @@
+import {auth0} from 'Scripts/auth0';
 import {clearCart} from 'Scripts/cartController';
 import {getItemFromLocalStorage, nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
@@ -49,6 +50,65 @@ export default function createCheckout () {
       const data = await response.json();
       historyPush(data, '/cart');
       return;
+    }
+
+    const orderUrl = new URL('/api/v1/orders', SERVER_BASE);
+
+    if (await auth0.isAuthenticated()) {
+      const userInfo = await auth0.getUser();
+
+      if (!userInfo) {
+        console.error('Failed to retrieve user info');
+        return;
+      }
+
+      let orderInsertResponse;
+
+      try {
+        orderInsertResponse = await fetch(orderUrl.href, {
+          body: JSON.stringify({
+            cartItems: cart,
+            email: userInfo.email,
+            userId: userInfo.sub,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+        });
+      } catch (error) {
+        console.error(error);
+        return;
+      }
+
+      if (!orderInsertResponse.ok) {
+        const data = await orderInsertResponse.json();
+        historyPush(data, '/cart');
+        return;
+      }
+    } else {
+      let orderInsertResponse;
+
+      try {
+        orderInsertResponse = await fetch(orderUrl.href, {
+          body: JSON.stringify({
+            inventoryId: cart,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+        });
+      } catch (error) {
+        console.error(error);
+        return;
+      }
+
+      if (!orderInsertResponse.ok) {
+        const data = await orderInsertResponse.json();
+        historyPush(data, '/cart');
+        return;
+      }
     }
 
     setTimeout(() => {

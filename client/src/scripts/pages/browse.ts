@@ -16,8 +16,6 @@ const key = nameof(createBrowse);
 export default function createBrowse (props: BrowseProps) {
   const [searchResults, setSearchState, reload, pageNumber, noMoreResults, requestError] = useSearch(key);
 
-  console.debug(searchResults);
-
   const browseContainer = createKeyedContainer('section', key, undefined, contentRootStyles.contentRoot);
 
   const filterBar = createFilterBar({setSearchState});
