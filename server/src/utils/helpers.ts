@@ -1,6 +1,6 @@
+import {type PostgresDb} from '@fastify/postgres';
 import {type CartItem, type JWTPayload} from 'api-types';
 import {type FastifyReply, type FastifyRequest} from 'fastify';
-import {type PostgresDb} from 'fastify-postgres';
 import {type Pool, type PoolClient, type QueryConfig, type QueryResult} from 'pg';
 
 export const sendQuery = async <T> (

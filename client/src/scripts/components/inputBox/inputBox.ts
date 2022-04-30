@@ -6,7 +6,7 @@ import {type ReUsableComponentProps} from 'Types/types';
 import inputBoxStyles from './inputBox.module.scss';
 
 interface InputBoxProps extends ReUsableComponentProps {
-  classPrefix: string;
+  classPrefix?: string;
   inputPrefix?: string;
   label: string;
   placeholder?: string;
@@ -19,7 +19,7 @@ interface InputBoxProps extends ReUsableComponentProps {
 export default function createInputBox (props: InputBoxProps) {
   props.key ??= nameof(createInputBox);
 
-  const inputContainer = createKeyedContainer('div', props.key, undefined, inputBoxStyles[`${props.classPrefix}InputContainer`]);
+  const inputContainer = createKeyedContainer('div', props.key, undefined, props.classPrefix ? inputBoxStyles[`${props.classPrefix}InputContainer`] : inputBoxStyles.inputContainer);
 
   const label = createElementWithStyles('label', {
     htmlFor: props.key,
@@ -59,7 +59,7 @@ export default function createInputBox (props: InputBoxProps) {
         }
       },
       placeholder: props.placeholder,
-      type: props.type,
+      type: props.type ?? 'text',
       value: props.value,
     }, inputBoxStyles.inputField, props.inputPrefix ? undefined : inputBoxStyles.noPrefix);
   }

@@ -1,6 +1,6 @@
 import {getAuthorizationHeader} from 'Scripts/auth0';
+import createInputBox from 'Scripts/components/inputBox/inputBox';
 import createCheckbox from 'Scripts/components/modal/productBody/checkbox/checkbox';
-import createInputBox from 'Scripts/components/modal/productBody/inputBox/inputBox';
 import {getImageUrl, nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useRef} from 'Scripts/hooks/useRef';

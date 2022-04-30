@@ -1,7 +1,44 @@
 import {sendQuery} from 'Utils/helpers';
 import {type CartItem} from 'api-types';
-import {type FastifyPluginAsync} from 'fastify';
+import {type FastifyPluginAsync, type FastifyReply} from 'fastify';
 import {nanoid} from 'nanoid';
+import {type PoolClient} from 'pg';
+
+export const addOrder = async (client: PoolClient, cartItems: CartItem[], orderId: string, reply: FastifyReply, email?: string, userId?: string) => {
+  const [, insertOrderError] = await sendQuery(client,
+    'INSERT INTO orders (order_id, date_ordered) VALUES ($1, $2)',
+    [orderId, new Date()]);
+
+  if (insertOrderError) {
+    console.error(insertOrderError);
+    reply.internalServerError();
+    return false;
+  }
+
+  const [, insertUserOrderError] = await sendQuery(client,
+    'INSERT INTO user_orders (user_id, email, order_id) VALUES ($1, $2, $3)',
+    [userId, email, orderId]);
+
+  if (insertUserOrderError) {
+    console.error(insertUserOrderError);
+    reply.internalServerError();
+    return false;
+  }
+
+  for (const cartItem of cartItems) {
+    const [, insertOrderItemError] = await sendQuery(client,
+      'INSERT INTO order_items (order_id, inventory_id, quantity) VALUES ($1, $2, $3)',
+      [orderId, cartItem.product.inventory_id, cartItem.quantity]);
+
+    if (insertOrderItemError) {
+      console.error(insertOrderItemError);
+      reply.internalServerError();
+      return false;
+    }
+  }
+
+  return true;
+};
 
 const orders: FastifyPluginAsync = async (fastify, options) => {
   fastify.get<{ Querystring: { email?: string, orderId: string, userId?: string, }, }>('/', async (request, reply) => {
@@ -69,41 +106,7 @@ const orders: FastifyPluginAsync = async (fastify, options) => {
 
     const orderId = nanoid(12);
 
-    const result = await fastify.pg.transact(async (client) => {
-      const [, insertOrderError] = await sendQuery(client,
-        'INSERT INTO orders (order_id, date_ordered) VALUES ($1, $2)',
-        [orderId, new Date()]);
-
-      if (insertOrderError) {
-        console.error(insertOrderError);
-        reply.internalServerError();
-        return false;
-      }
-
-      const [, insertUserOrderError] = await sendQuery(client,
-        'INSERT INTO user_orders (user_id, email, order_id) VALUES ($1, $2, $3)',
-        [userId, email, orderId]);
-
-      if (insertUserOrderError) {
-        console.error(insertUserOrderError);
-        reply.internalServerError();
-        return false;
-      }
-
-      for (const cartItem of cartItems) {
-        const [, insertOrderItemError] = await sendQuery(client,
-          'INSERT INTO order_items (order_id, inventory_id, quantity) VALUES ($1, $2, $3)',
-          [orderId, cartItem.product.inventory_id, cartItem.quantity]);
-
-        if (insertOrderItemError) {
-          console.error(insertOrderItemError);
-          reply.internalServerError();
-          return false;
-        }
-      }
-
-      return true;
-    });
+    const result = await fastify.pg.transact(async (client) => await addOrder(client, cartItems, orderId, reply, email, userId));
 
     if (!result) {
       return;

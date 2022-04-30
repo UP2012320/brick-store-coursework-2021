@@ -1,5 +1,7 @@
+import {type User} from '@auth0/auth0-spa-js';
 import {auth0} from 'Scripts/auth0';
 import {clearCart} from 'Scripts/cartController';
+import createInputBox from 'Scripts/components/inputBox/inputBox';
 import {getItemFromLocalStorage, nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
@@ -13,20 +15,57 @@ const key = nameof(createCheckout);
 
 export default function createCheckout () {
   const [checkoutComplete, setCheckoutComplete] = useState(key, false);
+  const [startCheckout, setStartCheckout] = useState(key, false);
+  const [userInfo, setUserInfo] = useState<User | undefined>(key, undefined);
+  const [email, setEmail] = useState(key, '');
 
   const container = createKeyedContainer('section', key, undefined, contentRootStyles.contentRoot);
 
   const contentContainer = createElementWithStyles('div', undefined, checkoutStyles.checkoutContentContainer);
 
-  const checkingOut = createElementWithStyles('p', {
-    textContent: checkoutComplete ? 'Checkout complete!' : 'Checking out...',
-  }, checkoutStyles.checkoutText);
+  let contentBody;
 
-  const statusCircle = createElementWithStyles('i', undefined, checkoutComplete ? checkoutStyles.biCheck : checkoutStyles.biDashLg);
+  if (userInfo || (startCheckout && email)) {
+    const checkoutStatus = createElementWithStyles('p', {
+      textContent: checkoutComplete ? 'Checkout complete!' : 'Checking out...',
+    }, checkoutStyles.checkoutText);
+
+    const statusCircle = createElementWithStyles('i', undefined, checkoutComplete ? checkoutStyles.biCheck : checkoutStyles.biDashLg);
+
+    contentBody = htmlx`
+    <${checkoutStatus}>
+      <${statusCircle}/>
+    </checkoutStatus>
+    `;
+  } else {
+    const emailInput = createInputBox({
+      key: 'checkoutEmailInput',
+      label: 'Enter your email',
+      placeholder: 'Enter your email',
+      setValue: setEmail,
+      type: 'email',
+      value: email,
+    });
+
+    const emailSubmit = createElementWithStyles('button', {
+      onclick: () => {
+        if (!email || !/^\S+@\S+\.\S+$/gmiu.test(email)) {
+          return;
+        }
+
+        setStartCheckout(true);
+      },
+      textContent: 'Submit',
+    }, checkoutStyles.actionButton);
+
+    contentBody = htmlx`
+    <${emailInput}>
+      <${emailSubmit}/>
+    </emailInput>
+    `;
+  }
 
   const checkoutProcess = async () => {
-    console.debug('Checking out');
-
     const cart = getItemFromLocalStorage<CartItem[]>('cart');
 
     const url = new URL('/api/v1/checkout', SERVER_BASE);
@@ -35,7 +74,11 @@ export default function createCheckout () {
 
     try {
       response = await fetch(url.href, {
-        body: JSON.stringify(cart),
+        body: JSON.stringify({
+          cartItems: cart,
+          email: userInfo?.email ?? email ?? '',
+          userId: userInfo?.sub ?? '',
+        }),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -52,65 +95,6 @@ export default function createCheckout () {
       return;
     }
 
-    const orderUrl = new URL('/api/v1/orders', SERVER_BASE);
-
-    if (await auth0.isAuthenticated()) {
-      const userInfo = await auth0.getUser();
-
-      if (!userInfo) {
-        console.error('Failed to retrieve user info');
-        return;
-      }
-
-      let orderInsertResponse;
-
-      try {
-        orderInsertResponse = await fetch(orderUrl.href, {
-          body: JSON.stringify({
-            cartItems: cart,
-            email: userInfo.email,
-            userId: userInfo.sub,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-        });
-      } catch (error) {
-        console.error(error);
-        return;
-      }
-
-      if (!orderInsertResponse.ok) {
-        const data = await orderInsertResponse.json();
-        historyPush(data, '/cart');
-        return;
-      }
-    } else {
-      let orderInsertResponse;
-
-      try {
-        orderInsertResponse = await fetch(orderUrl.href, {
-          body: JSON.stringify({
-            inventoryId: cart,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-        });
-      } catch (error) {
-        console.error(error);
-        return;
-      }
-
-      if (!orderInsertResponse.ok) {
-        const data = await orderInsertResponse.json();
-        historyPush(data, '/cart');
-        return;
-      }
-    }
-
     setTimeout(() => {
       setCheckoutComplete(true);
 
@@ -121,17 +105,31 @@ export default function createCheckout () {
     }, 1_000);
   };
 
+  const getInfo = async () => {
+    const user = await auth0.getUser();
+    setUserInfo(user);
+
+    if (user) {
+      setStartCheckout(true);
+    }
+  };
+
   useEffect(key, () => {
-    setTimeout(() => {
-      checkoutProcess();
-    }, 1_500);
+    getInfo();
   }, []);
+
+  useEffect(key, () => {
+    if (startCheckout) {
+      setTimeout(() => {
+        checkoutProcess();
+      }, 1_500);
+    }
+  }, [startCheckout]);
 
   return htmlx`
   <${container}>
     <${contentContainer}>
-      <${checkingOut}/>
-      <${statusCircle}/>
+      <${contentBody}/>
     </contentContainer>
   </container>
   `;

@@ -1,5 +1,6 @@
 @import 'src/styles/utils';
 @import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
 @import 'bootstrap-icons';
 
 .checkout-container {
@@ -29,6 +30,11 @@
 .bi-check {
   @include font-xlarge;
   color: green;
+}
+
+.action-button {
+  width: 100%;
+  margin-top: $spacing-medium;
 }
 
 @keyframes dash-spin {
