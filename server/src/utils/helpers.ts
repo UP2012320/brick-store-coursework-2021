@@ -1,5 +1,5 @@
 import {type PostgresDb} from '@fastify/postgres';
-import {type CartItem, type JWTPayload} from 'api-types';
+import {type CartItemRequest, type JWTPayload} from 'api-types';
 import {type FastifyReply, type FastifyRequest} from 'fastify';
 import {type Pool, type PoolClient, type QueryConfig, type QueryResult} from 'pg';
 
@@ -27,13 +27,13 @@ export const sendQueryTransact = async <T> (
   values?: unknown[],
 ): Promise<QueryResult<T> | unknown | undefined> => await pg.transact(async (client) => await client.query(query, values));
 
-export const checkIfProductInStock = async (pg: Pool | PoolClient, cartItems: CartItem[]) => {
+export const checkIfProductInStock = async (pg: Pool | PoolClient, cartItems: CartItemRequest[]) => {
   const responseBody = [];
 
   for (const product of cartItems) {
     const [result, error] = await sendQuery(pg,
       'SELECT stock FROM inventory WHERE inventory_id = $1',
-      [product.product.inventory_id]);
+      [product.inventoryId]);
 
     if (error || !result) {
       console.error(error);
@@ -47,7 +47,7 @@ export const checkIfProductInStock = async (pg: Pool | PoolClient, cartItems: Ca
     const row = result.rows[0] as { stock: number, };
 
     if (row.stock - product.quantity < 0) {
-      responseBody.push({inventoryId: product.product.inventory_id, stock: row.stock});
+      responseBody.push({inventoryId: product.inventoryId, stock: row.stock});
     }
   }
 

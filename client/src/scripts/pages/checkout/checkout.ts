@@ -75,7 +75,10 @@ export default function createCheckout () {
     try {
       response = await fetch(url.href, {
         body: JSON.stringify({
-          cartItems: cart,
+          cartItems: cart?.map((item) => ({
+            inventoryId: item.product.inventory_id,
+            quantity: item.quantity,
+          })),
           email: userInfo?.email ?? email ?? '',
           userId: userInfo?.sub ?? '',
         }),

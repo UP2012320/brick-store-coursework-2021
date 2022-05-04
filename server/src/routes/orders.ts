@@ -1,26 +1,47 @@
 import {sendQuery} from 'Utils/helpers';
-import {type CartItem} from 'api-types';
+import {type CartItemRequest} from 'api-types';
 import {type FastifyPluginAsync, type FastifyReply} from 'fastify';
 import {nanoid} from 'nanoid';
 import {type PoolClient} from 'pg';
+import {addOrderSchema, getAllUsersOrdersSchema, getOrderSchema} from './orders.schema';
 
-export const addOrder = async (client: PoolClient, cartItems: CartItem[], orderId: string, reply: FastifyReply, email?: string, userId?: string) => {
+export const addOrder = async (client: PoolClient, cartItems: CartItemRequest[], orderId: string, reply: FastifyReply, email?: string, userId?: string) => {
   const [, insertOrderError] = await sendQuery(client,
     'INSERT INTO orders (order_id, date_ordered) VALUES ($1, $2)',
     [orderId, new Date()]);
 
   if (insertOrderError) {
-    console.error(insertOrderError);
     reply.internalServerError();
     return false;
   }
 
+  const [userExistsResult, userExistsError] = await sendQuery<{exists: boolean, }>(client,
+    'SELECT EXISTS (SELECT 1 FROM users WHERE email = $1)',
+    [email]);
+
+  if (userExistsError || !userExistsResult?.rows) {
+    reply.internalServerError();
+    return false;
+  }
+
+  const userExists = userExistsResult.rows[0].exists;
+
+  if (!userExists) {
+    const [, insertUserError] = await sendQuery(client,
+      'INSERT INTO users (email, user_id) VALUES ($1, $2)',
+      [email, userId]);
+
+    if (insertUserError) {
+      reply.internalServerError();
+      return false;
+    }
+  }
+
   const [, insertUserOrderError] = await sendQuery(client,
-    'INSERT INTO user_orders (user_id, email, order_id) VALUES ($1, $2, $3)',
-    [userId, email, orderId]);
+    'INSERT INTO user_orders (email, order_id) VALUES ($1, $2)',
+    [email, orderId]);
 
   if (insertUserOrderError) {
-    console.error(insertUserOrderError);
     reply.internalServerError();
     return false;
   }
@@ -28,10 +49,9 @@ export const addOrder = async (client: PoolClient, cartItems: CartItem[], orderI
   for (const cartItem of cartItems) {
     const [, insertOrderItemError] = await sendQuery(client,
       'INSERT INTO order_items (order_id, inventory_id, quantity) VALUES ($1, $2, $3)',
-      [orderId, cartItem.product.inventory_id, cartItem.quantity]);
+      [orderId, cartItem.inventoryId, cartItem.quantity]);
 
     if (insertOrderItemError) {
-      console.error(insertOrderItemError);
       reply.internalServerError();
       return false;
     }
@@ -41,17 +61,13 @@ export const addOrder = async (client: PoolClient, cartItems: CartItem[], orderI
 };
 
 const orders: FastifyPluginAsync = async (fastify, options) => {
-  fastify.get<{ Querystring: { email?: string, orderId: string, userId?: string, }, }>('/', async (request, reply) => {
-    const {email, userId} = request.query;
-
-    if (!email && !userId) {
-      reply.badRequest();
-      return;
-    }
+  fastify.get<{ Querystring: { email?: string, orderId: string, userId?: string, }, }>('/', {schema: getOrderSchema}, async (request, reply) => {
+    const {email, orderId, userId} = request.query;
 
     const [result, error] = await sendQuery(fastify.pg.pool,
-      'SELECT * FROM user_orders WHERE (user_id = $1 OR email = $2) AND order_id = $3',
-      [userId, email, request.query.orderId]);
+      `SELECT * FROM get_all_orders()
+             WHERE ("userId" = $1 OR email = $2) AND "orderId" = $3`,
+      [userId, email, orderId]);
 
     if (error || !result) {
       console.error(error);
@@ -64,22 +80,18 @@ const orders: FastifyPluginAsync = async (fastify, options) => {
       return;
     }
 
-    reply.status(200).send(result.rows);
+    reply.status(200).send(result.rows[0]);
   });
 
-  fastify.get<{ Querystring: { userId: string, }, }>('/allUserOrders', async (request, reply) => {
+  fastify.get<{ Querystring: { userId: string, }, }>('/allUsersOrders', {
+    schema: getAllUsersOrdersSchema,
+  }, async (request, reply) => {
     const {userId} = request.query;
 
-    if (!userId) {
-      reply.badRequest();
-      return;
-    }
-
     const [result, error] = await sendQuery(fastify.pg.pool,
-      `SELECT *
-       FROM user_orders
-              JOIN orders o on o.order_id = user_orders.order_id
-       WHERE user_id = $1`,
+      `SELECT * FROM get_all_orders()
+             WHERE "userId" = $1
+             ORDER BY "dateOrdered" DESC`,
       [userId]);
 
     if (error || !result) {
@@ -96,7 +108,7 @@ const orders: FastifyPluginAsync = async (fastify, options) => {
     reply.status(200).send(result.rows);
   });
 
-  fastify.post<{ Body: { cartItems: CartItem[], email?: string, userId?: string, }, }>('/', async (request, reply) => {
+  fastify.post<{ Body: { cartItems: CartItemRequest[], email?: string, userId?: string, }, }>('/', {schema: addOrderSchema}, async (request, reply) => {
     const {email, cartItems, userId} = request.body;
 
     if ((!email && !userId) || !cartItems || cartItems.length === 0) {
@@ -112,7 +124,9 @@ const orders: FastifyPluginAsync = async (fastify, options) => {
       return;
     }
 
-    reply.status(200).send();
+    reply.status(200).send({
+      orderId,
+    });
   });
 };
 

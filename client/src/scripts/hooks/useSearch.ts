@@ -2,7 +2,7 @@ import {SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useRef} from 'Scripts/hooks/useRef';
 import {useState} from 'Scripts/hooks/useState';
-import {type Product, type SearchQueryResponse} from 'api-types';
+import {type Product} from 'api-types';
 
 const maxSearchResults = 50;
 
@@ -62,19 +62,19 @@ export default function useSearch (key: string,
       return;
     }
 
-    const data = await response.json() as SearchQueryResponse;
+    const data = await response.json() as Product[];
 
-    if (data.results.length < maxSearchResults) {
+    if (data.length < maxSearchResults) {
       setNoMoreResults(true);
     }
 
     // eslint-disable-next-line require-atomic-updates
     setSearchResults((previousSearchResults) => {
       if (previousSearchResults && !isNewSearch.current) {
-        return [...previousSearchResults, ...data.results];
+        return [...previousSearchResults, ...data];
       } else {
         isNewSearch.current = false;
-        return data.results;
+        return data;
       }
     });
   };

@@ -6,6 +6,7 @@ import {nanoid} from 'nanoid';
 import {type PoolClient} from 'pg';
 import slugify from 'slugify';
 import {deleteImageFile, deleteImageFromDatabase} from '../staff/images';
+import {deleteProductSchema, newProductSchema, updateProductSchema} from './products.schema';
 
 const getTypeAndColourId = async (client: PoolClient, type?: string, colour?: string) => {
   let colourId: number | undefined;
@@ -60,53 +61,12 @@ const getTypeAndColourId = async (client: PoolClient, type?: string, colour?: st
 };
 
 const products: FastifyPluginAsync = async (fastify, options) => {
-  fastify.addHook('preValidation', fastify.authenticate);
   fastify.addHook('preHandler', async (request, reply) => {
-    validatePermissions(request, reply, ['access:management', 'write:products', 'update:products', 'delete:products']);
+    validatePermissions(request, reply, ['write:products', 'update:products', 'delete:products']);
   });
 
-  fastify.post<{ Body: { product: NewProduct, }, }>('/', async (request, reply) => {
+  fastify.post<{ Body: { product: NewProduct, }, }>('/', {schema: newProductSchema}, async (request, reply) => {
     const {product} = request.body;
-
-    if (!product) {
-      reply.badRequest('Missing newProduct');
-      return;
-    }
-
-    if (!product.name) {
-      reply.badRequest('Missing newProduct.name');
-      return;
-    }
-
-    if (!product.price) {
-      reply.badRequest('Missing newProduct.price');
-      return;
-    }
-
-    if (!product.description) {
-      reply.badRequest('Missing newProduct.description');
-      return;
-    }
-
-    if (!product.type) {
-      reply.badRequest('Missing newProduct.type');
-      return;
-    }
-
-    if (!product.colour) {
-      reply.badRequest('Missing newProduct.colour');
-      return;
-    }
-
-    if (product.description.length > 2_500) {
-      reply.badRequest('newProduct.description is too long');
-      return;
-    }
-
-    if (product.name.length > 500) {
-      reply.badRequest('newProduct.name is too long');
-      return;
-    }
 
     if (product.price < 0) {
       reply.badRequest('newProduct.price is negative');
@@ -168,18 +128,8 @@ const products: FastifyPluginAsync = async (fastify, options) => {
     });
   });
 
-  fastify.put<{ Body: { product: UpdatedProduct, }, }>('/', async (request, reply) => {
+  fastify.put<{ Body: { product: UpdatedProduct, }, }>('/', {schema: updateProductSchema}, async (request, reply) => {
     const {product} = request.body;
-
-    if (!product) {
-      reply.badRequest('No product provided');
-      return;
-    }
-
-    if (!product.inventory_id) {
-      reply.badRequest('No product ID provided');
-      return;
-    }
 
     const [result, error] = await sendQuery<Inventory>(fastify.pg.pool,
       `SELECT * FROM inventory
@@ -221,7 +171,7 @@ const products: FastifyPluginAsync = async (fastify, options) => {
       }
 
       const [existingImages, existingImagesError] = await sendQuery<InventoryImages>(client,
-        `SELECT * FROM inventory_images
+        `SELECT image_id as "imageId", inventory_id as "inventoryId" FROM inventory_images
              WHERE inventory_id = $1`,
         [product.inventory_id]);
 
@@ -277,12 +227,8 @@ const products: FastifyPluginAsync = async (fastify, options) => {
     });
   });
 
-  fastify.delete<{Params: {id: string, }, }>('/:id', async (request, reply) => {
+  fastify.delete<{Params: {id: string, }, }>('/:id', {schema: deleteProductSchema}, async (request, reply) => {
     const {id} = request.params;
-
-    if (!id) {
-      reply.badRequest('Missing product id');
-    }
 
     const result = await fastify.pg.transact(async (client) => {
       const [deleteResult, deleteError] = await sendQuery(client, `

@@ -6,10 +6,6 @@ export interface SearchRequestArguments {
   types?: string;
 }
 
-export interface SearchQueryResponse {
-  results: Product[];
-}
-
 export interface Product {
   colour: string;
   date_added: string;
@@ -26,8 +22,8 @@ export interface Product {
   visibility: boolean;
 }
 
-export type NewProduct = Omit<Product, 'discount_price' | 'inventory_id' | 'slug'>;
-export type UpdatedProduct = Omit<Product, 'discount_price' | 'slug'>;
+export type NewProduct = Omit<Product, 'date_added' | 'discount_price' | 'inventory_id' | 'slug'>;
+export type UpdatedProduct = Omit<Product, 'date_added' | 'discount_price' | 'slug'>;
 
 export interface GetBrickColoursResponse {
   id: string;
@@ -41,6 +37,11 @@ export interface GetBrickTypesResponse {
 
 export interface CartItem {
   product: Product;
+  quantity: number;
+}
+
+export interface CartItemRequest {
+  inventoryId: string;
   quantity: number;
 }
 
@@ -60,3 +61,14 @@ export interface ApiResponse {
   message: string;
   statusCode: number;
 }
+
+export interface OrderInfo {
+  dateOrdered: Date;
+  dateShipped: Date;
+  email: string;
+  inventoryId: string;
+  orderId: string;
+  quantity: number;
+  userId: string;
+}
+

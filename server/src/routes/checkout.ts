@@ -1,11 +1,12 @@
 import {checkIfProductInStock, sendQuery} from 'Utils/helpers';
-import {type CartItem} from 'api-types';
+import {type CartItemRequest} from 'api-types';
 import {type FastifyPluginAsync} from 'fastify';
 import {nanoid} from 'nanoid';
+import {checkoutSchema} from './checkout.schema';
 import {addOrder} from './orders';
 
 const checkout: FastifyPluginAsync = async (fastify, options) => {
-  fastify.addHook<{ Body: { cartItems: CartItem[], email?: string, userId?: string, }, }>('preHandler', async (request, reply) => {
+  fastify.addHook<{ Body: { cartItems: CartItemRequest[], email?: string, userId?: string, }, }>('preHandler', async (request, reply) => {
     let canCheckout: Array<{ inventoryId: string, stock: number, }> | undefined = [];
 
     if (request.body) {
@@ -14,8 +15,6 @@ const checkout: FastifyPluginAsync = async (fastify, options) => {
       reply.badRequest();
       return;
     }
-
-    console.debug(canCheckout);
 
     if (!canCheckout) {
       reply.badRequest();
@@ -27,7 +26,7 @@ const checkout: FastifyPluginAsync = async (fastify, options) => {
     }
   });
 
-  fastify.post<{ Body: { cartItems: CartItem[], email?: string, userId?: string, }, }>('/', async (request, reply) => {
+  fastify.post<{ Body: { cartItems: CartItemRequest[], email?: string, userId?: string, }, }>('/', {schema: checkoutSchema}, async (request, reply) => {
     const {cartItems, email, userId} = request.body;
 
     if ((!email && !userId) || !cartItems || cartItems.length === 0) {
@@ -35,14 +34,9 @@ const checkout: FastifyPluginAsync = async (fastify, options) => {
       return;
     }
 
-    if (email && !/^\S+@\S+\.\S+$/gmiu.test(email)) {
-      reply.badRequest('Invalid email');
-      return;
-    }
-
     const result = await fastify.pg.transact(async (client) => {
       for (const cartItem of cartItems) {
-        const inventoryId = cartItem.product.inventory_id;
+        const inventoryId = cartItem.inventoryId;
         const quantity = cartItem.quantity;
 
         const [, error] = await sendQuery(fastify.pg.pool,

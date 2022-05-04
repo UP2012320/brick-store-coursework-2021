@@ -4,6 +4,7 @@ import {type FastifyPluginAsync, type onRequestHookHandler, type preHandlerAsync
 import {nanoid} from 'nanoid';
 import {type Pool, type PoolClient} from 'pg';
 import sharp from 'sharp';
+import {addImageSchema, deleteImageSchema} from './images.schema';
 
 const saveFolder = '../dist/public/images';
 
@@ -88,11 +89,27 @@ const saveImage = async (newId: string, buffer: Buffer) => {
 };
 
 export const deleteImageFromDatabase = async (client: Pool | PoolClient, id: string) => {
-  const [, error] = await sendQuery(client,
+  const [imageExists, imageExistsError] = await sendQuery<{exists: boolean, }>(client, 'SELECT EXISTS (SELECT 1 FROM images WHERE image_id = $1)', [id]);
+
+  if (imageExistsError) {
+    return false;
+  }
+
+  if (!imageExists?.rows[0].exists) {
+    return true;
+  }
+
+  const [, inventoryImagesError] = await sendQuery(client, 'DELETE FROM inventory_images WHERE image_id = $1', [id]);
+
+  if (inventoryImagesError) {
+    return false;
+  }
+
+  const [, imagesError] = await sendQuery(client,
     'DELETE FROM images WHERE image_id = $1',
     [id]);
 
-  return error;
+  return !imagesError;
 };
 
 export const deleteImageFile = async (id: string) => {
@@ -101,7 +118,11 @@ export const deleteImageFile = async (id: string) => {
   try {
     await fs.unlink(filePath);
   } catch (error) {
-    console.error(error);
+    const errno = error as NodeJS.ErrnoException;
+    if (errno.errno === -2) {
+      return true;
+    }
+    console.error(errno);
     return false;
   }
 
@@ -109,9 +130,8 @@ export const deleteImageFile = async (id: string) => {
 };
 
 const images: FastifyPluginAsync = async (fastify, options) => {
-  fastify.addHook('preValidation', fastify.authenticate);
   fastify.addHook('preHandler', async (request, reply) => {
-    validatePermissions(request, reply, ['access:management', 'write:image', 'delete:image']);
+    validatePermissions(request, reply, ['write:image', 'delete:image']);
   });
 
   fastify.decorateRequest('buffer', undefined);
@@ -121,6 +141,7 @@ const images: FastifyPluginAsync = async (fastify, options) => {
     onRequest: onUploadRequest,
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     preHandler: validateUpload,
+    schema: addImageSchema,
   }, async (request, reply) => {
     const fileUploadId = nanoid(32);
 
@@ -150,14 +171,7 @@ const images: FastifyPluginAsync = async (fastify, options) => {
     });
   });
 
-  fastify.delete<{ Params: { id: string, }, }>('/:id', async (request, reply) => {
-    if (!request.params.id) {
-      reply.code(400).send({
-        error: 'Invalid image id',
-      });
-      return;
-    }
-
+  fastify.delete<{ Params: { id: string, }, }>('/:id', {schema: deleteImageSchema}, async (request, reply) => {
     const result = await deleteImageFile(request.params.id);
 
     if (!result) {

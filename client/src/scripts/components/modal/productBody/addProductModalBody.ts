@@ -172,10 +172,6 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
 
     const removeButton = createElementWithStyles('i', {
       onclick: () => {
-        if (newImages.current.includes(image)) {
-          deleteImagesFromServer(image);
-        }
-
         setImages((existingImages) => existingImages.filter((existingImage) => existingImage !== image));
       },
       title: 'Remove Image',
@@ -351,11 +347,6 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
         error: false,
         message: `Product successfully ${props.existingProduct ? 'updated' : 'created'}`,
       });
-
-      if (props.existingProduct?.images) {
-        const deletedImages = props.existingProduct.images.filter((image) => !images.includes(image));
-        deleteImagesFromServer(...deletedImages);
-      }
 
       props.reloadResults();
     } else {

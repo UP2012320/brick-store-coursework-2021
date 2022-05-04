@@ -1,5 +1,5 @@
 const config = {
-  address: '0.0.0.0',
+  address: '127.0.0.1',
   audience: 'staff',
   clientId: 'kq0D1YmYDfSH0UEai0TbxqHp8UkRptCR',
   dev: true,
