@@ -9,13 +9,14 @@ import init from 'Scripts/init';
 import {createElement, createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
 import unload from 'Scripts/unload';
 import styles from 'Styles/components/navbar.module.scss';
-import {type CartItem} from 'api-types';
+import {type CartItem, type JWTPayload} from 'api-types';
 
 const key = nameof(createNavbar);
 
 export default function createNavbar () {
   const [cartSize, setCartSize] = useState(key, 0);
   const [isLoggedIn, setIsLoggedIn] = useState(key, false);
+  const [isStaff, setIsStaff] = useState(key, false);
 
   const navbar = createElement('nav');
   navbar.setAttribute('key', key);
@@ -58,9 +59,16 @@ export default function createNavbar () {
     setIsLoggedIn(await auth0.isAuthenticated());
   };
 
+  const checkIfUserIsStaff = async () => {
+    const user = await auth0.getTokenSilently();
+    const token = JSON.parse(atob(user.split('.')[1])) as JWTPayload;
+    setIsStaff(token.permissions.includes('access:management'));
+  };
+
   useEffect(key, () => {
     updateCartSize();
     checkIfLoggedIn();
+    checkIfUserIsStaff();
     window.addEventListener('storage', updateCartSize);
 
     return () => {
@@ -98,6 +106,7 @@ export default function createNavbar () {
 
     await init();
     setIsLoggedIn(true);
+    await checkIfUserIsStaff();
   };
 
   const logout = async () => {
@@ -109,18 +118,37 @@ export default function createNavbar () {
     setIsLoggedIn(false);
   };
 
-  let loginElement;
+  let loginButton;
 
   if (isLoggedIn) {
-    loginElement = createElementWithStyles('button', {textContent: 'Logout'}, styles.actionButtonNoBorder);
-    loginElement.onclick = async () => {
+    loginButton = createElementWithStyles('button', {textContent: 'Logout'}, styles.actionButtonNoBorder);
+    loginButton.onclick = async () => {
       await logout();
     };
   } else {
-    loginElement = createElementWithStyles('p', {textContent: 'Login'}, styles.actionButtonNoBorder);
-    loginElement.onclick = async () => {
+    loginButton = createElementWithStyles('button', {textContent: 'Login'}, styles.actionButtonNoBorder);
+    loginButton.onclick = async () => {
       await login();
     };
+  }
+
+  let staffButton;
+
+  if (isStaff) {
+    const staffButtonElement = createElementWithStyles('button', undefined, styles.actionButtonNoBorder);
+
+    const staffLink = createElementWithStyles('a', {
+      href: `${window.location.origin}/staff`,
+      textContent: 'Staff',
+    }, styles.aLink);
+
+    registerLinkClickHandler(staffLink, undefined, undefined, '/staff');
+
+    staffButton = htmlx`
+    <${staffButtonElement}>
+      <${staffLink}>
+    </staffLink>
+    `;
   }
 
   return htmlx`
@@ -132,7 +160,8 @@ export default function createNavbar () {
         <${navbarBrowseItem}/>
       </mainElement>
       <${rightSideContainer}>
-        <${loginElement}/>
+        <${staffButton}/>
+        <${loginButton}/>
         <${shoppingCartContainer}>
           <${shoppingCart}>
             <${shoppingCartAmount}/>
