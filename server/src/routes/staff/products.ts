@@ -231,21 +231,6 @@ const products: FastifyPluginAsync = async (fastify, options) => {
     const {id} = request.params;
 
     const result = await fastify.pg.transact(async (client) => {
-      const [deleteResult, deleteError] = await sendQuery(client, `
-        DELETE FROM inventory
-        WHERE inventory_id = $1
-      `, [id]);
-
-      if (deleteError || !deleteResult) {
-        reply.internalServerError('Error deleting product');
-        return false;
-      }
-
-      if (deleteResult.rowCount === 0) {
-        reply.notFound('Product not found');
-        return false;
-      }
-
       const [existingImages, existingImagesError] = await sendQuery<InventoryImages>(client,
         `SELECT * FROM inventory_images
              WHERE inventory_id = $1`,
@@ -282,6 +267,21 @@ const products: FastifyPluginAsync = async (fastify, options) => {
           reply.internalServerError('Error deleting product images');
           return false;
         }
+      }
+
+      const [deleteResult, deleteError] = await sendQuery(client, `
+        DELETE FROM inventory
+        WHERE inventory_id = $1
+      `, [id]);
+
+      if (deleteError || !deleteResult) {
+        reply.internalServerError('Error deleting product');
+        return false;
+      }
+
+      if (deleteResult.rowCount === 0) {
+        reply.notFound('Product not found');
+        return false;
       }
 
       return true;

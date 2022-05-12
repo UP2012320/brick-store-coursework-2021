@@ -24,17 +24,20 @@ const orders: FastifyPluginAsync = async (fastify, options) => {
     const {id} = request.params;
 
     const result = await fastify.pg.transact(async (client) => {
-      const [, error] = await sendQuery(client, `
+      const [, userOrdersError] = await sendQuery(client, `
       DELETE FROM user_orders WHERE order_id = $1;
+      `, [id]);
+
+      const [, orderItemsError] = await sendQuery(client, `
       DELETE FROM order_items WHERE order_id = $1;
+      `, [id]);
+
+      const [, ordersError] = await sendQuery(client, `
       DELETE FROM orders WHERE order_id = $1;
       `, [id]);
 
-      if (error && error.code === '23503') {
-        reply.badRequest('Order not found');
-        return false;
-      } else if (error) {
-        console.error(error);
+      if (userOrdersError || orderItemsError || ordersError) {
+        console.error(userOrdersError, orderItemsError, ordersError);
         reply.internalServerError();
         return false;
       }
