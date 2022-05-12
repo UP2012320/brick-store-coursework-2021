@@ -68,6 +68,8 @@ export default function createNavbar () {
     };
   }, []);
 
+  const shoppingCartContainer = createElementWithStyles('button', undefined, styles.actionButtonNoBorder);
+
   const shoppingCart = createElementWithStyles('i', undefined, styles.biCart2);
 
   registerLinkClickHandler(shoppingCart, undefined, undefined, '/cart');
@@ -110,12 +112,12 @@ export default function createNavbar () {
   let loginElement;
 
   if (isLoggedIn) {
-    loginElement = createElement('p', {textContent: 'logged in'});
+    loginElement = createElementWithStyles('button', {textContent: 'Logout'}, styles.actionButtonNoBorder);
     loginElement.onclick = async () => {
       await logout();
     };
   } else {
-    loginElement = createElement('p', {textContent: 'login here'});
+    loginElement = createElementWithStyles('p', {textContent: 'Login'}, styles.actionButtonNoBorder);
     loginElement.onclick = async () => {
       await login();
     };
@@ -131,9 +133,11 @@ export default function createNavbar () {
       </mainElement>
       <${rightSideContainer}>
         <${loginElement}/>
-        <${shoppingCart}>
-          <${shoppingCartAmount}/>
-        </shoppingCart>
+        <${shoppingCartContainer}>
+          <${shoppingCart}>
+            <${shoppingCartAmount}/>
+          </shoppingCart>
+        </shoppingCartContainer>
       </rightSideElement>
     </navbar>
   `;

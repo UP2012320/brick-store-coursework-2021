@@ -1,5 +1,6 @@
 @import 'src/styles/theme';
-@import '../utils';
+@import 'src/styles/utils';
+@import 'src/styles/commonComponents.module';
 @import 'bootstrap-icons/font/bootstrap-icons';
 
 $nav-side-basis: 20%;
@@ -41,7 +42,6 @@ nav {
   .bi-cart2 {
     position: relative;
     font-size: 3rem;
-    margin-right: $spacing-xlarge;
 
     span {
       @include font-medium;
@@ -56,7 +56,6 @@ nav {
 
     &:hover {
       cursor: pointer;
-      color: $primary-colour;
     }
   }
 }
@@ -97,5 +96,21 @@ nav {
       color: $highlight-colour;
       fill: $highlight-colour;
     }
+  }
+}
+
+.action-button-no-border {
+  flex: 0;
+  margin: $spacing-small;
+  height: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+  .nav-main-container {
+    flex: 1 0;
+  }
+
+  .nav-side-container {
+    flex: 1 0;
   }
 }
