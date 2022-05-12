@@ -1,4 +1,6 @@
 import {nameof} from 'Scripts/helpers';
+import {useEffect} from 'Scripts/hooks/useEffect';
+import useOverlay from 'Scripts/hooks/useOverlay';
 import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
@@ -13,6 +15,8 @@ interface CreateSidebarProps extends ReUsableComponentProps, HasBodyProps {
 export default function createSidebar (props: CreateSidebarProps) {
   props.key ??= nameof(createSidebar);
 
+  const [overlay, , setToggled] = useOverlay(props.key, props.toggled, props.setToggled);
+
   const container = createKeyedContainer('section', props.key, undefined, sidebarStyles.sidebarContainer);
 
   const containerInner = createElementWithStyles('div', undefined, sidebarStyles.sidebarContainerInner);
@@ -23,12 +27,16 @@ export default function createSidebar (props: CreateSidebarProps) {
     container.classList.remove(sidebarStyles.sidebarOpen);
   }
 
-  return htmlx`
+  useEffect(props.key, () => {
+    setToggled(props.toggled);
+  }, [props.toggled]);
+
+  return [htmlx`
     <${container}>
       <${containerInner}>
         <${props.body}/>
       </containerInner>
     </container>
-   `;
+   `, overlay];
 }
 

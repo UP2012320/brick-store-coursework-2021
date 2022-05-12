@@ -124,6 +124,7 @@
   & > input {
     border-left: 1px solid $not-quite-black;
     border-right: 1px solid $not-quite-black;
+    padding: $spacing-small;
     @include font-large;
   }
 }

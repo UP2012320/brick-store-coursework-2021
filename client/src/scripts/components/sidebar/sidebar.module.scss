@@ -1,12 +1,13 @@
 @import 'src/styles/utils';
 @import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
 
 .sidebar-container {
   position: fixed;
   right: 0;
   top: 0;
   height: 100%;
-  z-index: 2;
+  z-index: 3;
   width: calc(100vw - 80%);
   transform: scaleX(0);
   transform-origin: right;
@@ -22,4 +23,10 @@
 .sidebar-container-inner {
   @include column;
   height: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+  .sidebar-container {
+    width: calc(100vw - 50%);
+  }
 }
