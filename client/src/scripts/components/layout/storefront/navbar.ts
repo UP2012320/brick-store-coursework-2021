@@ -1,6 +1,7 @@
 import logo from 'Assets/drawing512.png';
 import {auth0} from 'Scripts/auth0';
 import createNavbarMainContainerItem from 'Scripts/components/layout/storefront/navbarMainContainerItem';
+import createSidebar from 'Scripts/components/sidebar/sidebar';
 import {getItemFromLocalStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
@@ -17,6 +18,8 @@ export default function createNavbar () {
   const [cartSize, setCartSize] = useState(key, 0);
   const [isLoggedIn, setIsLoggedIn] = useState(key, false);
   const [isStaff, setIsStaff] = useState(key, false);
+  const [sidebarToggled, setSidebarToggled] = useState(key, false);
+  const [windowWidth, setWindowWidth] = useState(key, window.innerWidth);
 
   const navbar = createElement('nav');
   navbar.setAttribute('key', key);
@@ -65,14 +68,20 @@ export default function createNavbar () {
     setIsStaff(token.permissions.includes('access:management'));
   };
 
+  const onResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
   useEffect(key, () => {
     updateCartSize();
     checkIfLoggedIn();
     checkIfUserIsStaff();
     window.addEventListener('storage', updateCartSize);
+    window.addEventListener('resize', onResize);
 
     return () => {
       window.removeEventListener('storage', updateCartSize);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
 
@@ -151,6 +160,33 @@ export default function createNavbar () {
     `;
   }
 
+  const hamburgerButton = createElementWithStyles('button', {
+    onclick: () => setSidebarToggled(!sidebarToggled),
+  }, styles.hamburgerMenu);
+
+  const list = createElementWithStyles('i', undefined, styles.biList);
+
+  const buttonContainer = createElementWithStyles('div', undefined, styles.buttonsContainer);
+
+  const buttonsContainer = htmlx`
+          <${buttonContainer}>
+          <${staffButton}/>
+          <${loginButton}/>
+          <${shoppingCartContainer}>
+            <${shoppingCart}>
+              <${shoppingCartAmount}/>
+            </shoppingCart>
+          </shoppingCartContainer>
+        </buttonContainer>
+`;
+
+  const sidebar = createSidebar({
+    body: buttonsContainer,
+    key: `${key}-sidebar`,
+    setToggled: setSidebarToggled,
+    toggled: sidebarToggled,
+  });
+
   return htmlx`
     <${navbar}>
       <${leftSideContainer}>
@@ -160,13 +196,11 @@ export default function createNavbar () {
         <${navbarBrowseItem}/>
       </mainElement>
       <${rightSideContainer}>
-        <${staffButton}/>
-        <${loginButton}/>
-        <${shoppingCartContainer}>
-          <${shoppingCart}>
-            <${shoppingCartAmount}/>
-          </shoppingCart>
-        </shoppingCartContainer>
+        <${hamburgerButton}>
+          <${list}/>
+        </hamburgerButton>
+        <${windowWidth > 768 ? buttonsContainer : null}/>
+        <${sidebar}/>
       </rightSideElement>
     </navbar>
   `;

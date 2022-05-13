@@ -110,6 +110,30 @@ nav {
   height: 100%;
 }
 
+.buttons-container {
+  @include row-centered;
+  height: 100%;
+}
+
+.hamburger-menu {
+  @include row-centered;
+  border: 1px solid $not-quite-black;
+  border-radius: $small-radius;
+  padding: $spacing-small $spacing-medium;
+  height: 55%;
+  margin-top: $spacing-small;
+  margin-bottom: $spacing-small;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+  display: none;
+  width: 55%;
+
+  &:hover {
+    cursor: pointer;
+    color: #FFF;
+    background-color: $highlight-colour;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   .nav-main-container {
     flex: 1 0;
@@ -117,5 +141,21 @@ nav {
 
   .nav-side-container {
     flex: 1 0;
+  }
+
+  .hamburger-menu {
+    display: flex;
+  }
+
+  .buttons-container {
+    flex-direction: column;
+    justify-content: unset;
+    align-items: unset;
+    height: unset;
+    width: 100%;
+  }
+
+  .nav-right-side-container {
+    justify-content: center;
   }
 }

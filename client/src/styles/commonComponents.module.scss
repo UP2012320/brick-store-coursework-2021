@@ -110,3 +110,20 @@
 .not-visible {
   visibility: hidden;
 }
+
+.hamburger-menu {
+  @include row-centered;
+  border: 1px solid $not-quite-black;
+  border-radius: $small-radius;
+  padding: $spacing-small $spacing-medium;
+  height: 100%;
+  margin-top: $spacing-small;
+  margin-bottom: $spacing-small;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    color: #FFF;
+    background-color: $highlight-colour;
+  }
+}
