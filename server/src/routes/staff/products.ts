@@ -1,10 +1,10 @@
-import {type BrickColours, type BrickTypes, type Inventory, type InventoryImages} from 'Types/types';
-import {sendQuery, validatePermissions} from 'Utils/helpers';
 import {type NewProduct, type UpdatedProduct} from 'api-types';
 import {type FastifyPluginAsync} from 'fastify';
 import {nanoid} from 'nanoid';
 import {type PoolClient} from 'pg';
 import slugify from 'slugify';
+import {type BrickColours, type BrickTypes, type Inventory, type InventoryImages} from '../../types/types';
+import {sendQuery, validatePermissions} from '../../utils/helpers';
 import {deleteImageFile, deleteImageFromDatabase} from '../staff/images';
 import {deleteProductSchema, newProductSchema, updateProductSchema} from './products.schema';
 

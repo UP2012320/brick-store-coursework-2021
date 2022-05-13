@@ -10,8 +10,8 @@ import fastifyStatic from '@fastify/static';
 import fastifySwagger from '@fastify/swagger';
 import ajvErrors from 'ajv-errors';
 import fastify from 'fastify';
-import config from './config.js';
-import api from './routes/api.js';
+import config from './config';
+import api from './routes/api';
 
 const ADDRESS = config.address;
 const PORT = config.port;

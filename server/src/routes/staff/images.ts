@@ -1,9 +1,9 @@
 import * as fs from 'node:fs/promises';
-import {sendQuery, validatePermissions} from 'Utils/helpers';
 import {type FastifyPluginAsync, type onRequestHookHandler, type preHandlerAsyncHookHandler} from 'fastify';
 import {nanoid} from 'nanoid';
 import {type Pool, type PoolClient} from 'pg';
 import sharp from 'sharp';
+import {sendQuery, validatePermissions} from '../../utils/helpers';
 import {addImageSchema, deleteImageSchema} from './images.schema';
 
 const saveFolder = '../dist/public/images';

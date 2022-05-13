@@ -1,7 +1,7 @@
-import {checkIfProductInStock, sendQuery} from 'Utils/helpers';
 import {type CartItemRequest} from 'api-types';
 import {type FastifyPluginAsync} from 'fastify';
 import {nanoid} from 'nanoid';
+import {checkIfProductInStock, sendQuery} from '../utils/helpers';
 import {checkoutSchema} from './checkout.schema';
 import {addOrder} from './orders';
 

@@ -1,8 +1,8 @@
-import {type QueryProduct} from 'Types/types';
-import {sendQuery} from 'Utils/helpers';
 import {type SearchRequestArguments} from 'api-types';
 import {type FastifyPluginAsync, type FastifyReply} from 'fastify';
 import {type QueryResult} from 'pg';
+import {type QueryProduct} from '../types/types';
+import {sendQuery} from '../utils/helpers';
 import {getBrickColoursSchema, getBrickTypesSchema, getProductByInventoryIdSchema, getProductBySlugSchema, searchSchema} from './inventory.schema';
 
 const returnSearchResults = async (searchResult: QueryResult<QueryProduct> | undefined, searchError: { code: string, } | undefined, reply: FastifyReply) => {

@@ -1,15 +1,24 @@
 import {nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
+import {createElementWithStyles, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
 
-export default function createNavbarMainContainerItem (props: { title: string, }) {
+const key = nameof(createNavbarMiddle);
+
+export default function createNavbarMiddle (props: { title: string, }) {
+  const mainContainer = createKeyedContainer(
+    'div',
+    key,
+    undefined,
+    styles.navMainContainer,
+  );
+
   const container = createElementWithStyles(
     'div',
     undefined,
     styles.navMainContainerItem,
   );
-  container.setAttribute('key', nameof(createNavbarMainContainerItem));
+  container.setAttribute('key', nameof(createNavbarMiddle));
 
   const browseIcon = createElementWithStyles('i', undefined, styles.biBag);
 
@@ -21,9 +30,11 @@ export default function createNavbarMainContainerItem (props: { title: string, }
   registerLinkClickHandler(container, undefined, undefined, '/browse');
 
   return htmlx`
+  <${mainContainer}>
     <${container}>
       <${browseIcon}/>
       <${link}/>
     </container>
+  </mainContainer>
   `;
 }

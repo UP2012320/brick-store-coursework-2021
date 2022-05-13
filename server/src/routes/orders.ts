@@ -1,8 +1,8 @@
-import {sendQuery} from 'Utils/helpers';
 import {type CartItemRequest} from 'api-types';
 import {type FastifyPluginAsync, type FastifyReply} from 'fastify';
 import {nanoid} from 'nanoid';
 import {type PoolClient} from 'pg';
+import {sendQuery} from '../utils/helpers';
 import {addOrderSchema, getAllUsersOrdersSchema, getOrderSchema} from './orders.schema';
 
 export const addOrder = async (client: PoolClient, cartItems: CartItemRequest[], orderId: string, reply: FastifyReply, email?: string, userId?: string) => {

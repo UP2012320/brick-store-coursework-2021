@@ -1,5 +1,5 @@
-import {validatePermissions} from 'Utils/helpers';
 import {type FastifyPluginAsync} from 'fastify';
+import {validatePermissions} from '../../utils/helpers';
 import images from './images';
 import orders from './orders';
 import products from './products';

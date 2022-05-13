@@ -1,6 +1,6 @@
-import {sendQuery, validatePermissions} from 'Utils/helpers';
 import {type OrderInfo} from 'api-types';
 import {type FastifyPluginAsync} from 'fastify';
+import {sendQuery, validatePermissions} from '../../utils/helpers';
 import {deleteOrderSchema, getAllOrdersSchema} from './orders.schema';
 
 const orders: FastifyPluginAsync = async (fastify, options) => {

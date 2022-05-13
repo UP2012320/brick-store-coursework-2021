@@ -115,17 +115,20 @@ nav {
   height: 100%;
 }
 
+.bi-list {
+  font-size: 2.25rem;
+}
+
 .hamburger-menu {
   @include row-centered;
-  border: 1px solid $not-quite-black;
-  border-radius: $small-radius;
+  border-left: 1px solid $not-quite-black;
   padding: $spacing-small $spacing-medium;
-  height: 55%;
+  height: 100%;
   margin-top: $spacing-small;
   margin-bottom: $spacing-small;
   transition: background-color .2s ease-in-out, color .2s ease-in-out;
   display: none;
-  width: 55%;
+  width: 60%;
 
   &:hover {
     cursor: pointer;
@@ -153,9 +156,5 @@ nav {
     align-items: unset;
     height: unset;
     width: 100%;
-  }
-
-  .nav-right-side-container {
-    justify-content: center;
   }
 }
