@@ -1,4 +1,4 @@
-import {type CartItemRequest} from 'api-types';
+import {type CartItemRequest, type OrderInfo} from 'api-types';
 import {type FastifyPluginAsync, type FastifyReply} from 'fastify';
 import {nanoid} from 'nanoid';
 import {type PoolClient} from 'pg';
@@ -88,8 +88,9 @@ const orders: FastifyPluginAsync = async (fastify, options) => {
   }, async (request, reply) => {
     const {userId} = request.query;
 
-    const [result, error] = await sendQuery(fastify.pg.pool,
+    const [result, error] = await sendQuery<OrderInfo>(fastify.pg.pool,
       `SELECT * FROM get_all_orders()
+             JOIN inventory ON inventory.inventory_id = "inventoryId"
              WHERE "userId" = $1
              ORDER BY "dateOrdered" DESC`,
       [userId]);
@@ -105,7 +106,14 @@ const orders: FastifyPluginAsync = async (fastify, options) => {
       return;
     }
 
-    reply.status(200).send(result.rows);
+    const ordersGrouped = result.rows.reduce<Record<string, OrderInfo[]>>((groups, order) => {
+      const group = groups[order.orderId] || [];
+      group.push(order);
+      groups[order.orderId] = group;
+      return groups;
+    }, {});
+
+    reply.status(200).send(ordersGrouped);
   });
 
   fastify.post<{ Body: { cartItems: CartItemRequest[], email?: string, userId?: string, }, }>('/', {schema: addOrderSchema}, async (request, reply) => {

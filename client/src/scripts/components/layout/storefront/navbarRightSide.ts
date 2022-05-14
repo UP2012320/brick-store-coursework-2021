@@ -102,9 +102,12 @@ export default function createNavbarRightSide () {
     setIsLoggedIn(false);
   };
 
-  const myOrdersButton = createElementWithStyles('button', {
+  const myOrdersButton = createElementWithStyles('button', undefined, styles.actionButtonNoBorder);
+
+  const myOrderLink = createElementWithStyles('a', {
+    href: isLoggedIn ? '/orders' : '/find-order',
     textContent: isLoggedIn ? 'My Orders' : 'Find My Order',
-  }, styles.actionButtonNoBorder);
+  }, styles.aLink);
 
   let loginButton;
 
@@ -154,7 +157,9 @@ export default function createNavbarRightSide () {
   const buttonsContainer = htmlx`
   <${buttonContainer}>
     <${staffButton}/>
-    <${myOrdersButton}/>
+    <${myOrdersButton}>
+      <${myOrderLink}/>
+    </myOrdersButton>
     <${loginButton}/>
     <${shoppingCartContainer}>
       <${shoppingCart}>

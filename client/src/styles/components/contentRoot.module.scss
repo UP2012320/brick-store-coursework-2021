@@ -2,9 +2,7 @@
 
 .content-root {
   @include column-centered;
-  flex: 1 0 88%;
   padding: $spacing-small;
-  height: 100vh;
 }
 
 @media only screen and (min-width: 641px) and (max-width: 768px) {

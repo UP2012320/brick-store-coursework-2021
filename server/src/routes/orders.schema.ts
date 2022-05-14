@@ -36,11 +36,11 @@ export const getAllUsersOrdersSchema = {
   },
   response: {
     '200': {
-      description: 'Successful response',
-      items: {
-        $ref: 'orderResponseSchema',
+      additionalProperties: {
+        type: 'array',
       },
-      type: 'array',
+      description: 'Successful response',
+      type: 'object',
     },
     default: {$ref: 'defaultResponseSchema'},
   },

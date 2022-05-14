@@ -43,6 +43,7 @@ module.exports = {
         '@typescript-eslint/no-invalid-void-type': 0,
         '@typescript-eslint/no-floating-promises': 0,
         'unicorn/no-object-as-default-parameter': 0,
+        'unicorn/no-array-reduce': 0,
       },
     },
     {

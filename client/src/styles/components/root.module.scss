@@ -2,8 +2,9 @@
 
 #root {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 2fr;
+  grid-template-columns: 1fr;
   font-family: Lato, sans-serif;
   overflow-y: hidden;
 }

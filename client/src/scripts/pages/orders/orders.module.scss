@@ -1,0 +1,31 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'src/styles/commonComponents.module';
+@import 'bootstrap-icons';
+
+.container {
+  @include column-centered;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.list-container {
+  @include column-centered;
+  background-color: $not-quite-white;
+  width: 50%;
+  height: 100%;
+}
+
+.list-item {
+  @include row-centered;
+  flex: 1 0;
+  width: 100%;
+  transition: background-color 0.2s ease-out;
+  min-height: 75px;
+
+  &:hover {
+    background-color: $not-really-white;
+    cursor: pointer;
+  }
+}

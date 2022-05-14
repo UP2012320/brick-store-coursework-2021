@@ -1,7 +1,7 @@
-import {fetchAuth0Config} from 'Scripts/auth0';
-import createFooter from 'Scripts/components/layout/storefront/footer';
+import {auth0, fetchAuth0Config, getAuthorizationHeader} from 'Scripts/auth0';
 import createNavbar from 'Scripts/components/layout/storefront/navbar';
 import createRouter from 'Scripts/createRouter';
+import {SERVER_BASE} from 'Scripts/helpers';
 import {clearUseEffect, fireUseEffectDiscardQueue, fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
 import {clearRef, resetRefIndexes} from 'Scripts/hooks/useRef';
 import {clearState, resetStateIndexes} from 'Scripts/hooks/useState';
@@ -12,7 +12,9 @@ import createCart from 'Scripts/pages/cart/cart';
 import createCheckout from 'Scripts/pages/checkout/checkout';
 import createMain from 'Scripts/pages/main';
 import createNotFound from 'Scripts/pages/notFound';
+import createOrders from 'Scripts/pages/orders/orders';
 import createProduct from 'Scripts/pages/product/product';
+import createProtectedPage from 'Scripts/pages/protectedPage/protectedPage';
 import createStaff from 'Scripts/pages/staff/staff';
 import {appendElements, createElement} from 'Scripts/uiUtils';
 import rootStyles from 'Styles/components/root.module.scss';
@@ -57,6 +59,10 @@ const render = async () => {
       route: '/staff/*',
     },
     {
+      name: 'orders',
+      route: '/orders',
+    },
+    {
       name: 'main',
       route: '/',
     },
@@ -78,7 +84,36 @@ const render = async () => {
       body = createCheckout();
       break;
     case 'staff':
-      body = createStaff();
+      body = createProtectedPage({
+        body: createStaff(),
+        checkIfAuthorized: async () => {
+          const authorizationHeader = await getAuthorizationHeader();
+
+          if (!authorizationHeader) {
+            return '401';
+          }
+
+          let response;
+
+          try {
+            response = await fetch(new URL('/api/v1/staff/authorized', SERVER_BASE).href, {
+              headers: authorizationHeader,
+            });
+          } catch (error) {
+            console.error(error);
+            return '500';
+          }
+
+          return response.status.toString();
+        },
+        key: 'staff-protected-page',
+      });
+      break;
+    case 'orders':
+      body = createProtectedPage({
+        body: createOrders(),
+        checkIfAuthorized: async () => (await auth0.isAuthenticated() ? '200' : '401'),
+      });
       break;
     case 'main':
       body = createMain();
@@ -93,10 +128,6 @@ const render = async () => {
   }
 
   appendElements(internalRoot, body);
-
-  if (targetedRoute !== 'staff') {
-    appendElements(internalRoot, createFooter());
-  }
 
   if (currentRoot) {
     morphdom(currentRoot, internalRoot, withEvents({
