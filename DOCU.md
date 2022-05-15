@@ -2,8 +2,19 @@
 
 This is a document that explains and justifies notable features/functionality of my project.
 
-For a more technical overview, please refer to the comments left in the code of the following features/functionality.
-There will be a list of relevant files for each item, so you'll know where to look.
+## Notes
+
+I was part way through implementing an order view page and such before realizing that completing this document was a
+better use of time, as such the functionality is not completed and any pages related to viewing order do not work.
+
+API documentation can be viewed at http://localhost:8080/documenation
+
+A staff account has been created with the following details
+
+```
+username: admin
+password: admin
+```
 
 ## htmlX
 
@@ -102,3 +113,8 @@ to be.
 ### Where to look
 
 * [client/src/scripts/diffing.ts](client/src/scripts/diffing.ts)
+
+### Notes
+
+I eventually moved away from this personal solution to a library called morphdom. This was because it had to ability to
+add hooks. However, in terms of functionality my function and the library are near identical.

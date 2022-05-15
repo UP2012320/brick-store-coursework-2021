@@ -1,4 +1,5 @@
 import path from 'node:path';
+import process from 'node:process';
 // eslint-disable-next-line
 import fastifyAuth0Verify from 'fastify-auth0-verify';
 import fastifyCors from '@fastify/cors';
@@ -14,7 +15,8 @@ import config from './config';
 import api from './routes/api';
 
 const ADDRESS = config.address;
-const PORT = config.port;
+// eslint-disable-next-line node/no-process-env
+const PORT = process.env.NODE_ENV === 'production' ? config.port : config.portDev;
 const PG_USER = config.pgUser;
 const PG_PASSWORD = config.pgPass;
 const PG_PORT = config.pgPort;

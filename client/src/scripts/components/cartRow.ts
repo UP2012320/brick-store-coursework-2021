@@ -17,7 +17,7 @@ export interface CartRowProps extends ReUsableComponentProps {
 export default function createCartRow (props: CartRowProps) {
   props.key ??= nameof(createCartRow);
 
-  const quantityDebounceTimeout = useRef<NodeJS.Timeout | undefined>(props.key, undefined);
+  const quantityDebounceTimeout = useRef<number | undefined>(props.key, undefined);
 
   const cartRow = createElementWithStyles('div', undefined, cartStyles.cartRow);
   cartRow.setAttribute('key', props.key);

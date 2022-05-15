@@ -44,6 +44,7 @@ module.exports = {
         '@typescript-eslint/no-floating-promises': 0,
         'unicorn/no-object-as-default-parameter': 0,
         'unicorn/no-array-reduce': 0,
+        'node/no-process-env': 0,
       },
     },
     {

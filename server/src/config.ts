@@ -8,7 +8,8 @@ const config = {
   pgPass: 'y*_dwYx7CkTbaQQ!',
   pgPort: 5_432,
   pgUser: 'brick_store_user',
-  port: 8_085,
+  port: 8_080,
+  portDev: 8_085,
 };
 
 export default config;

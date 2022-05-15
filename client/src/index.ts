@@ -5,7 +5,6 @@ import {SERVER_BASE} from 'Scripts/helpers';
 import {clearUseEffect, fireUseEffectDiscardQueue, fireUseEffectQueue, resetUseEffectStateIndexes} from 'Scripts/hooks/useEffect';
 import {clearRef, resetRefIndexes} from 'Scripts/hooks/useRef';
 import {clearState, resetStateIndexes} from 'Scripts/hooks/useState';
-import init from 'Scripts/init';
 import withEvents from 'Scripts/morphdomEvents';
 import createBrowse, {type BrowseProps} from 'Scripts/pages/browse';
 import createCart from 'Scripts/pages/cart/cart';
@@ -175,7 +174,6 @@ const onPopState = async () => {
 
 const main = async () => {
   await fetchAuth0Config();
-  await init();
 
   window.onpopstate = async () => await onPopState();
 

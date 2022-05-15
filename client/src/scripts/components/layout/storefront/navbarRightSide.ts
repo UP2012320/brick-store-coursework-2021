@@ -4,7 +4,6 @@ import {getItemFromLocalStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import init from 'Scripts/init';
 import {createElement, createElementWithStyles, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
 import unload from 'Scripts/unload';
 import styles from 'Styles/components/navbar.module.scss';
@@ -88,7 +87,6 @@ export default function createNavbarRightSide () {
       return;
     }
 
-    await init();
     setIsLoggedIn(true);
     await checkIfUserIsStaff();
   };
