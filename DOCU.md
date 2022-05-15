@@ -5,16 +5,20 @@ This is a document that explains and justifies notable features/functionality of
 ## Notes
 
 I was part way through implementing an order view page and such before realizing that completing this document was a
-better use of time, as such the functionality is not completed and any pages related to viewing order do not work.
+better use of time, as such the functionality is not completed and any pages related to viewing orders do not work.
 
 API documentation can be viewed at http://localhost:8080/documenation
 
 A staff account has been created with the following details
 
 ```
-username: admin
-password: admin
+email: up2012320@myport.ac.uk
+password: Admin12345
 ```
+
+# Features
+
+The following features are in order of what I think is most important, if you're low on time please skip later ones.
 
 ## htmlX
 
@@ -72,6 +76,31 @@ readability.
 
 * [client/src/scripts/htmlX.ts](client/src/scripts/htmlX.ts)
 
+## hookCallerStateManagement
+
+### What is it?
+
+A key aspect of modern front-end development is state management. Being able to store data bound to a component and
+having your application update in response to state changes. hookCallerStateManager is a class employed by stateful
+hooks to handle underlying state.
+
+The functionality is quite simple in practice. It works based off my research into React stateful hooks. Essentially, it
+is just a set of key-value pairs, with the key being the index of each caller. These key-value pairs are then grouped
+together by a component key.
+
+```ts
+const [age, setAge] = useState('some-key', 20);
+const [name, setName] = useState('some-key', 'Bob');
+```
+
+In the above example, "some-key" is the component key. The key for the age state would be 0, name would be 1. It simply
+increments based off the call order. This is why with React hooks you're not allowed to change the order certain hooks
+are declared in.
+
+### Why did I add this?
+
+Personally, development is agonizing without some form of state management.
+
 ## createRouter
 
 ### What is it?
@@ -94,6 +123,11 @@ functionality in a common function.
 
 * [client/src/scripts/createRouter.ts](client/src/scripts/createRouter.ts)
 
+### Notes
+
+I eventually moved away from this personal solution to a library called morphdom. This was because it had to ability to
+add hooks. However, in terms of functionality my function and the library are near identical.
+
 ## diffing
 
 ### What is it?
@@ -113,8 +147,3 @@ to be.
 ### Where to look
 
 * [client/src/scripts/diffing.ts](client/src/scripts/diffing.ts)
-
-### Notes
-
-I eventually moved away from this personal solution to a library called morphdom. This was because it had to ability to
-add hooks. However, in terms of functionality my function and the library are near identical.
