@@ -4,7 +4,7 @@ import {nameof, type SortSetting} from 'Scripts/helpers';
 import {type SetSearchStateArguments} from 'Scripts/hooks/useSearch';
 import {type StateSetter, useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import {createElement} from 'Scripts/uiUtils';
 
 const key = nameof(createHeaderRow);
 
@@ -18,7 +18,7 @@ interface HeaderRowProps {
 export default function createHeaderRow (props: HeaderRowProps) {
   const [searchInput, setSearchInput] = useState(key, '');
 
-  const header = createElementWithStyles('header', undefined, inventoryTableStyles.header);
+  const header = createElement('header', undefined, inventoryTableStyles.header);
 
   const headerId = createHeaderItem({
     key: 'inventory_id',
@@ -103,8 +103,8 @@ export default function createHeaderRow (props: HeaderRowProps) {
     title: 'Visible',
   });
 
-  const headerSearch = createElementWithStyles('div', undefined, inventoryTableStyles.headerSearch);
-  const headerSearchBox = createElementWithStyles('input', {
+  const headerSearch = createElement('div', undefined, inventoryTableStyles.headerSearch);
+  const headerSearchBox = createElement('input', {
     defaultValue: searchInput,
     oninput: (event: Event) => {
       const searchValue = (event.target as HTMLInputElement).value;
@@ -124,8 +124,8 @@ export default function createHeaderRow (props: HeaderRowProps) {
     placeholder: 'Search',
   }, inventoryTableStyles.headerSearch);
 
-  const headerAdd = createElementWithStyles('div', undefined, inventoryTableStyles.headerAdd);
-  const headerAddButton = createElementWithStyles('button', {
+  const headerAdd = createElement('div', undefined, inventoryTableStyles.headerAdd);
+  const headerAddButton = createElement('button', {
     onclick: () => {
       props.setAddModalIsOpen(true);
     },

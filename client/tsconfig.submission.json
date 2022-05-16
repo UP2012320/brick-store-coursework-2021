@@ -6,6 +6,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "sourceMap": false,
     "outDir": "../submission/client",
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "removeComments": false
   }
 }

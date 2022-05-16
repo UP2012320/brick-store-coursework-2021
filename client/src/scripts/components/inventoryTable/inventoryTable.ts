@@ -4,7 +4,7 @@ import {nameof, type SortSetting} from 'Scripts/helpers';
 import {type SetSearchStateArguments} from 'Scripts/hooks/useSearch';
 import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import {type Product} from 'api-types';
 import inventoryTableStyles from './inventoryTable.module.scss';
 
@@ -31,7 +31,7 @@ export default function createInventoryTable (props: InventoryTableProps) {
     sortSetting: props.sortSetting,
   });
 
-  const body = createElementWithStyles('ul', undefined, inventoryTableStyles.body);
+  const body = createElement('ul', undefined, inventoryTableStyles.body);
 
   const rows = props.rows.map((row) => createBodyRow({
     key: row.inventory_id,

@@ -6,7 +6,7 @@ import {getItemFromLocalStorage, nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer, historyPush} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer, historyPush} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import {type CartItem} from 'api-types';
 import checkoutStyles from './checkout.module.scss';
@@ -21,16 +21,16 @@ export default function createCheckout () {
 
   const container = createKeyedContainer('section', key, undefined, contentRootStyles.contentRoot);
 
-  const contentContainer = createElementWithStyles('div', undefined, checkoutStyles.checkoutContentContainer);
+  const contentContainer = createElement('div', undefined, checkoutStyles.checkoutContentContainer);
 
   let contentBody;
 
   if (userInfo || (startCheckout && email)) {
-    const checkoutStatus = createElementWithStyles('p', {
+    const checkoutStatus = createElement('p', {
       textContent: checkoutComplete ? 'Checkout complete!' : 'Checking out...',
     }, checkoutStyles.checkoutText);
 
-    const statusCircle = createElementWithStyles('i', undefined, checkoutComplete ? checkoutStyles.biCheck : checkoutStyles.biDashLg);
+    const statusCircle = createElement('i', undefined, checkoutComplete ? checkoutStyles.biCheck : checkoutStyles.biDashLg);
 
     contentBody = htmlx`
     <${checkoutStatus}>
@@ -47,7 +47,7 @@ export default function createCheckout () {
       value: email,
     });
 
-    const emailSubmit = createElementWithStyles('button', {
+    const emailSubmit = createElement('button', {
       onclick: () => {
         if (!email || !/^\S+@\S+\.\S+$/gmiu.test(email)) {
           return;

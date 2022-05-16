@@ -2,7 +2,7 @@ import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import {createElement} from 'Scripts/uiUtils';
 import commonComponentsStyles from 'Styles/commonComponents.module.scss';
 import {type MultiSelectDropDownOption, type ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
@@ -60,13 +60,13 @@ export default function createDropdownMultiSelectBody (props: dropdownMultiSelec
     });
   };
 
-  const dropDownOptionHeader = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionHeader);
+  const dropDownOptionHeader = createElement('div', undefined, dropDownStyles.dropdownOptionHeader);
 
-  const dropDownOptionHeaderSelectedCount = createElementWithStyles('p', {
+  const dropDownOptionHeaderSelectedCount = createElement('p', {
     textContent: `${options.filter((option) => option.toggled).length} Selected`,
   }, dropDownStyles.dropdownOptionHeaderSelected);
 
-  const dropDownOptionHeaderSelectAll = createElementWithStyles('div', {
+  const dropDownOptionHeaderSelectAll = createElement('div', {
     onclick: () => {
       toggleOptions();
       setAllToggled((previous) => !previous);
@@ -77,17 +77,17 @@ export default function createDropdownMultiSelectBody (props: dropdownMultiSelec
     dropDownOptionHeaderSelectAll.classList.toggle(commonComponentsStyles.hidden);
   }
 
-  const dropDownOptionHeaderSelectedTitle = createElementWithStyles('p', {
+  const dropDownOptionHeaderSelectedTitle = createElement('p', {
     textContent: allToggled ? 'Clear' : 'All',
   }, dropDownStyles.dropdownOptionHeaderSelectAllTitle);
 
-  const dropDownOptionHeaderSelectAllCheckbox = createElementWithStyles('i', undefined, dropDownStyles.biCheck);
+  const dropDownOptionHeaderSelectAllCheckbox = createElement('i', undefined, dropDownStyles.biCheck);
 
-  const dropDownSearchOptionContainer = createElementWithStyles('div',
+  const dropDownSearchOptionContainer = createElement('div',
     undefined,
     dropDownStyles.dropdownSearchOptionContainer);
 
-  const dropDownSearchOption = createElementWithStyles('input',
+  const dropDownSearchOption = createElement('input',
     {
       oninput: (event) => {
         if (event?.target) {
@@ -101,7 +101,7 @@ export default function createDropdownMultiSelectBody (props: dropdownMultiSelec
     },
     dropDownStyles.dropdownOptionText);
 
-  const dropDownSelectOptionsContainer = createElementWithStyles('ul', {
+  const dropDownSelectOptionsContainer = createElement('ul', {
     ariaRoleDescription: 'list',
   }, dropDownStyles.dropdownSelectOptionsContainer);
 
@@ -109,11 +109,11 @@ export default function createDropdownMultiSelectBody (props: dropdownMultiSelec
   const filteredOptions = options.filter((option) => visibleOptions.includes(option.value));
 
   for (const option of filteredOptions) {
-    const dropDownOptionContainer = createElementWithStyles('li', {
+    const dropDownOptionContainer = createElement('li', {
       onclick: () => toggleOptions([option.value]),
     }, dropDownStyles.dropdownOptionContainer);
-    const dropDownCheck = createElementWithStyles('i', undefined, dropDownStyles.biCheck);
-    const dropDownCheckBox = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionCheckbox);
+    const dropDownCheck = createElement('i', undefined, dropDownStyles.biCheck);
+    const dropDownCheckBox = createElement('div', undefined, dropDownStyles.dropdownOptionCheckbox);
 
     if (option.toggled) {
       dropDownCheck.classList.remove(commonComponentsStyles.hidden);
@@ -121,7 +121,7 @@ export default function createDropdownMultiSelectBody (props: dropdownMultiSelec
       dropDownCheck.classList.add(commonComponentsStyles.hidden);
     }
 
-    const dropDownOption = createElementWithStyles('div', {textContent: option.name}, dropDownStyles.dropdownOptionText);
+    const dropDownOption = createElement('div', {textContent: option.name}, dropDownStyles.dropdownOptionText);
 
     dropDownOptions.push(htmlx`
     <${dropDownOptionContainer}>

@@ -3,7 +3,7 @@ import inventoryTableStyles from 'Scripts/components/inventoryTable/inventoryTab
 import {formatPercent, formatPrice, nameof, SERVER_BASE} from 'Scripts/helpers';
 import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import {type ReUsableComponentProps} from 'Types/types';
 import {type Product} from 'api-types';
 
@@ -19,47 +19,47 @@ export default function createBodyRow (props: BodyRowProps) {
 
   const bodyRow = createKeyedContainer('li', props.key, undefined, inventoryTableStyles.bodyRow);
 
-  const bodyId = createElementWithStyles('div', {
+  const bodyId = createElement('div', {
     textContent: props.row.inventory_id.toUpperCase(),
   }, inventoryTableStyles.bodyRowId);
 
-  const bodyName = createElementWithStyles('div', {
+  const bodyName = createElement('div', {
     textContent: props.row.name,
   }, inventoryTableStyles.bodyRowName);
 
-  const bodyColour = createElementWithStyles('div', {
+  const bodyColour = createElement('div', {
     textContent: props.row.colour,
   }, inventoryTableStyles.bodyRowColour);
 
-  const bodyType = createElementWithStyles('div', {
+  const bodyType = createElement('div', {
     textContent: props.row.type,
   }, inventoryTableStyles.bodyRowType);
 
-  const bodyPrice = createElementWithStyles('div', {
+  const bodyPrice = createElement('div', {
     textContent: formatPrice(props.row.price),
   }, inventoryTableStyles.bodyRowPrice);
 
-  const bodyDiscountedPrice = createElementWithStyles('div', {
+  const bodyDiscountedPrice = createElement('div', {
     textContent: formatPrice(props.row.discount_price),
   }, inventoryTableStyles.bodyRowDiscountedPrice);
 
-  const bodyDiscount = createElementWithStyles('div', {
+  const bodyDiscount = createElement('div', {
     textContent: formatPercent(props.row.discount ?? 0),
   }, inventoryTableStyles.bodyRowDiscount);
 
-  const bodyStock = createElementWithStyles('div', {
+  const bodyStock = createElement('div', {
     textContent: (props.row.stock ?? 0).toString(),
   }, inventoryTableStyles.bodyRowStock);
 
-  const bodyDateAdded = createElementWithStyles('div', {
+  const bodyDateAdded = createElement('div', {
     textContent: new Date(props.row.date_added).toLocaleString(navigator.languages[0]),
   }, inventoryTableStyles.bodyRowDateAdded);
 
-  const bodyVisibility = createElementWithStyles('div', {
+  const bodyVisibility = createElement('div', {
     textContent: props.row.visibility ? 'Yes' : 'No',
   }, inventoryTableStyles.bodyRowVisibility);
 
-  const bodyEdit = createElementWithStyles('button', {
+  const bodyEdit = createElement('button', {
     onclick: () => {
       props.setProductToEdit(props.row);
       props.setEditModalIsOpen(true);
@@ -87,7 +87,7 @@ export default function createBodyRow (props: BodyRowProps) {
     }
   };
 
-  const bodyDelete = createElementWithStyles('button', {
+  const bodyDelete = createElement('button', {
     onclick: () => onDelete(),
     textContent: 'Delete',
   }, inventoryTableStyles.bodyRowDelete);

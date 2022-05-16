@@ -1,7 +1,7 @@
 import {nameof} from 'Scripts/helpers';
 import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import {type ReUsableComponentProps} from 'Types/types';
 import checkboxStyles from './checkbox.module.scss';
 
@@ -17,7 +17,7 @@ export default function createCheckbox (props: CheckboxProps) {
 
   const container = createKeyedContainer('div', props.key, undefined, checkboxStyles[`${props.class}CheckboxContainer`]);
 
-  const input = createElementWithStyles('input', {
+  const input = createElement('input', {
     checked: props.value,
     id: props.key,
     onchange: (event) => {
@@ -28,7 +28,7 @@ export default function createCheckbox (props: CheckboxProps) {
     type: 'checkbox',
   });
 
-  const label = createElementWithStyles('label', {
+  const label = createElement('label', {
     htmlFor: props.key,
     textContent: props.label,
   });

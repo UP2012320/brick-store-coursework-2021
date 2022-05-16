@@ -2,7 +2,7 @@ import createToggleHeader from 'Scripts/components/toggleHeader/toggleHeader';
 import {nameof} from 'Scripts/helpers';
 import useOverlay from 'Scripts/hooks/useOverlay';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import {type HasBodyProps, type ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
@@ -16,7 +16,7 @@ export default function createDropdown (props: DropdownProps) {
 
   const [overlay, toggled, setToggled] = useOverlay(props.key, false, undefined, 768);
 
-  const rowItem = createElementWithStyles('div', undefined, filterBarStyles.filterBarOptionsRowItem);
+  const rowItem = createElement('div', undefined, filterBarStyles.filterBarOptionsRowItem);
 
   const dropdownToggleHeader = createToggleHeader({
     key: `${props.key}-toggle-header`,
@@ -27,7 +27,7 @@ export default function createDropdown (props: DropdownProps) {
 
   const dropDownContainer = createKeyedContainer('div', props.key, undefined, dropDownStyles.dropdownContainer);
 
-  const dropDownBodyContainer = createElementWithStyles('div', undefined, dropDownStyles.dropdownOptionsContainer);
+  const dropDownBodyContainer = createElement('div', undefined, dropDownStyles.dropdownOptionsContainer);
 
   if (toggled) {
     dropDownBodyContainer.classList.add(dropDownStyles.dropdownOpen);

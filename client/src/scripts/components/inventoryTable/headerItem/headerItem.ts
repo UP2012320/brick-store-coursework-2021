@@ -3,7 +3,7 @@ import inventoryTableStyles from 'Scripts/components/inventoryTable/inventoryTab
 import {nameof, type SortSetting} from 'Scripts/helpers';
 import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElement, createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import {type ReUsableComponentProps} from 'Types/types';
 
 interface HeaderItemProps extends ReUsableComponentProps {
@@ -23,7 +23,7 @@ export default function createHeaderItem (props: HeaderItemProps) {
   const headerText = createElement('p', {
     textContent: props.title,
   });
-  const headerContainerSortArrow = createElementWithStyles('i', undefined, inventoryTableStyles.biCaretDownFill);
+  const headerContainerSortArrow = createElement('i', undefined, inventoryTableStyles.biCaretDownFill);
 
   if (props.sortSetting.sortBy === props.sortBy) {
     headerContainer.classList.add(inventoryTableStyles.selected);

@@ -97,6 +97,8 @@ In the above example, "some-key" is the component key. The key for the age state
 increments based off the call order. This is why with React hooks you're not allowed to change the order certain hooks
 are declared in.
 
+On of this foundation, I was able to write standard React hooks such useRef, useState and useEffect.
+
 ### Why did I add this?
 
 Personally, development is agonizing without some form of state management.

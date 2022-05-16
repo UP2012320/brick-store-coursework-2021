@@ -10,7 +10,7 @@ import {useRef} from 'Scripts/hooks/useRef';
 import {type SetSearchStateArguments} from 'Scripts/hooks/useSearch';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import {createElement} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import {type DropDownOption, type MultiSelectDropDownOption} from 'Types/types';
 
@@ -61,7 +61,7 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     });
   }, []);
 
-  const container = createElementWithStyles(
+  const container = createElement(
     'section',
     undefined,
     filterBarStyles.filterBarContainer,
@@ -69,20 +69,20 @@ export default function createFilterBar (props: CreateFilterBarProps) {
 
   container.setAttribute('key', nameof(createFilterBar));
 
-  const mainRow = createElementWithStyles('div', undefined, filterBarStyles.filterBarRowContainer);
+  const mainRow = createElement('div', undefined, filterBarStyles.filterBarRowContainer);
 
-  const LeftSectionContainer = createElementWithStyles(
+  const LeftSectionContainer = createElement(
     'section',
     undefined,
     filterBarStyles.filterBarSectionContainer,
   );
-  const rightSectionContainer = createElementWithStyles(
+  const rightSectionContainer = createElement(
     'section',
     undefined,
     filterBarStyles.filterBarSectionContainerRight,
   );
 
-  const searchRow = createElementWithStyles('div', undefined, filterBarStyles.filterBarSearchRow);
+  const searchRow = createElement('div', undefined, filterBarStyles.filterBarSearchRow);
 
   const onSearch = (query: string) => {
     props.setSearchState({
@@ -91,7 +91,7 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     });
   };
 
-  const search = createElementWithStyles(
+  const search = createElement(
     'input',
     {
       onkeydown: ((event) => {
@@ -108,7 +108,7 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     filterBarStyles.filterBarSearchItem,
   );
 
-  const searchButton = createElementWithStyles('div', {
+  const searchButton = createElement('div', {
     onclick: () => {
       const searchInput = document.querySelector(`.${filterBarStyles.filterBarSearchItem}`) as HTMLInputElement | undefined;
 
@@ -118,7 +118,7 @@ export default function createFilterBar (props: CreateFilterBarProps) {
     },
   }, filterBarStyles.filterBarSearchButton);
 
-  const searchButtonIcon = createElementWithStyles('i', undefined, filterBarStyles.biSearch);
+  const searchButtonIcon = createElement('i', undefined, filterBarStyles.biSearch);
 
   const orderByDropdown = htmlx`
   <${createDropdown({

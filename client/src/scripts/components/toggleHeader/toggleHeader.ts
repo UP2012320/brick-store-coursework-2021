@@ -1,6 +1,6 @@
 import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import {createElement} from 'Scripts/uiUtils';
 import commonComponentsStyles from 'Styles/commonComponents.module.scss';
 import {type ReUsableComponentProps} from 'Types/types';
 
@@ -11,17 +11,17 @@ export interface CreateToggleHeaderProps extends ReUsableComponentProps {
 }
 
 export default function createToggleHeader (props: CreateToggleHeaderProps) {
-  const headerContainer = createElementWithStyles('div', {
+  const headerContainer = createElement('div', {
     onclick: () => {
       props.setToggled((previous) => !previous);
     },
   }, commonComponentsStyles.toggleHeader);
 
-  const headerTitle = createElementWithStyles('p',
+  const headerTitle = createElement('p',
     {textContent: props.title},
     commonComponentsStyles.toggleHeaderTitle);
 
-  const headerArrow = createElementWithStyles('i', undefined, commonComponentsStyles.biCaretDownFill);
+  const headerArrow = createElement('i', undefined, commonComponentsStyles.biCaretDownFill);
 
   if (props.toggled) {
     headerContainer.classList.add(commonComponentsStyles.open);

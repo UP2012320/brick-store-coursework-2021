@@ -2,7 +2,7 @@ import createSidebar from 'Scripts/components/sidebar/sidebar';
 import {nameof} from 'Scripts/helpers';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import {type HasBodyProps} from 'Types/types';
 
@@ -12,11 +12,11 @@ export default function createAllFilters (props: HasBodyProps) {
   const [toggled, setToggled] = useState(key, false);
 
   const allFiltersRowItem = createKeyedContainer('div', key, undefined, filterBarStyles.filterBarOptionsRowItem);
-  const allFiltersContainer = createElementWithStyles('div', {
+  const allFiltersContainer = createElement('div', {
     onclick: () => setToggled((previous) => !previous),
   }, filterBarStyles.filterBarFilterAllContainer);
-  const sliders = createElementWithStyles('i', undefined, filterBarStyles.biSliders);
-  const title = createElementWithStyles('p', {
+  const sliders = createElement('i', undefined, filterBarStyles.biSliders);
+  const title = createElement('p', {
     textContent: 'All Filters',
   }, filterBarStyles.filterBarFilterAllTitle);
 

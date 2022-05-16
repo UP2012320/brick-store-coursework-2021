@@ -3,7 +3,7 @@ import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, historyPush} from 'Scripts/uiUtils';
+import {createElement, historyPush} from 'Scripts/uiUtils';
 import {type HasBodyProps, type ReUsableComponentProps} from 'Types/types';
 import protectedPageStyles from './protectedPage.module.scss';
 
@@ -24,16 +24,16 @@ export default function createProtectedPage (props: ProtectedPageProps) {
     checkIfAuthorized();
   }, []);
 
-  const container = createElementWithStyles('div', undefined, protectedPageStyles.messageContainer);
-  const statusContainer = createElementWithStyles('div', undefined, protectedPageStyles.statusContainer);
+  const container = createElement('div', undefined, protectedPageStyles.messageContainer);
+  const statusContainer = createElement('div', undefined, protectedPageStyles.statusContainer);
 
-  const titleRow = createElementWithStyles('div', undefined, protectedPageStyles.statusRow);
-  const title = createElementWithStyles('h1', undefined, protectedPageStyles.statusTitle);
+  const titleRow = createElement('div', undefined, protectedPageStyles.statusRow);
+  const title = createElement('h1', undefined, protectedPageStyles.statusTitle);
 
   if (responseStatus === '') {
     title.textContent = 'Loading...';
-    const spinnerRow = createElementWithStyles('div', undefined, protectedPageStyles.statusRow);
-    const spinner = createElementWithStyles('i', undefined, protectedPageStyles.biArrowRepeat);
+    const spinnerRow = createElement('div', undefined, protectedPageStyles.statusRow);
+    const spinner = createElement('i', undefined, protectedPageStyles.biArrowRepeat);
 
     return htmlx`
     <${container}>
@@ -49,8 +49,8 @@ export default function createProtectedPage (props: ProtectedPageProps) {
     `;
   } else if (responseStatus === '401') {
     title.textContent = 'You need to login to view this page';
-    const loginButtonRow = createElementWithStyles('div', undefined, protectedPageStyles.statusRow);
-    const loginButton = createElementWithStyles('button', {
+    const loginButtonRow = createElement('div', undefined, protectedPageStyles.statusRow);
+    const loginButton = createElement('button', {
       onclick: async () => {
         try {
           await auth0.loginWithPopup();
@@ -78,8 +78,8 @@ export default function createProtectedPage (props: ProtectedPageProps) {
     `;
   } else if (responseStatus === '403') {
     title.textContent = 'You are not authorized to view this page';
-    const redirectButtonRow = createElementWithStyles('div', undefined, protectedPageStyles.statusRow);
-    const redirectButton = createElementWithStyles('button', {
+    const redirectButtonRow = createElement('div', undefined, protectedPageStyles.statusRow);
+    const redirectButton = createElement('button', {
       onclick: () => {
         historyPush(undefined, '/');
       },
@@ -108,8 +108,8 @@ export default function createProtectedPage (props: ProtectedPageProps) {
   } else {
     title.textContent = 'An error occurred, please refresh and try again';
 
-    const messageRow = createElementWithStyles('div', undefined, protectedPageStyles.statusRow);
-    const message = createElementWithStyles('p', {
+    const messageRow = createElement('div', undefined, protectedPageStyles.statusRow);
+    const message = createElement('p', {
       textContent: 'Error code: ' + responseStatus,
     }, protectedPageStyles.statusMessage);
 

@@ -47,16 +47,21 @@ export function clearUseEffect (key: string) {
 export function useEffect (key: string, callback: () => (() => void) | void, dependencies?: unknown[]) {
   const [callerState, callerStateIndex] = stateManager.useStateManager(key, dependencies, {isFirstRender: true});
 
+  // The state is the dependencies array passed
   const state = callerState.states[callerStateIndex];
 
   if (state === undefined || state === null) {
+    // If the state is undefined or null, then the callback is always called
     useEffectQueue.push({callback, key});
   } else if (state.length === 0 && callerState.isFirstRender) {
+    // If the state is empty, and it's the first render, then the callback can be called
     useEffectQueue.push({callback, key});
   } else if (state.length > 0 && !deepEqual(state, dependencies)) {
+    // If the dependencies have changed, then the callback needs to be re-queued
     callerState.states[callerStateIndex] = dependencies;
     useEffectQueue.push({callback, key});
   } else if (state.length !== 0) {
+    // Dependencies have not changed, so do not call the callback, but update the dependency state
     callerState.states[callerStateIndex] = dependencies;
   }
 }

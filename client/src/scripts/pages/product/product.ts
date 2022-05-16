@@ -3,7 +3,7 @@ import {formatPrice, getImageUrl, nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElement, createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import {type ProductProps} from 'Types/types';
 import {type Product} from 'api-types';
 import productStyles from './product.module.scss';
@@ -47,25 +47,25 @@ export default function createProduct (props: ProductProps) {
 
   const ProductScrollContainer = createKeyedContainer('div', key, undefined, productStyles.productScrollContainer);
 
-  const ProductContainer = createElementWithStyles('div', undefined, productStyles.productContainer);
+  const ProductContainer = createElement('div', undefined, productStyles.productContainer);
 
   if (productDetails) {
     let ProductImage;
 
     if (productDetails.images) {
-      ProductImage = createElementWithStyles('img', {src: getImageUrl(productDetails.images[0])}, productStyles.productImageContainer);
+      ProductImage = createElement('img', {src: getImageUrl(productDetails.images[0])}, productStyles.productImageContainer);
     }
 
-    const ProductDetailsContainer = createElementWithStyles('div', undefined, productStyles.productDetailsContainer);
-    const ProductDetailsTitle = createElementWithStyles('h1', {textContent: productDetails.name}, productStyles.productDetailsTitle);
-    const ProductDetailsId = createElementWithStyles('p', {textContent: productDetails.inventory_id.toUpperCase()}, productStyles.productDetailsId);
-    const ProductDetailsStock = createElementWithStyles('p', {textContent: `${productDetails.stock} in Stock`}, productStyles.productDetailsStock);
-    const ProductDetailsDescriptionContainer = createElementWithStyles('div', undefined, productStyles.productDetailsDescriptionContainer);
-    const ProductDetailsDescriptionHeader = createElementWithStyles('h1', {textContent: 'Details:'}, productStyles.productDetailsDescriptionHeader);
-    const ProductDetailsDescription = createElementWithStyles('p', {textContent: productDetails.description}, productStyles.productDetailsDescription);
-    const ProductDetailsPrice = createElementWithStyles('p', {textContent: formatPrice(productDetails.price)}, productStyles.productDetailsPrice);
+    const ProductDetailsContainer = createElement('div', undefined, productStyles.productDetailsContainer);
+    const ProductDetailsTitle = createElement('h1', {textContent: productDetails.name}, productStyles.productDetailsTitle);
+    const ProductDetailsId = createElement('p', {textContent: productDetails.inventory_id.toUpperCase()}, productStyles.productDetailsId);
+    const ProductDetailsStock = createElement('p', {textContent: `${productDetails.stock} in Stock`}, productStyles.productDetailsStock);
+    const ProductDetailsDescriptionContainer = createElement('div', undefined, productStyles.productDetailsDescriptionContainer);
+    const ProductDetailsDescriptionHeader = createElement('h1', {textContent: 'Details:'}, productStyles.productDetailsDescriptionHeader);
+    const ProductDetailsDescription = createElement('p', {textContent: productDetails.description}, productStyles.productDetailsDescription);
+    const ProductDetailsPrice = createElement('p', {textContent: formatPrice(productDetails.price)}, productStyles.productDetailsPrice);
 
-    const ProductAddToCard = createElementWithStyles('button', {
+    const ProductAddToCard = createElement('button', {
       onclick: async () => {
         await addToCart(productDetails);
       }, textContent: 'Add to Cart',

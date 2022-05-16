@@ -4,7 +4,7 @@ import {getItemFromLocalStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElement, createElementWithStyles, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
 import unload from 'Scripts/unload';
 import styles from 'Styles/components/navbar.module.scss';
 import {type CartItem, type JWTPayload} from 'api-types';
@@ -68,9 +68,9 @@ export default function createNavbarRightSide () {
     styles.navRightSideContainer,
   );
 
-  const shoppingCartContainer = createElementWithStyles('button', undefined, styles.actionButtonNoBorder);
+  const shoppingCartContainer = createElement('button', undefined, styles.actionButtonNoBorder);
 
-  const shoppingCart = createElementWithStyles('i', undefined, styles.biCart2);
+  const shoppingCart = createElement('i', undefined, styles.biCart2);
 
   registerLinkClickHandler(shoppingCart, undefined, undefined, '/cart');
 
@@ -100,9 +100,9 @@ export default function createNavbarRightSide () {
     setIsLoggedIn(false);
   };
 
-  const myOrdersButton = createElementWithStyles('button', undefined, styles.actionButtonNoBorder);
+  const myOrdersButton = createElement('button', undefined, styles.actionButtonNoBorder);
 
-  const myOrderLink = createElementWithStyles('a', {
+  const myOrderLink = createElement('a', {
     href: isLoggedIn ? '/orders' : '/find-order',
     textContent: isLoggedIn ? 'My Orders' : 'Find My Order',
   }, styles.aLink);
@@ -110,14 +110,14 @@ export default function createNavbarRightSide () {
   let loginButton;
 
   if (isLoggedIn) {
-    loginButton = createElementWithStyles('button', {
+    loginButton = createElement('button', {
       onclick: async () => {
         await logout();
       },
       textContent: 'Logout',
     }, styles.actionButtonNoBorder);
   } else {
-    loginButton = createElementWithStyles('button', {
+    loginButton = createElement('button', {
       onclick: async () => {
         await login();
       },
@@ -128,9 +128,9 @@ export default function createNavbarRightSide () {
   let staffButton;
 
   if (isStaff) {
-    const staffButtonElement = createElementWithStyles('button', undefined, styles.actionButtonNoBorder);
+    const staffButtonElement = createElement('button', undefined, styles.actionButtonNoBorder);
 
-    const staffLink = createElementWithStyles('a', {
+    const staffLink = createElement('a', {
       href: `${window.location.origin}/staff`,
       textContent: 'Staff',
     }, styles.aLink);
@@ -144,13 +144,13 @@ export default function createNavbarRightSide () {
     `;
   }
 
-  const hamburgerButton = createElementWithStyles('button', {
+  const hamburgerButton = createElement('button', {
     onclick: () => setSidebarToggled(!sidebarToggled),
   }, styles.hamburgerMenu);
 
-  const list = createElementWithStyles('i', undefined, styles.biList);
+  const list = createElement('i', undefined, styles.biList);
 
-  const buttonContainer = createElementWithStyles('div', undefined, styles.buttonsContainer);
+  const buttonContainer = createElement('div', undefined, styles.buttonsContainer);
 
   const buttonsContainer = htmlx`
   <${buttonContainer}>

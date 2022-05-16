@@ -1,7 +1,7 @@
 import {nameof} from 'Scripts/helpers';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
+import {createElement, registerLinkClickHandler} from 'Scripts/uiUtils';
 import sidebarStyles from './sidebar.module.scss';
 
 const key = nameof(createSidebar);
@@ -17,10 +17,10 @@ export interface SidebarProps {
 export default function createSidebar (props: SidebarProps) {
   const [collapsed, setCollapsed] = useState(key, false);
 
-  const container = createElementWithStyles('div', undefined, sidebarStyles.sidebarContainer);
+  const container = createElement('div', undefined, sidebarStyles.sidebarContainer);
 
-  const titleContainer = createElementWithStyles('div', undefined, sidebarStyles.sidebarTitleContainer);
-  const title = createElementWithStyles('h1', {
+  const titleContainer = createElement('div', undefined, sidebarStyles.sidebarTitleContainer);
+  const title = createElement('h1', {
     textContent: props.title,
   }, sidebarStyles.sidebarTitle);
 
@@ -28,7 +28,7 @@ export default function createSidebar (props: SidebarProps) {
     setCollapsed((previous) => !previous);
   };
 
-  const collapseButton = createElementWithStyles('i', {
+  const collapseButton = createElement('i', {
     onclick: () => onCollapse(),
   }, sidebarStyles.biCaretLeftFill);
 
@@ -40,12 +40,12 @@ export default function createSidebar (props: SidebarProps) {
     collapseButton.classList.remove(sidebarStyles.toggled);
   }
 
-  const rowsContainer = createElementWithStyles('div', undefined, sidebarStyles.rowsContainer);
+  const rowsContainer = createElement('div', undefined, sidebarStyles.rowsContainer);
 
   const rows = [];
 
   for (const option of props.options) {
-    const row = createElementWithStyles('a', {
+    const row = createElement('a', {
       href: option.href,
       textContent: option.title,
     }, sidebarStyles.actionButton);

@@ -2,7 +2,7 @@ import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import {createElement} from 'Scripts/uiUtils';
 import {type DropDownOption, type ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
 
@@ -20,19 +20,19 @@ export default function createDropdownSingleSelectBody (props: DropdownSingleSel
     props.onSelectedChange(selected);
   }, [selected]);
 
-  const dropDownSelectOptionsContainer = createElementWithStyles('ul', {
+  const dropDownSelectOptionsContainer = createElement('ul', {
     ariaRoleDescription: 'list',
   }, dropDownStyles.dropdownSelectOptionsContainer);
 
   const dropDownOptions = [];
 
   for (const option of props.dropDownOptions) {
-    const dropDownOptionContainer = createElementWithStyles('li', {
+    const dropDownOptionContainer = createElement('li', {
       onclick: () => setSelected(option),
     }, dropDownStyles.dropdownOptionContainer);
-    const dropDownCheck = createElementWithStyles('i', undefined, option.value === selected.value ? dropDownStyles.biCircleFill : dropDownStyles.biCircle);
+    const dropDownCheck = createElement('i', undefined, option.value === selected.value ? dropDownStyles.biCircleFill : dropDownStyles.biCircle);
 
-    const dropDownOption = createElementWithStyles('div', {textContent: option.name}, dropDownStyles.dropdownOptionText);
+    const dropDownOption = createElement('div', {textContent: option.name}, dropDownStyles.dropdownOptionText);
 
     dropDownOptions.push(htmlx`
     <${dropDownOptionContainer}>

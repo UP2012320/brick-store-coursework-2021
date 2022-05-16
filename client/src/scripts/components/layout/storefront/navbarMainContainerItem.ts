@@ -1,6 +1,6 @@
 import {nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
 import styles from 'Styles/components/navbar.module.scss';
 
 const key = nameof(createNavbarMiddle);
@@ -13,16 +13,16 @@ export default function createNavbarMiddle (props: { title: string, }) {
     styles.navMainContainer,
   );
 
-  const container = createElementWithStyles(
+  const container = createElement(
     'div',
     undefined,
     styles.navMainContainerItem,
   );
   container.setAttribute('key', nameof(createNavbarMiddle));
 
-  const browseIcon = createElementWithStyles('i', undefined, styles.biBag);
+  const browseIcon = createElement('i', undefined, styles.biBag);
 
-  const link = createElementWithStyles('a', {
+  const link = createElement('a', {
     href: '/browse',
     textContent: props.title,
   }, styles.linkTitle);

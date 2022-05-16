@@ -1,7 +1,7 @@
 import {addToCart} from 'Scripts/cartController';
 import {formatPercent, formatPrice, getImageUrl, getProductUrl, nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, registerLinkClickHandler} from 'Scripts/uiUtils';
+import {createElement, registerLinkClickHandler} from 'Scripts/uiUtils';
 import actionButtonStyles from 'Styles/commonComponents.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';
 import {type ReUsableComponentProps} from 'Types/types';
@@ -14,7 +14,7 @@ export interface CreateShopCardProps extends ReUsableComponentProps {
 export default function createShopCard (props: CreateShopCardProps) {
   props.key ??= nameof(createShopCard);
 
-  const cardContainer = createElementWithStyles(
+  const cardContainer = createElement(
     'div',
     undefined,
     browseStyles.shopCardContainer,
@@ -22,7 +22,7 @@ export default function createShopCard (props: CreateShopCardProps) {
 
   cardContainer.setAttribute('key', props.key);
 
-  const imageContainer = createElementWithStyles('a', {
+  const imageContainer = createElement('a', {
     href: getProductUrl(props.searchResultArgument.slug),
   }, browseStyles.shopCardImgHrefContainer);
 
@@ -31,7 +31,7 @@ export default function createShopCard (props: CreateShopCardProps) {
   let image;
 
   if (props.searchResultArgument.images) {
-    image = createElementWithStyles(
+    image = createElement(
       'img',
       {
         loading: 'lazy',
@@ -41,7 +41,7 @@ export default function createShopCard (props: CreateShopCardProps) {
     );
   }
 
-  const title = createElementWithStyles(
+  const title = createElement(
     'a',
     {
       href: getProductUrl(props.searchResultArgument.slug),
@@ -52,7 +52,7 @@ export default function createShopCard (props: CreateShopCardProps) {
 
   registerLinkClickHandler(title);
 
-  const idStockRow = createElementWithStyles(
+  const idStockRow = createElement(
     'div',
     undefined,
     browseStyles.shopCardRowId,
@@ -60,7 +60,7 @@ export default function createShopCard (props: CreateShopCardProps) {
 
   idStockRow.style.gridArea = 'idRow';
 
-  const id = createElementWithStyles(
+  const id = createElement(
     'p',
     {
       textContent: `#${props.searchResultArgument.inventory_id.toUpperCase()}`,
@@ -68,7 +68,7 @@ export default function createShopCard (props: CreateShopCardProps) {
     browseStyles.shopCardId,
   );
 
-  const stock = createElementWithStyles(
+  const stock = createElement(
     'p',
     {
       textContent: `${props.searchResultArgument.stock} in Stock`,
@@ -78,9 +78,9 @@ export default function createShopCard (props: CreateShopCardProps) {
 
   stock.style.color = props.searchResultArgument.stock > 0 ? 'green' : 'red';
 
-  const priceRow = createElementWithStyles('div', undefined, browseStyles.shopCardPriceRow);
+  const priceRow = createElement('div', undefined, browseStyles.shopCardPriceRow);
 
-  const price = createElementWithStyles(
+  const price = createElement(
     'p',
     {
       textContent: formatPrice(props.searchResultArgument.price),
@@ -94,16 +94,16 @@ export default function createShopCard (props: CreateShopCardProps) {
   if (props.searchResultArgument.discount) {
     price.style.textDecoration = 'line-through';
 
-    discountedPrice = createElementWithStyles('p', {
+    discountedPrice = createElement('p', {
       textContent: formatPrice(props.searchResultArgument.discount_price),
     }, browseStyles.shopCardDiscountedPrice);
 
-    discountPercentage = createElementWithStyles('p', {
+    discountPercentage = createElement('p', {
       textContent: '(-' + formatPercent(props.searchResultArgument.discount) + ')',
     }, browseStyles.shopCardDiscountPercentage);
   }
 
-  const actionsRow = createElementWithStyles(
+  const actionsRow = createElement(
     'div',
     undefined,
     browseStyles.shopCardRowActions,
@@ -111,14 +111,14 @@ export default function createShopCard (props: CreateShopCardProps) {
 
   actionsRow.style.gridArea = 'actionsRow';
 
-  const viewLink = createElementWithStyles('a', {
+  const viewLink = createElement('a', {
     href: getProductUrl(props.searchResultArgument.slug),
     textContent: 'View',
   }, actionButtonStyles.actionButton);
 
   registerLinkClickHandler(viewLink);
 
-  const addButton = createElementWithStyles(
+  const addButton = createElement(
     'div',
     {
       onclick: async () => {

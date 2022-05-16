@@ -3,7 +3,7 @@ import {formatPrice, getItemFromLocalStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
 import {type CartItem} from 'api-types';
 import cartStyles from './cart.module.scss';
 
@@ -22,18 +22,18 @@ export default function createCart () {
 
   const cartScrollContainer = createKeyedContainer('section', nameof(createCart), undefined, cartStyles.cartScrollContainer);
 
-  const cartContainer = createElementWithStyles('div', undefined, cartStyles.cartContainer);
-  const headingRow = createElementWithStyles('div', undefined, cartStyles.cartRow);
-  const quantityHeading = createElementWithStyles('p', {textContent: 'Quantity'}, cartStyles.cartQuantityHeader);
-  const priceHeading = createElementWithStyles('p', {textContent: 'Price'}, cartStyles.cartPriceHeader);
-  const removeHeading = createElementWithStyles('p', {textContent: 'Remove'}, cartStyles.cartRemoveHeader);
+  const cartContainer = createElement('div', undefined, cartStyles.cartContainer);
+  const headingRow = createElement('div', undefined, cartStyles.cartRow);
+  const quantityHeading = createElement('p', {textContent: 'Quantity'}, cartStyles.cartQuantityHeader);
+  const priceHeading = createElement('p', {textContent: 'Price'}, cartStyles.cartPriceHeader);
+  const removeHeading = createElement('p', {textContent: 'Remove'}, cartStyles.cartRemoveHeader);
 
   const totalPrice = formatPrice(cartItems.reduce((current, item) => (item.product.price * item.quantity) + current, 0));
 
-  const checkoutRow = createElementWithStyles('div', undefined, cartStyles.cartRow);
-  const cartPriceContainer = createElementWithStyles('div', undefined, cartStyles.cartPriceContainer);
-  const cartPrice = createElementWithStyles('p', {textContent: totalPrice}, cartStyles.cartPrice);
-  const checkoutButton = createElementWithStyles('a', {
+  const checkoutRow = createElement('div', undefined, cartStyles.cartRow);
+  const cartPriceContainer = createElement('div', undefined, cartStyles.cartPriceContainer);
+  const cartPrice = createElement('p', {textContent: totalPrice}, cartStyles.cartPrice);
+  const checkoutButton = createElement('a', {
     href: '/checkout',
     textContent: 'Checkout',
   }, cartStyles.cartCheckoutButton);

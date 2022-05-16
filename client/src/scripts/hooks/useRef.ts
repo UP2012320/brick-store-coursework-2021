@@ -14,6 +14,7 @@ export function clearRef (key: string) {
 export function useRef<T = undefined> (key: string, initialValue?: undefined): Ref<T | undefined>;
 export function useRef<T> (key: string, initialValue: T): Ref<T>;
 export function useRef<T> (key: string, initialValue: T): unknown {
+  // Wrap the initial value in an object so that any type including primitives will be passed around as a reference
   const [callerState, callerStateIndex] = stateManager.useStateManager(key, {current: initialValue}, {});
 
   return callerState.states[callerStateIndex] as Ref<T>;

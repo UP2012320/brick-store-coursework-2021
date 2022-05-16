@@ -1,7 +1,7 @@
 import {nameof} from 'Scripts/helpers';
 import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import {type ReUsableComponentProps} from 'Types/types';
 import inputBoxStyles from './inputBox.module.scss';
 
@@ -21,17 +21,17 @@ export default function createInputBox (props: InputBoxProps) {
 
   const inputContainer = createKeyedContainer('div', props.key, undefined, props.classPrefix ? inputBoxStyles[`${props.classPrefix}InputContainer`] : inputBoxStyles.inputContainer);
 
-  const label = createElementWithStyles('label', {
+  const label = createElement('label', {
     htmlFor: props.key,
     textContent: props.label,
   }, inputBoxStyles.inputLabel);
 
-  const inputFieldContainer = createElementWithStyles('div', undefined, inputBoxStyles.inputFieldContainer);
+  const inputFieldContainer = createElement('div', undefined, inputBoxStyles.inputFieldContainer);
 
   let inputPrefix;
 
   if (props.inputPrefix) {
-    inputPrefix = createElementWithStyles('div', {
+    inputPrefix = createElement('div', {
       textContent: props.inputPrefix,
     }, inputBoxStyles.inputPrefix);
   }
@@ -39,7 +39,7 @@ export default function createInputBox (props: InputBoxProps) {
   let input;
 
   if (props.textarea) {
-    input = createElementWithStyles('textarea', {
+    input = createElement('textarea', {
       id: props.key,
       maxLength: 2_500,
       oninput: (event) => {
@@ -51,7 +51,7 @@ export default function createInputBox (props: InputBoxProps) {
       value: props.value,
     }, inputBoxStyles.inputField, inputBoxStyles.noPrefix);
   } else {
-    input = createElementWithStyles('input', {
+    input = createElement('input', {
       id: props.key,
       oninput: (event) => {
         if (event.target instanceof HTMLInputElement) {

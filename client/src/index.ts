@@ -129,6 +129,7 @@ const render = async () => {
   appendElements(internalRoot, body);
 
   if (currentRoot) {
+    // Using these hooks, I can ensure that a component's state is reset when it is unmounted.
     morphdom(currentRoot, internalRoot, withEvents({
       onBeforeElUpdated: (fromElement, toElement) => {
         const fromKey = fromElement.getAttribute('key');

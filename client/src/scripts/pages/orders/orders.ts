@@ -3,7 +3,7 @@ import {nameof, SERVER_BASE} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import {type OrderInfo} from 'api-types';
 import ordersStyles from './orders.module.scss';
 
@@ -42,11 +42,11 @@ export default function createOrders () {
 
   const container = createKeyedContainer('section', key, undefined, ordersStyles.container);
 
-  const orderList = createElementWithStyles('ul', {
+  const orderList = createElement('ul', {
     ariaRoleDescription: 'list',
   }, ordersStyles.listContainer);
 
-  const orderItems = Object.values(orders).map((order) => createElementWithStyles('li', {
+  const orderItems = Object.values(orders).map((order) => createElement('li', {
     textContent: order[0].orderId,
   }, ordersStyles.listItem));
 

@@ -6,7 +6,7 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {useRef} from 'Scripts/hooks/useRef';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import {type ReUsableComponentProps} from 'Types/types';
 import {type ApiResponse, type Product} from 'api-types';
 import productBodyStyles from './addProductModalBody.module.scss';
@@ -71,12 +71,12 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
 
   const container = createKeyedContainer('div', props.key, undefined, productBodyStyles.container);
 
-  const imageUploadText = createElementWithStyles('label', {
+  const imageUploadText = createElement('label', {
     htmlFor: 'productImageUpload',
     textContent: 'Add an Image',
   }, productBodyStyles.imageContainer);
 
-  const test = createElementWithStyles('p', {
+  const test = createElement('p', {
     textContent: '\nMax 10MB, (JPG or PNG)',
   }, productBodyStyles.imageContainerSubheading);
 
@@ -118,7 +118,7 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
     setImages((existingImages) => [...existingImages, ...filteredResponses]);
   };
 
-  const imageUploadInput = createElementWithStyles('input', {
+  const imageUploadInput = createElement('input', {
     accept: 'image/jpg,image/jpeg,image/png',
     id: 'productImageUpload',
     max: '16',
@@ -136,10 +136,10 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
     type: 'file',
   }, productBodyStyles.hidden);
 
-  const galleryContainer = createElementWithStyles('div', undefined, productBodyStyles.galleryContainer);
+  const galleryContainer = createElement('div', undefined, productBodyStyles.galleryContainer);
 
   const imagesContainers = images.map((image, index) => {
-    const imageContainer = createElementWithStyles('div', {
+    const imageContainer = createElement('div', {
       draggable: true,
       ondragover: (event) => {
         event.preventDefault();
@@ -166,11 +166,11 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
       },
     }, productBodyStyles.galleryImage);
 
-    const imageElement = createElementWithStyles('img', {
+    const imageElement = createElement('img', {
       src: getImageUrl(image),
     });
 
-    const removeButton = createElementWithStyles('i', {
+    const removeButton = createElement('i', {
       onclick: () => {
         setImages((existingImages) => existingImages.filter((existingImage) => existingImage !== image));
       },
@@ -262,9 +262,9 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
     value: visibility,
   });
 
-  const actionsContainer = createElementWithStyles('div', undefined, productBodyStyles.actionsContainer);
+  const actionsContainer = createElement('div', undefined, productBodyStyles.actionsContainer);
 
-  const clearButton = createElementWithStyles('button', {
+  const clearButton = createElement('button', {
     onclick: () => {
       setName('');
       setDescription('');
@@ -281,7 +281,7 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
     textContent: 'Clear',
   }, productBodyStyles.clearButton);
 
-  const resetButton = createElementWithStyles('button', {
+  const resetButton = createElement('button', {
     onclick: () => {
       setName(props.existingProduct?.name ?? '');
       setDescription(props.existingProduct?.description ?? '');
@@ -362,7 +362,7 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
     }), 5_000);
   };
 
-  const submitButton = createElementWithStyles('button', {
+  const submitButton = createElement('button', {
     onclick: () => {
       onSubmit();
     },
@@ -372,7 +372,7 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
   let messageContainer;
 
   if (submitMessage.message) {
-    messageContainer = createElementWithStyles('div', undefined, productBodyStyles.messageContainer, productBodyStyles.visible);
+    messageContainer = createElement('div', undefined, productBodyStyles.messageContainer, productBodyStyles.visible);
 
     if (submitMessage.error) {
       messageContainer.classList.add(productBodyStyles.errored);
@@ -380,7 +380,7 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
       messageContainer.classList.add(productBodyStyles.success);
     }
 
-    const message = createElementWithStyles('p', {
+    const message = createElement('p', {
       textContent: submitMessage.message,
     });
 
@@ -390,7 +390,7 @@ export default function modifyProductModalBody (props: ModifyModalBody) {
     </errorContainer>
     `;
   } else {
-    messageContainer = createElementWithStyles('div', undefined, productBodyStyles.messageContainer);
+    messageContainer = createElement('div', undefined, productBodyStyles.messageContainer);
   }
 
   return htmlx`

@@ -1,7 +1,7 @@
 import {nameof} from 'Scripts/helpers';
 import {type StateSetter} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import {type HasBodyProps, type ReUsableComponentProps} from 'Types/types';
 import modalStyles from './modal.module.scss';
 
@@ -21,19 +21,19 @@ export default function createModal (props: ModalProps) {
       event.stopPropagation();
     },
   }, modalStyles.container);
-  const controlContainer = createElementWithStyles('div', undefined, modalStyles.controlContainer);
+  const controlContainer = createElement('div', undefined, modalStyles.controlContainer);
 
-  const title = createElementWithStyles('p', {
+  const title = createElement('p', {
     textContent: props.title,
   }, modalStyles.title);
 
-  const closeButton = createElementWithStyles('i', {
+  const closeButton = createElement('i', {
     onclick: () => close(),
   }, modalStyles.biX);
 
-  const bodyContainer = createElementWithStyles('div', undefined, modalStyles.bodyContainer);
+  const bodyContainer = createElement('div', undefined, modalStyles.bodyContainer);
 
-  const overlay = createElementWithStyles('div', {
+  const overlay = createElement('div', {
     onmousedown: () => close(),
   }, modalStyles.overlay);
 

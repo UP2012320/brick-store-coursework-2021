@@ -1,5 +1,5 @@
 import htmlx from 'Scripts/htmlX';
-import {createElement, createElementWithStyles, preventHrefDefault, registerLinkClickHandler} from 'Scripts/uiUtils';
+import {createElement, registerLinkClickHandler} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import notFoundStyles from 'Styles/pages/notFound.module.scss';
 
@@ -8,9 +8,9 @@ const createNotFound = () => {
     id: contentRootStyles.contentRoot,
   });
 
-  const errorContainer = createElementWithStyles('div', undefined, notFoundStyles.errorContainer);
+  const errorContainer = createElement('div', undefined, notFoundStyles.errorContainer);
 
-  const textContainer = createElementWithStyles('div', undefined, notFoundStyles.textContainer);
+  const textContainer = createElement('div', undefined, notFoundStyles.textContainer);
 
   const heading = createElement('header', {
     textContent: '404 Not Found',

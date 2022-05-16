@@ -1,26 +1,19 @@
 export const createElement = <K extends keyof HTMLElementTagNameMap> (
   type: K,
   options?: Partial<HTMLElementTagNameMap[K]>,
-): HTMLElementTagNameMap[K] => {
-  const newElement = document.createElement(type) as HTMLElementTagNameMap[K];
-
-  return Object.assign(newElement, options);
-};
-
-export const createElementWithStyles = <K extends keyof HTMLElementTagNameMap> (
-  type: K,
-  options?: Partial<HTMLElementTagNameMap[K]>,
   ...styles: Array<string | null | undefined>
 ) => {
-  const newElement = createElement(type, options);
+  const newElement = document.createElement(type) as HTMLElementTagNameMap[K];
+
+  const withOptions = Object.assign(newElement, options);
 
   for (const style of styles) {
     if (style) {
-      newElement.classList.add(style);
+      withOptions.classList.add(style);
     }
   }
 
-  return newElement;
+  return withOptions;
 };
 
 export const createKeyedContainer = <K extends keyof HTMLElementTagNameMap> (
@@ -29,7 +22,7 @@ export const createKeyedContainer = <K extends keyof HTMLElementTagNameMap> (
   options?: Partial<HTMLElementTagNameMap[K]>,
   ...styles: string[]
 ) => {
-  const newElement = createElementWithStyles(type, options, ...styles);
+  const newElement = createElement(type, options, ...styles);
   newElement.setAttribute('key', key);
 
   return newElement;

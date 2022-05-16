@@ -4,10 +4,10 @@ import htmlx from 'Scripts/htmlX';
 import createNotFound from 'Scripts/pages/notFound';
 import protectedPageStyles from 'Scripts/pages/protectedPage/protectedPage.module.scss';
 import createManageProducts from 'Scripts/pages/staff/manageProducts/manageProducts';
-import {createElementWithStyles} from 'Scripts/uiUtils';
+import {createElement} from 'Scripts/uiUtils';
 
 export default function createStaff () {
-  const container = createElementWithStyles('div', undefined, protectedPageStyles.messageContainer);
+  const container = createElement('div', undefined, protectedPageStyles.messageContainer);
 
   const sidebar = createSidebar({
     options: [
@@ -41,7 +41,7 @@ export default function createStaff () {
       page = createNotFound();
   }
 
-  const body = createElementWithStyles('div', undefined, protectedPageStyles.bodyContainer);
+  const body = createElement('div', undefined, protectedPageStyles.bodyContainer);
 
   return htmlx`
     <${container}>

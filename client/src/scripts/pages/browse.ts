@@ -3,7 +3,7 @@ import createShopCard from 'Scripts/components/shopCard';
 import {nameof} from 'Scripts/helpers';
 import useSearch from 'Scripts/hooks/useSearch';
 import htmlx from 'Scripts/htmlX';
-import {createElement, createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import contentRootStyles from 'Styles/components/contentRoot.module.scss';
 import browseStyles from 'Styles/pages/browse.module.scss';
 
@@ -20,13 +20,13 @@ export default function createBrowse (props: BrowseProps) {
 
   const filterBar = createFilterBar({setSearchState});
 
-  const shoppingCardsContainer = createElementWithStyles(
+  const shoppingCardsContainer = createElement(
     'div',
     undefined,
     browseStyles.shopCardsContainer,
   );
 
-  const shoppingCardsScrollContainer = createElementWithStyles('div', undefined, browseStyles.shopCardsScrollContainer);
+  const shoppingCardsScrollContainer = createElement('div', undefined, browseStyles.shopCardsScrollContainer);
 
   let statusMessage;
 
@@ -61,7 +61,7 @@ export default function createBrowse (props: BrowseProps) {
     }),
   });
 
-  const returnToTopIcon = createElementWithStyles('i', undefined, browseStyles.biChevronUp);
+  const returnToTopIcon = createElement('i', undefined, browseStyles.biChevronUp);
 
   const cards = searchResults.map((searchResult) => createShopCard({key: searchResult.inventory_id, searchResultArgument: searchResult}));
 

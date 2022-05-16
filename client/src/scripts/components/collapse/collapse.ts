@@ -2,7 +2,7 @@ import createToggleHeader from 'Scripts/components/toggleHeader/toggleHeader';
 import {nameof} from 'Scripts/helpers';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
-import {createElementWithStyles, createKeyedContainer} from 'Scripts/uiUtils';
+import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
 import {type HasBodyProps, type ReUsableComponentProps} from 'Types/types';
 import collapseStyles from './collapse.module.scss';
 
@@ -24,7 +24,7 @@ export default function createCollapse (props: CreateCollapseProps) {
     toggled,
   });
 
-  const collapseContentContainer = createElementWithStyles('div', undefined, collapseStyles.collapseContentContainer);
+  const collapseContentContainer = createElement('div', undefined, collapseStyles.collapseContentContainer);
 
   if (toggled) {
     collapseContentContainer.classList.add(collapseStyles.collapseOpen);
