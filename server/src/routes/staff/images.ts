@@ -6,6 +6,7 @@ import sharp from 'sharp';
 import {sendQuery, validatePermissions} from '../../utils/helpers';
 import {addImageSchema, deleteImageSchema} from './images.schema';
 
+// As I don't have a CDN for images, I'm using a local folder
 const saveFolder = '../dist/public/images';
 
 declare module 'fastify' {

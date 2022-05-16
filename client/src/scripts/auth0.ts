@@ -27,6 +27,7 @@ export const fetchAuth0Config = async () => {
     cacheLocation: 'localstorage',
     client_id: config.clientId,
     domain: config.domain,
+    useRefreshTokens: true,
   });
 };
 
@@ -44,18 +45,24 @@ export const runIfAuthenticated = async (callback: (userInfo: User) => Promise<v
 };
 
 export const getAuthorizationHeader = async (): Promise<HeadersInit | undefined> => {
-  try {
-    const token = await auth0.getTokenSilently();
+  let result;
 
-    if (!token) {
-      return undefined;
+  await runIfAuthenticated(async () => {
+    try {
+      console.debug('getting token');
+      const token = await auth0.getTokenSilently();
+
+      if (!token) {
+        return;
+      }
+
+      result = {
+        Authorization: `Bearer ${token}`,
+      };
+    } catch (error) {
+      console.error(error);
     }
+  });
 
-    return {
-      Authorization: `Bearer ${token}`,
-    };
-  } catch (error) {
-    console.error(error);
-    return undefined;
-  }
+  return result;
 };

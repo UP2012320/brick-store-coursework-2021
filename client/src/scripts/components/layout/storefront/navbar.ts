@@ -1,10 +1,10 @@
 import logo from 'Assets/drawing512.png';
+import styles from 'Scripts/components/layout/storefront/navbar.module.scss';
 import createNavbarMiddle from 'Scripts/components/layout/storefront/navbarMainContainerItem';
 import createNavbarRightSide from 'Scripts/components/layout/storefront/navbarRightSide';
 import {nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElement, registerLinkClickHandler} from 'Scripts/uiUtils';
-import styles from 'Styles/components/navbar.module.scss';
 
 const key = nameof(createNavbar);
 

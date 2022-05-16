@@ -4,6 +4,7 @@ import createDropdown from 'Scripts/components/dropdown/dropdownFrame/dropdownFr
 import createDropdownMultiSelectBody from 'Scripts/components/dropdown/dropdownMultiSelectBody/dropdownMultiSelectBody';
 import createDropdownSingleSelectBody from 'Scripts/components/dropdown/dropdownSingleSelectBody/dropdownSingleSelectBody';
 import {fetchColours, fetchTypes} from 'Scripts/components/filterBar/fetch';
+import filterBarStyles from 'Scripts/components/filterBar/filterBar.module.scss';
 import {nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useRef} from 'Scripts/hooks/useRef';
@@ -11,7 +12,6 @@ import {type SetSearchStateArguments} from 'Scripts/hooks/useSearch';
 import {registerUseState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElement} from 'Scripts/uiUtils';
-import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import {type DropDownOption, type MultiSelectDropDownOption} from 'Types/types';
 
 const useState = registerUseState(nameof(createFilterBar));

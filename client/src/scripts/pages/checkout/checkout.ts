@@ -7,7 +7,7 @@ import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElement, createKeyedContainer, historyPush} from 'Scripts/uiUtils';
-import contentRootStyles from 'Styles/components/contentRoot.module.scss';
+import contentRootStyles from 'Styles/contentRoot.module.scss';
 import {type CartItem} from 'api-types';
 import checkoutStyles from './checkout.module.scss';
 

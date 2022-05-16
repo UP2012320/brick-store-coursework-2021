@@ -1,0 +1,54 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+
+.error-container {
+  flex: 1 0;
+  display: flex;
+  justify-content: center;
+}
+
+.text-container {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  header {
+    font-size: 42pt;
+    font-weight: 600;
+  }
+
+  summary {
+    font-size: 14pt;
+  }
+
+  // Background transition source: https://stackoverflow.com/a/43671830
+  button {
+    background: linear-gradient(to top, $not-quite-white 50%, #FFF 50%);
+    background-size: 100% 200%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 3px solid $primary-colour;
+    margin: $spacing-medium auto auto;
+    width: max-content;
+    transition: background-position .3s ease-in-out, background-color .3s ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $not-quite-white;
+      background-position: 0 100%;
+    }
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .text-container {
+    header {
+      font-size: 32pt;
+    }
+
+    summary {
+      font-size: 14pt;
+    }
+  }
+}

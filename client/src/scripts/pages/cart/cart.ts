@@ -1,4 +1,4 @@
-import createCartRow from 'Scripts/components/cartRow';
+import createCartRow from 'Scripts/components/cartRow/cartRow';
 import {formatPrice, getItemFromLocalStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
 import {useState} from 'Scripts/hooks/useState';

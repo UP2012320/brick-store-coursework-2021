@@ -1,7 +1,7 @@
+import styles from 'Scripts/components/layout/storefront/navbar.module.scss';
 import {nameof} from 'Scripts/helpers';
 import htmlx from 'Scripts/htmlX';
 import {createElement, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
-import styles from 'Styles/components/navbar.module.scss';
 
 const key = nameof(createNavbarMiddle);
 

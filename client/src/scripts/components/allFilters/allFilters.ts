@@ -1,9 +1,9 @@
+import filterBarStyles from 'Scripts/components/filterBar/filterBar.module.scss';
 import createSidebar from 'Scripts/components/sidebar/sidebar';
 import {nameof} from 'Scripts/helpers';
 import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
-import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import {type HasBodyProps} from 'Types/types';
 
 const key = nameof(createAllFilters);

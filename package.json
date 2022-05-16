@@ -5,8 +5,10 @@
   "author": "Emily Medhurst <UP2012320@myport.ac.uk>",
   "license": "MIT",
   "scripts": {
-    "setup": "cd client && npm run build && cd ../server && npm run build",
-    "start": "cross-env NODE_ENV=production cd server && npm run start"
+    "start-client": "cd client && npm run start",
+    "start-server": "cd server && npm run serve",
+    "start": "npm-run-all --parallel start-client start-server",
+    "build-submission": "tsc -p client/tsconfig.submission.json && tsc -p server/tsconfig.submission.json"
   },
   "workspaces": [
     "client",
@@ -15,6 +17,7 @@
   ],
   "private": true,
   "dependencies": {
-    "typescript": "^4.6.4"
+    "cross-env": "^7.0.3",
+    "npm-run-all": "^4.1.5"
   }
 }

@@ -1,0 +1,14 @@
+@import 'utils';
+
+.content-root {
+  @include column-centered;
+  padding: $spacing-small;
+  overflow-y: auto;
+}
+
+@media only screen and (max-width: 1024px) {
+  .content-root {
+    align-items: unset;
+    justify-content: unset;
+  }
+}

@@ -84,7 +84,7 @@ const products: FastifyPluginAsync = async (fastify, options) => {
     }
 
     const id = `${nanoid(5)}-${nanoid(5)}`;
-    const slug = slugify(product.name);
+    const slug = slugify(product.name, {lower: true});
 
     const result = await fastify.pg.transact(async (client) => {
       const [colour, type] = await getTypeAndColourId(client, product.type, product.colour);

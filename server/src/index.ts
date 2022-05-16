@@ -1,7 +1,6 @@
 import path from 'node:path';
 import process from 'node:process';
 // eslint-disable-next-line
-import fastifyAuth0Verify from 'fastify-auth0-verify';
 import fastifyCors from '@fastify/cors';
 import fastifyHelmet from '@fastify/helmet';
 import fastifyMultipart from '@fastify/multipart';
@@ -11,6 +10,7 @@ import fastifyStatic from '@fastify/static';
 import fastifySwagger from '@fastify/swagger';
 import ajvErrors from 'ajv-errors';
 import fastify from 'fastify';
+import fastifyAuth0Verify from 'fastify-auth0-verify';
 import config from './config';
 import api from './routes/api';
 
@@ -45,7 +45,7 @@ const app = fastify({ajv: {
     },
   });
   await app.register(fastifyHelmet, {contentSecurityPolicy: false});
-  await app.register(fastifyCors, {origin: config.dev ? 'http://localhost:8080' : 'http://localhost:8085'});
+  await app.register(fastifyCors, {origin: ['http://127.0.0.1:8080', 'http://127.0.0.1:8085', 'http://localhost:8080', 'http://localhost:8085']});
   await app.register(fastifyPostgres, {
     connectionString: PG_CONNECTION_STRING,
   });

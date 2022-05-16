@@ -6,17 +6,17 @@ import {clearUseEffect, fireUseEffectDiscardQueue, fireUseEffectQueue, resetUseE
 import {clearRef, resetRefIndexes} from 'Scripts/hooks/useRef';
 import {clearState, resetStateIndexes} from 'Scripts/hooks/useState';
 import withEvents from 'Scripts/morphdomEvents';
-import createBrowse, {type BrowseProps} from 'Scripts/pages/browse';
+import createBrowse, {type BrowseProps} from 'Scripts/pages/browse/browse';
 import createCart from 'Scripts/pages/cart/cart';
 import createCheckout from 'Scripts/pages/checkout/checkout';
-import createMain from 'Scripts/pages/main';
-import createNotFound from 'Scripts/pages/notFound';
+import createMain from 'Scripts/pages/main/main';
+import createNotFound from 'Scripts/pages/notFound/notFound';
 import createOrders from 'Scripts/pages/orders/orders';
 import createProduct from 'Scripts/pages/product/product';
 import createProtectedPage from 'Scripts/pages/protectedPage/protectedPage';
 import createStaff from 'Scripts/pages/staff/staff';
 import {appendElements, createElement} from 'Scripts/uiUtils';
-import rootStyles from 'Styles/components/root.module.scss';
+import rootStyles from 'Styles/root.module.scss';
 import {type ProductProps} from 'Types/types';
 import morphdom from 'morphdom';
 

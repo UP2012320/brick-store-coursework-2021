@@ -1,9 +1,9 @@
+import filterBarStyles from 'Scripts/components/filterBar/filterBar.module.scss';
 import createToggleHeader from 'Scripts/components/toggleHeader/toggleHeader';
 import {nameof} from 'Scripts/helpers';
 import useOverlay from 'Scripts/hooks/useOverlay';
 import htmlx from 'Scripts/htmlX';
 import {createElement, createKeyedContainer} from 'Scripts/uiUtils';
-import filterBarStyles from 'Styles/components/filterBar.module.scss';
 import {type HasBodyProps, type ReUsableComponentProps} from 'Types/types';
 import dropDownStyles from '../dropdown.module.scss';
 

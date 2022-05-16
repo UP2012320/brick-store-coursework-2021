@@ -1,8 +1,3 @@
-export const trimCharactersFromEnd = (text: string, character: string) => {
-  const regex = new RegExp(`^(.+)${character}+$`, 'gimu');
-  return text.replace(regex, '$1');
-};
-
 // eslint-disable-next-line unicorn/prevent-abbreviations
 export const nameof = (func: Function): string => func.name;
 
@@ -10,7 +5,7 @@ export const formatPrice = (price: number) => new Intl.NumberFormat('en-GB', {cu
 
 export const formatPercent = (percent: number) => new Intl.NumberFormat('en-GB', {currency: 'GBP', style: 'percent'}).format(percent);
 
-export const SERVER_BASE = 'http://localhost:8085';
+export const SERVER_BASE = process.env.NODE_ENV === 'production' ? 'http://localhost:8080' : 'http://localhost:8085';
 
 export const getItemFromLocalStorage = <T>(itemName: string) => {
   const itemStorage = window.localStorage.getItem(itemName);

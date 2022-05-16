@@ -1,4 +1,5 @@
 import {auth0} from 'Scripts/auth0';
+import styles from 'Scripts/components/layout/storefront/navbar.module.scss';
 import createSidebar from 'Scripts/components/sidebar/sidebar';
 import {getItemFromLocalStorage, nameof} from 'Scripts/helpers';
 import {useEffect} from 'Scripts/hooks/useEffect';
@@ -6,7 +7,6 @@ import {useState} from 'Scripts/hooks/useState';
 import htmlx from 'Scripts/htmlX';
 import {createElement, createKeyedContainer, registerLinkClickHandler} from 'Scripts/uiUtils';
 import unload from 'Scripts/unload';
-import styles from 'Styles/components/navbar.module.scss';
 import {type CartItem, type JWTPayload} from 'api-types';
 
 const key = nameof(createNavbarRightSide);
@@ -179,7 +179,7 @@ export default function createNavbarRightSide () {
     <${hamburgerButton}>
       <${list}/>
     </hamburgerButton>
-    <${windowWidth > 768 ? buttonsContainer : null}/>
+    <${windowWidth > 1_024 ? buttonsContainer : null}/>
     <${sidebar}/>
   </rightSideElement>
   `;

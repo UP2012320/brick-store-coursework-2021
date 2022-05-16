@@ -1,0 +1,218 @@
+@import 'src/styles/utils';
+@import 'src/styles/theme';
+@import 'bootstrap-icons';
+
+.filter-bar-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: $spacing-medium;
+  max-width: 1400px;
+}
+
+.filter-bar-row-container {
+  display: flex;
+  margin: 0 4vw;
+}
+
+.filter-bar-options-row-container {
+  @extend .filter-bar-row-container;
+  flex-direction: row;
+  transition: width .5s ease-in-out;
+  overflow: hidden;
+  width: 0;
+  border-right: 1px solid $not-quite-black;
+
+  &.open {
+    width: max-content;
+    overflow: visible;
+    background-color: $not-quite-black;
+  }
+}
+
+.filter-bar-options-row-item {
+  display: flex;
+  margin: $spacing-medium;
+}
+
+.filter-bar-section-container {
+  display: flex;
+  flex: 5 0;
+}
+
+.filter-bar-section-container-right {
+  @include row-centered;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+@mixin filter-bar-item {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  @media only screen and (max-width: 1024px) {
+    width: 100%;
+  }
+}
+
+.filter-bar-item-left {
+  @include filter-bar-item;
+  border-right: 1px solid $not-quite-black;
+}
+
+.filter-bar-item-right {
+  @include filter-bar-item;
+  border-left: 1px solid $not-quite-black;
+  margin-left: auto;
+}
+
+.filter-bar-search-item {
+  @extend .filter-bar-item-right;
+  flex: 1 0 70%;
+  font-size: 16pt;
+  padding: $spacing-medium;
+  height: 100%;
+  margin-left: unset;
+  border-bottom-left-radius: $medium-radius;
+  border-top-left-radius: $medium-radius;
+  border-left: unset;
+  border-bottom: unset;
+  border-top: unset;
+  border-right: 1px solid $not-quite-black;
+
+  &:hover {
+    cursor: text;
+  }
+}
+
+.filter-bar-search-button {
+  @include row-centered;
+  flex: 1 0;
+  height: 100%;
+  border-bottom-right-radius: $spacing-medium;
+  border-top-right-radius: $spacing-medium;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    color: #FFF;
+    background-color: $highlight-colour;
+  }
+}
+
+.filter-bar-search-row {
+  @include row-centered;
+  flex: 1 0;
+  background-color: $not-quite-white;
+  border: 1px solid $not-quite-black;
+  border-radius: $medium-radius;
+  margin-top: $spacing-small;
+  margin-bottom: $spacing-small;
+  margin-right: $spacing-small;
+  width: 200px;
+  height: min-content;
+}
+
+.bi-search {
+  @include row-centered;
+  height: 100%;
+  width: 100%;
+}
+
+.filter-bar-filter-all-container {
+  @include row;
+  align-items: center;
+  padding: $spacing-medium;
+  border-top-left-radius: $medium-radius;
+  border-top-right-radius: $medium-radius;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $not-really-white;
+  }
+}
+
+.bi-sliders {
+  @include row;
+  font-size: 15pt;
+  align-items: center;
+}
+
+.filter-bar-filter-all-title {
+  font-size: 12pt;
+  margin-left: $spacing-medium;
+  user-select: none;
+}
+
+@media only screen and (max-width: 1024px) {
+  .filter-bar-container {
+    margin-top: unset;
+    margin-bottom: unset;
+
+    & .filter-bar-section-container:first-child {
+      & .filter-bar-item-left {
+        border-right: unset;
+        height: 40px;
+      }
+
+      & .filter-bar-item-left:first-child {
+        border-bottom: 1px solid $not-quite-black;
+      }
+
+      flex-wrap: wrap;
+    }
+  }
+
+  .filter-bar-options-row-container {
+    height: 0;
+    display: unset;
+    border-right-color: transparent;
+    width: unset;
+    transition: height .5s ease-in-out;
+
+    &.open {
+      height: 100px;
+      border-right-color: transparent;
+    }
+  }
+
+  .filter-bar-row-container {
+    flex-direction: column;
+  }
+
+  .filter-bar-section-container-right {
+    width: 100%;
+  }
+
+  .filter-bar-search-row {
+    margin: 0;
+    border: unset;
+    border-radius: 0;
+    border-top: 1px solid $not-quite-black;
+  }
+
+  .filter-bar-search-item {
+    margin: unset;
+    border-radius: 0;
+    text-align: center;
+    flex: 1 0 60%;
+
+    &:focus {
+      border-radius: 0;
+    }
+  }
+
+  .filter-bar-options-row-item {
+    display: unset;
+     flex: 1 0 50%;
+  }
+}
+
+

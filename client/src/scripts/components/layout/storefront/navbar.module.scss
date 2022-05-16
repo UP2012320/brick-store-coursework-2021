@@ -1,0 +1,159 @@
+@import 'src/styles/theme';
+@import 'src/styles/utils';
+@import 'src/styles/commonComponents.module';
+@import 'bootstrap-icons';
+
+$nav-side-basis: 20%;
+
+nav {
+  border-bottom: 5px solid $primary-colour;
+  display: flex;
+  max-height: 100px;
+}
+
+.nav-side-container {
+  flex: 1 0;
+  display: flex;
+  align-items: center;
+
+  .navbar-logo {
+    margin: $spacing-small;
+    padding: $spacing-small;
+    max-height: 100%;
+    max-width: 100%;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.nav-right-side-container {
+  @extend .nav-side-container;
+  justify-content: flex-end;
+
+  p {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .bi-cart2 {
+    position: relative;
+    font-size: 3rem;
+
+    span {
+      @include font-medium;
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -48%);
+      text-align: center;
+      font-style: normal;
+      user-select: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.nav-main-container {
+  flex: 1 0 (100 - $nav-side-basis * 2);
+  display: flex;
+  justify-content: center;
+
+  div:not(:last-child) {
+    margin-right: $spacing-xlarge;
+  }
+}
+
+.nav-main-container-item {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  max-width: 128px;
+
+  .link-title {
+    @include font-xlarge;
+    padding: $spacing-small;
+    color: $font-colour;
+    margin-top: auto;
+    user-select: none;
+  }
+
+  .bi-bag {
+    transform-origin: top;
+    transform: scale(2.5);
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    * {
+      color: $highlight-colour;
+      fill: $highlight-colour;
+    }
+  }
+}
+
+.a-link {
+  @include row-centered;
+  height: 100%;
+}
+
+.action-button-no-border {
+  flex: 0;
+  margin: $spacing-small;
+  height: 100%;
+}
+
+.buttons-container {
+  @include row-centered;
+  height: 100%;
+}
+
+.bi-list {
+  font-size: 2.25rem;
+}
+
+.hamburger-menu {
+  @include row-centered;
+  border-left: 1px solid $not-quite-black;
+  padding: $spacing-small $spacing-medium;
+  height: 100%;
+  margin-top: $spacing-small;
+  margin-bottom: $spacing-small;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+  display: none;
+  width: 60%;
+
+  &:hover {
+    cursor: pointer;
+    color: #FFF;
+    background-color: $highlight-colour;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .nav-main-container {
+    flex: 1 0;
+  }
+
+  .nav-side-container {
+    flex: 1 0;
+  }
+
+  .hamburger-menu {
+    display: flex;
+  }
+
+  .buttons-container {
+    flex-direction: column;
+    justify-content: unset;
+    align-items: unset;
+    height: unset;
+    width: 100%;
+  }
+}
